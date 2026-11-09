@@ -1,0 +1,5 @@
+{ "updated": "1999-12-01", "items": [
+  { "id": "fe-meta", "pick": "Next.js", "version": "98" },
+  { "id": "fe-pm", "pick": "yarn", "version": "4" },
+  { "id": "be-orm", "pick": "Drizzle", "version": "1.0" }
+]}

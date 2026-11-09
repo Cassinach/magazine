@@ -1,0 +1,6 @@
+{ "updated": "2000-01-01", "items": [
+  { "id": "fe-meta", "layer": "Frontend", "topic": "メタフレームワーク", "pick": "Next.js", "version": "99", "alternatives": ["TanStack Start", "React Router"], "reason": "サンプル理由", "last_checked": "2000-01-01", "sources": [{ "title": "S", "url": "https://example.com/w1" }] },
+  { "id": "fe-pm", "layer": "Frontend", "topic": "パッケージマネージャー", "pick": "pnpm", "version": "99", "alternatives": ["bun"], "reason": "サンプル理由", "last_checked": "2000-01-01", "sources": [{ "title": "S", "url": "https://example.com/w2" }] },
+  { "id": "be-orm", "layer": "Backend", "topic": "ORM／クエリビルダ", "pick": "Drizzle", "version": "1.0", "alternatives": ["Prisma", "Kysely"], "reason": "サンプル理由", "last_checked": "2000-01-01", "sources": [{ "title": "S", "url": "https://example.com/w3" }] },
+  { "id": "ai-local", "layer": "AI", "topic": "ローカル LLM（モデル）", "pick": "Sample-7B", "version": "", "alternatives": [], "reason": "サンプル理由", "last_checked": "2000-01-01", "sources": [{ "title": "S", "url": "https://example.com/w4" }] }
+]}

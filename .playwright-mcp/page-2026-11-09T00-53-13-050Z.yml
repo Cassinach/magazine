@@ -1,0 +1,1048 @@
+- generic [active] [ref=f1e1]:
+  - generic [ref=f1e2]:
+    - generic [ref=f1e3]:
+      - generic [ref=f1e5]:
+        - generic [ref=f1e6]:
+          - heading "magazine" [level=1] [ref=f1e7]
+          - paragraph [ref=f1e8]: Personal Tech Monthly
+        - generic [ref=f1e9]: 2000年1月号
+        - generic [ref=f1e11]:
+          - generic [ref=f1e12]:
+            - generic [ref=f1e13]: Frontend
+            - text: サンプル見出し：メタフレームワークの勢力図が動いた
+          - generic [ref=f1e14]:
+            - generic [ref=f1e15]: AI
+            - text: サンプル見出し：ローカル LLM が実用ラインを超えた月
+          - generic [ref=f1e16]:
+            - generic [ref=f1e17]: 3D
+            - text: サンプル見出し：feed-forward 再構成が SfM を置き換え始めた
+        - generic [ref=f1e18]:
+          - generic [ref=f1e19]: 右から左へお読みください
+          - generic [ref=f1e20]: 2000-01-01
+      - generic [ref=f1e21]: magazine
+    - generic [ref=f1e23]:
+      - generic [ref=f1e24]:
+        - generic [ref=f1e25]:
+          - paragraph [ref=f1e26]: Contents
+          - heading "目次" [level=2] [ref=f1e27]
+          - list [ref=f1e28]:
+            - listitem [ref=f1e29]:
+              - generic [ref=f1e30] [cursor=pointer]:
+                - generic [ref=f1e31]: "00"
+                - generic [ref=f1e32]: 定点観測ボード
+                - generic [ref=f1e33]: "4"
+            - listitem [ref=f1e34]:
+              - generic [ref=f1e35] [cursor=pointer]:
+                - generic [ref=f1e36]: "01"
+                - generic [ref=f1e37]: 巻頭特集
+                - generic [ref=f1e38]: "5"
+              - list [ref=f1e39]:
+                - listitem [ref=f1e40] [cursor=pointer]:
+                  - generic [ref=f1e41]: サンプル特集：ビルドツールの Rust 化は何を変えるか
+                  - generic [ref=f1e42]: "6"
+            - listitem [ref=f1e43]:
+              - generic [ref=f1e44] [cursor=pointer]:
+                - generic [ref=f1e45]: "02"
+                - generic [ref=f1e46]: Frontend
+                - generic [ref=f1e47]: "7"
+              - list [ref=f1e48]:
+                - listitem [ref=f1e49] [cursor=pointer]:
+                  - generic [ref=f1e50]: FE 記事 1
+                  - generic [ref=f1e51]: "8"
+                - listitem [ref=f1e52] [cursor=pointer]:
+                  - generic [ref=f1e53]: FE 記事 2
+                  - generic [ref=f1e54]: "9"
+                - listitem [ref=f1e55] [cursor=pointer]:
+                  - generic [ref=f1e56]: FE 記事 3
+                  - generic [ref=f1e57]: "10"
+            - listitem [ref=f1e58]:
+              - generic [ref=f1e59] [cursor=pointer]:
+                - generic [ref=f1e60]: "03"
+                - generic [ref=f1e61]: Backend
+                - generic [ref=f1e62]: "11"
+              - list [ref=f1e63]:
+                - listitem [ref=f1e64] [cursor=pointer]:
+                  - generic [ref=f1e65]: BE 記事 1
+                  - generic [ref=f1e66]: "12"
+                - listitem [ref=f1e67] [cursor=pointer]:
+                  - generic [ref=f1e68]: BE 記事 2
+                  - generic [ref=f1e69]: "13"
+                - listitem [ref=f1e70] [cursor=pointer]:
+                  - generic [ref=f1e71]: BE 記事 3
+                  - generic [ref=f1e72]: "14"
+            - listitem [ref=f1e73]:
+              - generic [ref=f1e74] [cursor=pointer]:
+                - generic [ref=f1e75]: "04"
+                - generic [ref=f1e76]: Infra
+                - generic [ref=f1e77]: "15"
+              - list [ref=f1e78]:
+                - listitem [ref=f1e79] [cursor=pointer]:
+                  - generic [ref=f1e80]: Infra 記事 1
+                  - generic [ref=f1e81]: "16"
+                - listitem [ref=f1e82] [cursor=pointer]:
+                  - generic [ref=f1e83]: Infra 記事 2
+                  - generic [ref=f1e84]: "17"
+            - listitem [ref=f1e85]:
+              - generic [ref=f1e86] [cursor=pointer]:
+                - generic [ref=f1e87]: "05"
+                - generic [ref=f1e88]: 三次元再構成
+                - generic [ref=f1e89]: "18"
+              - list [ref=f1e90]:
+                - listitem [ref=f1e91] [cursor=pointer]:
+                  - generic [ref=f1e92]: 3D 記事 1
+                  - generic [ref=f1e93]: "19"
+                - listitem [ref=f1e94] [cursor=pointer]:
+                  - generic [ref=f1e95]: 3D 記事 2
+                  - generic [ref=f1e96]: "20"
+            - listitem [ref=f1e97]:
+              - generic [ref=f1e98] [cursor=pointer]:
+                - generic [ref=f1e99]: "06"
+                - generic [ref=f1e100]: AI
+                - generic [ref=f1e101]: "21"
+              - list [ref=f1e102]:
+                - listitem [ref=f1e103] [cursor=pointer]:
+                  - generic [ref=f1e104]: AI 記事 1：各社比較
+                  - generic [ref=f1e105]: "22"
+                - listitem [ref=f1e106] [cursor=pointer]:
+                  - generic [ref=f1e107]: AI 記事 2：ローカル
+                  - generic [ref=f1e108]: "23"
+                - listitem [ref=f1e109] [cursor=pointer]:
+                  - generic [ref=f1e110]: AI 記事 3：ツール
+                  - generic [ref=f1e111]: "24"
+            - listitem [ref=f1e112]:
+              - generic [ref=f1e113] [cursor=pointer]:
+                - generic [ref=f1e114]: "07"
+                - generic [ref=f1e115]: Dev Tooling & DX
+                - generic [ref=f1e116]: "25"
+              - list [ref=f1e117]:
+                - listitem [ref=f1e118] [cursor=pointer]:
+                  - generic [ref=f1e119]: DX 記事 1
+                  - generic [ref=f1e120]: "26"
+                - listitem [ref=f1e121] [cursor=pointer]:
+                  - generic [ref=f1e122]: DX 記事 2
+                  - generic [ref=f1e123]: "27"
+            - listitem [ref=f1e124]:
+              - generic [ref=f1e125] [cursor=pointer]:
+                - generic [ref=f1e126]: "08"
+                - generic [ref=f1e127]: セキュリティ & サプライチェーン
+                - generic [ref=f1e128]: "28"
+              - list [ref=f1e129]:
+                - listitem [ref=f1e130] [cursor=pointer]:
+                  - generic [ref=f1e131]: Sec 記事 1
+                  - generic [ref=f1e132]: "29"
+            - listitem [ref=f1e133]:
+              - generic [ref=f1e134] [cursor=pointer]:
+                - generic [ref=f1e135]: "09"
+                - generic [ref=f1e136]: リリースカレンダー
+                - generic [ref=f1e137]: "30"
+              - list [ref=f1e138]:
+                - listitem [ref=f1e139] [cursor=pointer]:
+                  - generic [ref=f1e140]: 今月の主要リリース
+                  - generic [ref=f1e141]: "31"
+            - listitem [ref=f1e142]:
+              - generic [ref=f1e143] [cursor=pointer]:
+                - generic [ref=f1e144]: "10"
+                - generic [ref=f1e145]: 今月試す3つ
+                - generic [ref=f1e146]: "32"
+              - list [ref=f1e147]:
+                - listitem [ref=f1e148] [cursor=pointer]:
+                  - generic [ref=f1e149]: サンプル課題 1
+                  - generic [ref=f1e150]: "33"
+                - listitem [ref=f1e151] [cursor=pointer]:
+                  - generic [ref=f1e152]: サンプル課題 2
+                  - generic [ref=f1e153]: "34"
+                - listitem [ref=f1e154] [cursor=pointer]:
+                  - generic [ref=f1e155]: サンプル課題 3
+                  - generic [ref=f1e156]: "35"
+            - listitem [ref=f1e157]:
+              - generic [ref=f1e158] [cursor=pointer]:
+                - generic [ref=f1e159]: "11"
+                - generic [ref=f1e160]: 新語辞典
+                - generic [ref=f1e161]: "36"
+              - list [ref=f1e162]:
+                - listitem [ref=f1e163] [cursor=pointer]:
+                  - generic [ref=f1e164]: サンプル語 A 〜 サンプル語 E
+                  - generic [ref=f1e165]: "37"
+            - listitem [ref=f1e166]:
+              - generic [ref=f1e167] [cursor=pointer]:
+                - generic [ref=f1e168]: —
+                - generic [ref=f1e169]: 奥付・出典
+                - generic [ref=f1e170]: "38"
+        - generic [ref=f1e171]: "2"
+      - generic [ref=f1e172]:
+        - generic [ref=f1e173]:
+          - paragraph [ref=f1e174]: Editorial
+          - heading "巻頭言" [level=2] [ref=f1e175]
+          - paragraph [ref=f1e176]:
+            - text: これは
+            - strong [ref=f1e177]: テンプレート検証用のサンプル号
+            - text: です。本文はダミーで、出典 URL も例示です。
+          - list [ref=f1e178]:
+            - listitem [ref=f1e179]: 右から左へめくれること
+            - listitem [ref=f1e180]: 見開き／単ページの切り替え
+            - listitem [ref=f1e181]: 目次ジャンプと印刷レイアウト
+          - paragraph [ref=f1e182]: を確認するために使います。
+        - generic [ref=f1e183]: "3"
+    - generic [ref=f1e184]:
+      - generic [ref=f1e185]:
+        - generic [ref=f1e186]: 定点観測ボード
+        - generic [ref=f1e188]:
+          - paragraph [ref=f1e189]: Watchlist
+          - heading "定点観測ボード" [level=2] [ref=f1e190]
+          - paragraph [ref=f1e191]: 各層で「いま新規に始めるならこれ」を一つ選び、前号からの変化を矢印で示します。
+          - paragraph [ref=f1e192]:
+            - generic [ref=f1e193]: ✦ 新規
+            - generic [ref=f1e194]: ⇄ 推し変更
+            - generic [ref=f1e195]: ↑ 更新
+            - generic [ref=f1e196]: → 据え置き
+            - generic [ref=f1e197]: 前号（1999-12-01）との比較
+          - table [ref=f1e198]:
+            - rowgroup [ref=f1e199]:
+              - row [ref=f1e200]:
+                - columnheader "層" [ref=f1e201]
+                - columnheader "いま採用するなら" [ref=f1e202]
+                - columnheader "対抗" [ref=f1e203]
+                - columnheader "理由" [ref=f1e204]
+                - columnheader "変化" [ref=f1e205]
+            - rowgroup [ref=f1e206]:
+              - row [ref=f1e207]:
+                - cell "Frontend メタフレームワーク" [ref=f1e208]:
+                  - generic [ref=f1e209]: Frontend
+                  - text: メタフレームワーク
+                - cell "Next.js99" [ref=f1e210]
+                - cell "TanStack Start / React Router" [ref=f1e211]
+                - cell [ref=f1e212]:
+                  - text: サンプル理由
+                  - link "[↗]" [ref=f1e214] [cursor=pointer]:
+                    - /url: https://example.com/w1
+                - cell "↑ 更新 98" [ref=f1e215]:
+                  - text: ↑ 更新
+                  - generic [ref=f1e216]: "98"
+              - row [ref=f1e217]:
+                - cell "Frontend パッケージマネージャー" [ref=f1e218]:
+                  - generic [ref=f1e219]: Frontend
+                  - text: パッケージマネージャー
+                - cell "pnpm99" [ref=f1e220]
+                - cell "bun" [ref=f1e221]
+                - cell [ref=f1e222]:
+                  - text: サンプル理由
+                  - link "[↗]" [ref=f1e224] [cursor=pointer]:
+                    - /url: https://example.com/w2
+                - cell "⇄ 推し変更 yarn" [ref=f1e225]:
+                  - text: ⇄ 推し変更
+                  - generic [ref=f1e226]: yarn
+              - row [ref=f1e227]:
+                - cell "Backend ORM／クエリビルダ" [ref=f1e228]:
+                  - generic [ref=f1e229]: Backend
+                  - text: ORM／クエリビルダ
+                - cell "Drizzle1.0" [ref=f1e230]
+                - cell "Prisma / Kysely" [ref=f1e231]
+                - cell [ref=f1e232]:
+                  - text: サンプル理由
+                  - link "[↗]" [ref=f1e234] [cursor=pointer]:
+                    - /url: https://example.com/w3
+                - cell "→ 据え置き" [ref=f1e235]
+              - row [ref=f1e236]:
+                - cell "AI ローカル LLM（モデル）" [ref=f1e237]:
+                  - generic [ref=f1e238]: AI
+                  - text: ローカル LLM（モデル）
+                - cell "Sample-7B" [ref=f1e239]
+                - cell [ref=f1e240]
+                - cell [ref=f1e241]:
+                  - text: サンプル理由
+                  - link "[↗]" [ref=f1e243] [cursor=pointer]:
+                    - /url: https://example.com/w4
+                - cell "✦ 新規" [ref=f1e244]
+        - generic [ref=f1e245]: "4"
+      - generic [ref=f1e246]:
+        - generic [ref=f1e247]: 巻頭特集
+        - generic [ref=f1e249]:
+          - generic [ref=f1e250]: "01"
+          - paragraph [ref=f1e251]: Section 01
+          - heading "巻頭特集" [level=2] [ref=f1e252]
+          - paragraph [ref=f1e253]: 今月いちばん大きかった動きを一本だけ深掘りします。
+          - list [ref=f1e254]:
+            - listitem [ref=f1e255] [cursor=pointer]:
+              - generic [ref=f1e256]: サンプル特集：ビルドツールの Rust 化は何を変えるか
+              - generic [ref=f1e257]: "6"
+        - generic [ref=f1e258]: "5"
+    - generic [ref=f1e259]:
+      - generic [ref=f1e260]:
+        - generic [ref=f1e261]: 巻頭特集
+        - generic [ref=f1e263]:
+          - paragraph [ref=f1e264]: 巻頭特集 / Build
+          - heading "サンプル特集：ビルドツールの Rust 化は何を変えるか" [level=2] [ref=f1e265]
+          - generic [ref=f1e266]:
+            - generic [ref=f1e267]: 影響大
+            - generic [ref=f1e268]: Vite
+            - generic [ref=f1e269]: Rolldown
+            - generic [ref=f1e270]: Rust
+          - paragraph [ref=f1e271]: リード文です。結論を先に書きます。ここではダミーの説明文が入ります。
+          - heading "何が起きたか" [level=4] [ref=f1e272]
+          - paragraph [ref=f1e273]:
+            - text: 本文の段落です
+            - superscript [ref=f1e274]:
+              - link "[1]" [ref=f1e275] [cursor=pointer]:
+                - /url: "#src-1"
+            - text: 。
+            - code [ref=f1e276]: code
+            - text: や
+            - strong [ref=f1e277]: 太字
+            - text: も混ざります。次の段落では表を使います。
+          - table [ref=f1e279]:
+            - rowgroup [ref=f1e280]:
+              - row [ref=f1e281]:
+                - columnheader "ツール" [ref=f1e282]
+                - columnheader "言語" [ref=f1e283]
+                - columnheader "特徴" [ref=f1e284]
+            - rowgroup [ref=f1e285]:
+              - row [ref=f1e286]:
+                - cell "Vite" [ref=f1e287]
+                - cell "TS→Rust" [ref=f1e288]
+                - cell "プラグイン互換" [ref=f1e289]
+              - row [ref=f1e290]:
+                - cell "Turbopack" [ref=f1e291]
+                - cell "Rust" [ref=f1e292]
+                - cell "Next 専用" [ref=f1e293]
+          - heading "なぜ重要か" [level=4] [ref=f1e294]
+          - list [ref=f1e295]:
+            - listitem [ref=f1e296]:
+              - text: 箇条書き一つ目
+              - superscript [ref=f1e297]:
+                - link "[2]" [ref=f1e298] [cursor=pointer]:
+                  - /url: "#src-2"
+            - listitem [ref=f1e299]: 箇条書き二つ目
+          - generic [ref=f1e300]:
+            - text: ts
+            - code [ref=f1e301]: "export default defineConfig({ plugins: [] })"
+          - blockquote [ref=f1e302]: 引用ブロックのサンプルです。
+          - generic [ref=f1e303]: 自分の次のプロジェクトでは：新規プロジェクトでは Vite 系を既定にし、設定ファイルは最小限に保つ。
+          - list [ref=f1e305]:
+            - listitem [ref=f1e306]:
+              - link "Sample source A" [ref=f1e307] [cursor=pointer]:
+                - /url: https://example.com/a
+              - text: 2000-01-01
+            - listitem [ref=f1e308]:
+              - link "Sample source B" [ref=f1e309] [cursor=pointer]:
+                - /url: https://example.com/b
+              - text: 2000-01-02
+        - generic [ref=f1e310]: "6"
+      - generic [ref=f1e311]:
+        - generic [ref=f1e312]: Frontend
+        - generic [ref=f1e314]:
+          - generic [ref=f1e315]: "02"
+          - paragraph [ref=f1e316]: Section 02
+          - heading "Frontend" [level=2] [ref=f1e317]
+          - paragraph [ref=f1e318]: 構成・パッケージマネージャー・ライブラリの動向。
+          - list [ref=f1e319]:
+            - listitem [ref=f1e320] [cursor=pointer]:
+              - generic [ref=f1e321]: FE 記事 1
+              - generic [ref=f1e322]: "8"
+            - listitem [ref=f1e323] [cursor=pointer]:
+              - generic [ref=f1e324]: FE 記事 2
+              - generic [ref=f1e325]: "9"
+            - listitem [ref=f1e326] [cursor=pointer]:
+              - generic [ref=f1e327]: FE 記事 3
+              - generic [ref=f1e328]: "10"
+        - generic [ref=f1e329]: "7"
+    - generic [ref=f1e330]:
+      - generic [ref=f1e331]:
+        - generic [ref=f1e332]: Frontend
+        - generic [ref=f1e334]:
+          - paragraph [ref=f1e335]: Frontend / 構成
+          - heading "FE 記事 1" [level=2] [ref=f1e336]
+          - generic [ref=f1e337]:
+            - generic [ref=f1e338]: 影響中
+            - generic [ref=f1e339]: Next.js
+          - paragraph [ref=f1e340]: リード
+          - paragraph [ref=f1e341]:
+            - text: 本文
+            - superscript [ref=f1e342]:
+              - link "[3]" [ref=f1e343] [cursor=pointer]:
+                - /url: "#src-3"
+            - text: 。
+          - list [ref=f1e345]:
+            - listitem [ref=f1e346]:
+              - link "S" [ref=f1e347] [cursor=pointer]:
+                - /url: https://example.com/fe1
+              - text: 2000-01-03
+        - generic [ref=f1e348]: "8"
+      - generic [ref=f1e349]:
+        - generic [ref=f1e350]: Frontend
+        - generic [ref=f1e352]:
+          - paragraph [ref=f1e353]: Frontend / パッケージマネージャー
+          - heading "FE 記事 2" [level=2] [ref=f1e354]
+          - generic [ref=f1e355]:
+            - generic [ref=f1e356]: 小ネタ
+            - generic [ref=f1e357]: pnpm
+          - paragraph [ref=f1e358]: リード
+          - paragraph [ref=f1e359]:
+            - text: 本文
+            - superscript [ref=f1e360]:
+              - link "[4]" [ref=f1e361] [cursor=pointer]:
+                - /url: "#src-4"
+            - text: 。
+          - list [ref=f1e363]:
+            - listitem [ref=f1e364]:
+              - link "S" [ref=f1e365] [cursor=pointer]:
+                - /url: https://example.com/fe2
+              - text: 2000-01-03
+        - generic [ref=f1e366]: "9"
+    - generic [ref=f1e367]:
+      - generic [ref=f1e368]:
+        - generic [ref=f1e369]: Frontend
+        - generic [ref=f1e371]:
+          - paragraph [ref=f1e372]: Frontend / ライブラリ
+          - heading "FE 記事 3" [level=2] [ref=f1e373]
+          - generic [ref=f1e374]:
+            - generic [ref=f1e375]: 影響中
+            - generic [ref=f1e376]: TanStack
+          - paragraph [ref=f1e377]: リード
+          - paragraph [ref=f1e378]:
+            - text: 本文
+            - superscript [ref=f1e379]:
+              - link "[5]" [ref=f1e380] [cursor=pointer]:
+                - /url: "#src-5"
+            - text: 。
+          - list [ref=f1e382]:
+            - listitem [ref=f1e383]:
+              - link "S" [ref=f1e384] [cursor=pointer]:
+                - /url: https://example.com/fe3
+              - text: 2000-01-03
+        - generic [ref=f1e385]: "10"
+      - generic [ref=f1e386]:
+        - generic [ref=f1e387]: Backend
+        - generic [ref=f1e389]:
+          - generic [ref=f1e390]: "03"
+          - paragraph [ref=f1e391]: Section 03
+          - heading "Backend" [level=2] [ref=f1e392]
+          - paragraph [ref=f1e393]: 言語・フレームワーク・ORM。
+          - list [ref=f1e394]:
+            - listitem [ref=f1e395] [cursor=pointer]:
+              - generic [ref=f1e396]: BE 記事 1
+              - generic [ref=f1e397]: "12"
+            - listitem [ref=f1e398] [cursor=pointer]:
+              - generic [ref=f1e399]: BE 記事 2
+              - generic [ref=f1e400]: "13"
+            - listitem [ref=f1e401] [cursor=pointer]:
+              - generic [ref=f1e402]: BE 記事 3
+              - generic [ref=f1e403]: "14"
+        - generic [ref=f1e404]: "11"
+    - generic [ref=f1e405]:
+      - generic [ref=f1e406]:
+        - generic [ref=f1e407]: Backend
+        - generic [ref=f1e409]:
+          - paragraph [ref=f1e410]: Backend
+          - heading "BE 記事 1" [level=2] [ref=f1e411]
+          - generic [ref=f1e412]:
+            - generic [ref=f1e413]: 影響中
+            - generic [ref=f1e414]: Hono
+          - paragraph [ref=f1e415]: リード
+          - paragraph [ref=f1e416]:
+            - text: 本文
+            - superscript [ref=f1e417]:
+              - link "[6]" [ref=f1e418] [cursor=pointer]:
+                - /url: "#src-6"
+            - text: 。
+          - list [ref=f1e420]:
+            - listitem [ref=f1e421]:
+              - link "S" [ref=f1e422] [cursor=pointer]:
+                - /url: https://example.com/be1
+              - text: 2000-01-03
+        - generic [ref=f1e423]: "12"
+      - generic [ref=f1e424]:
+        - generic [ref=f1e425]: Backend
+        - generic [ref=f1e427]:
+          - paragraph [ref=f1e428]: Backend
+          - heading "BE 記事 2" [level=2] [ref=f1e429]
+          - generic [ref=f1e430]:
+            - generic [ref=f1e431]: 影響中
+            - generic [ref=f1e432]: Drizzle
+          - paragraph [ref=f1e433]: リード
+          - paragraph [ref=f1e434]:
+            - text: 本文
+            - superscript [ref=f1e435]:
+              - link "[7]" [ref=f1e436] [cursor=pointer]:
+                - /url: "#src-7"
+            - text: 。
+          - list [ref=f1e438]:
+            - listitem [ref=f1e439]:
+              - link "S" [ref=f1e440] [cursor=pointer]:
+                - /url: https://example.com/be2
+              - text: 2000-01-03
+        - generic [ref=f1e441]: "13"
+    - generic [ref=f1e442]:
+      - generic [ref=f1e443]:
+        - generic [ref=f1e444]: Backend
+        - generic [ref=f1e446]:
+          - paragraph [ref=f1e447]: Backend
+          - heading "BE 記事 3" [level=2] [ref=f1e448]
+          - generic [ref=f1e449]:
+            - generic [ref=f1e450]: 小ネタ
+            - generic [ref=f1e451]: uv
+          - paragraph [ref=f1e452]: リード
+          - paragraph [ref=f1e453]:
+            - text: 本文
+            - superscript [ref=f1e454]:
+              - link "[8]" [ref=f1e455] [cursor=pointer]:
+                - /url: "#src-8"
+            - text: 。
+          - list [ref=f1e457]:
+            - listitem [ref=f1e458]:
+              - link "S" [ref=f1e459] [cursor=pointer]:
+                - /url: https://example.com/be3
+              - text: 2000-01-03
+        - generic [ref=f1e460]: "14"
+      - generic [ref=f1e461]:
+        - generic [ref=f1e462]: Infra
+        - generic [ref=f1e464]:
+          - generic [ref=f1e465]: "04"
+          - paragraph [ref=f1e466]: Section 04
+          - heading "Infra" [level=2] [ref=f1e467]
+          - paragraph [ref=f1e468]: 構成の潮流。
+          - list [ref=f1e469]:
+            - listitem [ref=f1e470] [cursor=pointer]:
+              - generic [ref=f1e471]: Infra 記事 1
+              - generic [ref=f1e472]: "16"
+            - listitem [ref=f1e473] [cursor=pointer]:
+              - generic [ref=f1e474]: Infra 記事 2
+              - generic [ref=f1e475]: "17"
+        - generic [ref=f1e476]: "15"
+    - generic [ref=f1e477]:
+      - generic [ref=f1e478]:
+        - generic [ref=f1e479]: Infra
+        - generic [ref=f1e481]:
+          - paragraph [ref=f1e482]: Infra
+          - heading "Infra 記事 1" [level=2] [ref=f1e483]
+          - generic [ref=f1e484]:
+            - generic [ref=f1e485]: 影響中
+            - generic [ref=f1e486]: IaC
+          - paragraph [ref=f1e487]: リード
+          - paragraph [ref=f1e488]:
+            - text: 本文
+            - superscript [ref=f1e489]:
+              - link "[9]" [ref=f1e490] [cursor=pointer]:
+                - /url: "#src-9"
+            - text: 。
+          - list [ref=f1e492]:
+            - listitem [ref=f1e493]:
+              - link "S" [ref=f1e494] [cursor=pointer]:
+                - /url: https://example.com/in1
+              - text: 2000-01-03
+        - generic [ref=f1e495]: "16"
+      - generic [ref=f1e496]:
+        - generic [ref=f1e497]: Infra
+        - generic [ref=f1e499]:
+          - paragraph [ref=f1e500]: Infra
+          - heading "Infra 記事 2" [level=2] [ref=f1e501]
+          - generic [ref=f1e502]:
+            - generic [ref=f1e503]: 小ネタ
+            - generic [ref=f1e504]: DB
+          - paragraph [ref=f1e505]: リード
+          - paragraph [ref=f1e506]:
+            - text: 本文
+            - superscript [ref=f1e507]:
+              - link "[10]" [ref=f1e508] [cursor=pointer]:
+                - /url: "#src-10"
+            - text: 。
+          - list [ref=f1e510]:
+            - listitem [ref=f1e511]:
+              - link "S" [ref=f1e512] [cursor=pointer]:
+                - /url: https://example.com/in2
+              - text: 2000-01-03
+        - generic [ref=f1e513]: "17"
+    - generic [ref=f1e514]:
+      - generic [ref=f1e515]:
+        - generic [ref=f1e516]: 三次元再構成
+        - generic [ref=f1e518]:
+          - generic [ref=f1e519]: "05"
+          - paragraph [ref=f1e520]: Section 05
+          - heading "三次元再構成" [level=2] [ref=f1e521]
+          - paragraph [ref=f1e522]: 研究とツール。
+          - list [ref=f1e523]:
+            - listitem [ref=f1e524] [cursor=pointer]:
+              - generic [ref=f1e525]: 3D 記事 1
+              - generic [ref=f1e526]: "19"
+            - listitem [ref=f1e527] [cursor=pointer]:
+              - generic [ref=f1e528]: 3D 記事 2
+              - generic [ref=f1e529]: "20"
+        - generic [ref=f1e530]: "18"
+      - generic [ref=f1e531]:
+        - generic [ref=f1e532]: 三次元再構成
+        - generic [ref=f1e534]:
+          - paragraph [ref=f1e535]: 三次元再構成
+          - heading "3D 記事 1" [level=2] [ref=f1e536]
+          - generic [ref=f1e537]:
+            - generic [ref=f1e538]: 影響大
+            - generic [ref=f1e539]: Splatting
+          - paragraph [ref=f1e540]: リード
+          - paragraph [ref=f1e541]:
+            - text: 本文
+            - superscript [ref=f1e542]:
+              - link "[11]" [ref=f1e543] [cursor=pointer]:
+                - /url: "#src-11"
+            - text: 。
+          - list [ref=f1e545]:
+            - listitem [ref=f1e546]:
+              - link "S" [ref=f1e547] [cursor=pointer]:
+                - /url: https://arxiv.org/abs/0000.00001
+              - text: 2000-01-03
+        - generic [ref=f1e548]: "19"
+    - generic [ref=f1e549]:
+      - generic [ref=f1e550]:
+        - generic [ref=f1e551]: 三次元再構成
+        - generic [ref=f1e553]:
+          - paragraph [ref=f1e554]: 三次元再構成
+          - heading "3D 記事 2" [level=2] [ref=f1e555]
+          - generic [ref=f1e556]:
+            - generic [ref=f1e557]: 影響中
+            - generic [ref=f1e558]: SLAM
+          - paragraph [ref=f1e559]: リード
+          - paragraph [ref=f1e560]:
+            - text: 本文
+            - superscript [ref=f1e561]:
+              - link "[12]" [ref=f1e562] [cursor=pointer]:
+                - /url: "#src-12"
+            - text: 。
+          - list [ref=f1e564]:
+            - listitem [ref=f1e565]:
+              - link "S" [ref=f1e566] [cursor=pointer]:
+                - /url: https://arxiv.org/abs/0000.00002
+              - text: 2000-01-03
+        - generic [ref=f1e567]: "20"
+      - generic [ref=f1e568]:
+        - generic [ref=f1e569]: AI
+        - generic [ref=f1e571]:
+          - generic [ref=f1e572]: "06"
+          - paragraph [ref=f1e573]: Section 06
+          - heading "AI" [level=2] [ref=f1e574]
+          - paragraph [ref=f1e575]: モデル比較とローカル LLM。
+          - list [ref=f1e576]:
+            - listitem [ref=f1e577] [cursor=pointer]:
+              - generic [ref=f1e578]: AI 記事 1：各社比較
+              - generic [ref=f1e579]: "22"
+            - listitem [ref=f1e580] [cursor=pointer]:
+              - generic [ref=f1e581]: AI 記事 2：ローカル
+              - generic [ref=f1e582]: "23"
+            - listitem [ref=f1e583] [cursor=pointer]:
+              - generic [ref=f1e584]: AI 記事 3：ツール
+              - generic [ref=f1e585]: "24"
+        - generic [ref=f1e586]: "21"
+    - generic [ref=f1e587]:
+      - generic [ref=f1e588]:
+        - generic [ref=f1e589]: AI
+        - generic [ref=f1e591]:
+          - paragraph [ref=f1e592]: AI
+          - heading "AI 記事 1：各社比較" [level=2] [ref=f1e593]
+          - generic [ref=f1e594]:
+            - generic [ref=f1e595]: 影響大
+            - generic [ref=f1e596]: 比較
+          - paragraph [ref=f1e597]: リード
+          - table [ref=f1e599]:
+            - rowgroup [ref=f1e600]:
+              - row [ref=f1e601]:
+                - columnheader "社" [ref=f1e602]
+                - columnheader "モデル" [ref=f1e603]
+                - columnheader "強み" [ref=f1e604]
+            - rowgroup [ref=f1e605]:
+              - row [ref=f1e606]:
+                - cell "A" [ref=f1e607]
+                - cell "x" [ref=f1e608]
+                - cell "y" [ref=f1e609]
+              - row [ref=f1e610]:
+                - cell "B" [ref=f1e611]
+                - cell "x" [ref=f1e612]
+                - cell "y" [ref=f1e613]
+          - paragraph [ref=f1e614]:
+            - text: 本文
+            - superscript [ref=f1e615]:
+              - link "[13]" [ref=f1e616] [cursor=pointer]:
+                - /url: "#src-13"
+            - text: 。
+          - list [ref=f1e618]:
+            - listitem [ref=f1e619]:
+              - link "S" [ref=f1e620] [cursor=pointer]:
+                - /url: https://example.com/ai1
+              - text: 2000-01-03
+        - generic [ref=f1e621]: "22"
+      - generic [ref=f1e622]:
+        - generic [ref=f1e623]: AI
+        - generic [ref=f1e625]:
+          - paragraph [ref=f1e626]: AI
+          - heading "AI 記事 2：ローカル" [level=2] [ref=f1e627]
+          - generic [ref=f1e628]:
+            - generic [ref=f1e629]: 影響中
+            - generic [ref=f1e630]: llama.cpp
+          - paragraph [ref=f1e631]: リード
+          - paragraph [ref=f1e632]:
+            - text: 本文
+            - superscript [ref=f1e633]:
+              - link "[14]" [ref=f1e634] [cursor=pointer]:
+                - /url: "#src-14"
+            - text: 。
+          - list [ref=f1e636]:
+            - listitem [ref=f1e637]:
+              - link "S" [ref=f1e638] [cursor=pointer]:
+                - /url: https://example.com/ai2
+              - text: 2000-01-03
+        - generic [ref=f1e639]: "23"
+    - generic [ref=f1e640]:
+      - generic [ref=f1e641]:
+        - generic [ref=f1e642]: AI
+        - generic [ref=f1e644]:
+          - paragraph [ref=f1e645]: AI
+          - heading "AI 記事 3：ツール" [level=2] [ref=f1e646]
+          - generic [ref=f1e647]:
+            - generic [ref=f1e648]: 小ネタ
+            - generic [ref=f1e649]: MCP
+          - paragraph [ref=f1e650]: リード
+          - paragraph [ref=f1e651]:
+            - text: 本文
+            - superscript [ref=f1e652]:
+              - link "[15]" [ref=f1e653] [cursor=pointer]:
+                - /url: "#src-15"
+            - text: 。
+          - list [ref=f1e655]:
+            - listitem [ref=f1e656]:
+              - link "S" [ref=f1e657] [cursor=pointer]:
+                - /url: https://example.com/ai3
+              - text: 2000-01-03
+        - generic [ref=f1e658]: "24"
+      - generic [ref=f1e659]:
+        - generic [ref=f1e660]: Dev Tooling & DX
+        - generic [ref=f1e662]:
+          - generic [ref=f1e663]: "07"
+          - paragraph [ref=f1e664]: Section 07
+          - heading "Dev Tooling & DX" [level=2] [ref=f1e665]
+          - paragraph [ref=f1e666]: DX。
+          - list [ref=f1e667]:
+            - listitem [ref=f1e668] [cursor=pointer]:
+              - generic [ref=f1e669]: DX 記事 1
+              - generic [ref=f1e670]: "26"
+            - listitem [ref=f1e671] [cursor=pointer]:
+              - generic [ref=f1e672]: DX 記事 2
+              - generic [ref=f1e673]: "27"
+        - generic [ref=f1e674]: "25"
+    - generic [ref=f1e675]:
+      - generic [ref=f1e676]:
+        - generic [ref=f1e677]: Dev Tooling & DX
+        - generic [ref=f1e679]:
+          - paragraph [ref=f1e680]: Dev Tooling & DX
+          - heading "DX 記事 1" [level=2] [ref=f1e681]
+          - generic [ref=f1e682]:
+            - generic [ref=f1e683]: 影響中
+            - generic [ref=f1e684]: Vitest
+          - paragraph [ref=f1e685]: リード
+          - paragraph [ref=f1e686]:
+            - text: 本文
+            - superscript [ref=f1e687]:
+              - link "[16]" [ref=f1e688] [cursor=pointer]:
+                - /url: "#src-16"
+            - text: 。
+          - list [ref=f1e690]:
+            - listitem [ref=f1e691]:
+              - link "S" [ref=f1e692] [cursor=pointer]:
+                - /url: https://example.com/dx1
+              - text: 2000-01-03
+        - generic [ref=f1e693]: "26"
+      - generic [ref=f1e694]:
+        - generic [ref=f1e695]: Dev Tooling & DX
+        - generic [ref=f1e697]:
+          - paragraph [ref=f1e698]: Dev Tooling & DX
+          - heading "DX 記事 2" [level=2] [ref=f1e699]
+          - generic [ref=f1e700]:
+            - generic [ref=f1e701]: 小ネタ
+            - generic [ref=f1e702]: CI
+          - paragraph [ref=f1e703]: リード
+          - paragraph [ref=f1e704]:
+            - text: 本文
+            - superscript [ref=f1e705]:
+              - link "[17]" [ref=f1e706] [cursor=pointer]:
+                - /url: "#src-17"
+            - text: 。
+          - list [ref=f1e708]:
+            - listitem [ref=f1e709]:
+              - link "S" [ref=f1e710] [cursor=pointer]:
+                - /url: https://example.com/dx2
+              - text: 2000-01-03
+        - generic [ref=f1e711]: "27"
+    - generic [ref=f1e712]:
+      - generic [ref=f1e713]:
+        - generic [ref=f1e714]: セキュリティ & サプライチェーン
+        - generic [ref=f1e716]:
+          - generic [ref=f1e717]: "08"
+          - paragraph [ref=f1e718]: Section 08
+          - heading "セキュリティ & サプライチェーン" [level=2] [ref=f1e719]
+          - paragraph [ref=f1e720]: サプライチェーン。
+          - list [ref=f1e721]:
+            - listitem [ref=f1e722] [cursor=pointer]:
+              - generic [ref=f1e723]: Sec 記事 1
+              - generic [ref=f1e724]: "29"
+        - generic [ref=f1e725]: "28"
+      - generic [ref=f1e726]:
+        - generic [ref=f1e727]: セキュリティ & サプライチェーン
+        - generic [ref=f1e729]:
+          - paragraph [ref=f1e730]: セキュリティ & サプライチェーン
+          - heading "Sec 記事 1" [level=2] [ref=f1e731]
+          - generic [ref=f1e732]:
+            - generic [ref=f1e733]: 影響大
+            - generic [ref=f1e734]: npm
+          - paragraph [ref=f1e735]: リード
+          - paragraph [ref=f1e736]:
+            - text: 本文
+            - superscript [ref=f1e737]:
+              - link "[18]" [ref=f1e738] [cursor=pointer]:
+                - /url: "#src-18"
+            - text: 。
+          - list [ref=f1e740]:
+            - listitem [ref=f1e741]:
+              - link "S" [ref=f1e742] [cursor=pointer]:
+                - /url: https://example.com/sec1
+              - text: 2000-01-03
+        - generic [ref=f1e743]: "29"
+    - generic [ref=f1e744]:
+      - generic [ref=f1e745]:
+        - generic [ref=f1e746]: リリースカレンダー
+        - generic [ref=f1e748]:
+          - generic [ref=f1e749]: "09"
+          - paragraph [ref=f1e750]: Section 09
+          - heading "リリースカレンダー" [level=2] [ref=f1e751]
+          - list [ref=f1e752]:
+            - listitem [ref=f1e753] [cursor=pointer]:
+              - generic [ref=f1e754]: 今月の主要リリース
+              - generic [ref=f1e755]: "31"
+        - generic [ref=f1e756]: "30"
+      - generic [ref=f1e757]:
+        - generic [ref=f1e758]: リリースカレンダー
+        - generic [ref=f1e760]:
+          - paragraph [ref=f1e761]: リリースカレンダー
+          - heading "今月の主要リリース" [level=2] [ref=f1e762]
+          - table [ref=f1e764]:
+            - rowgroup [ref=f1e765]:
+              - row [ref=f1e766]:
+                - columnheader "プロダクト" [ref=f1e767]
+                - columnheader "バージョン" [ref=f1e768]
+                - columnheader "日付" [ref=f1e769]
+                - columnheader "ひとこと" [ref=f1e770]
+            - rowgroup [ref=f1e771]:
+              - row [ref=f1e772]:
+                - cell [ref=f1e773]:
+                  - link "Node.js" [ref=f1e774] [cursor=pointer]:
+                    - /url: https://example.com/node
+                - cell "99.0.0" [ref=f1e775]
+                - cell "2000-01-05" [ref=f1e776]
+                - cell "サンプル" [ref=f1e777]
+              - row [ref=f1e778]:
+                - cell [ref=f1e779]:
+                  - link "TypeScript" [ref=f1e780] [cursor=pointer]:
+                    - /url: https://example.com/ts
+                - cell "9.9" [ref=f1e781]
+                - cell "2000-01-06" [ref=f1e782]
+                - cell "サンプル" [ref=f1e783]
+              - row [ref=f1e784]:
+                - cell "React" [ref=f1e785]
+                - cell "99" [ref=f1e786]
+                - cell "2000-01-07" [ref=f1e787]
+                - cell "サンプル" [ref=f1e788]
+              - row [ref=f1e789]:
+                - cell "Go" [ref=f1e790]
+                - cell "9.99" [ref=f1e791]
+                - cell "2000-01-08" [ref=f1e792]
+                - cell "サンプル" [ref=f1e793]
+              - row [ref=f1e794]:
+                - cell "Python" [ref=f1e795]
+                - cell "9.99" [ref=f1e796]
+                - cell "2000-01-09" [ref=f1e797]
+                - cell "サンプル" [ref=f1e798]
+          - heading "来月以降の予定" [level=3] [ref=f1e799]
+          - table [ref=f1e801]:
+            - rowgroup [ref=f1e802]:
+              - row [ref=f1e803]:
+                - columnheader "プロダクト" [ref=f1e804]
+                - columnheader "予定" [ref=f1e805]
+                - columnheader "見どころ" [ref=f1e806]
+            - rowgroup [ref=f1e807]:
+              - row [ref=f1e808]:
+                - cell "Rust" [ref=f1e809]
+                - cell "2000-02" [ref=f1e810]
+                - cell "サンプル" [ref=f1e811]
+        - generic [ref=f1e812]: "31"
+    - generic [ref=f1e813]:
+      - generic [ref=f1e814]:
+        - generic [ref=f1e815]: 今月試す3つ
+        - generic [ref=f1e817]:
+          - generic [ref=f1e818]: "10"
+          - paragraph [ref=f1e819]: Section 10
+          - heading "今月試す3つ" [level=2] [ref=f1e820]
+          - list [ref=f1e821]:
+            - listitem [ref=f1e822] [cursor=pointer]:
+              - generic [ref=f1e823]: サンプル課題 1
+              - generic [ref=f1e824]: "33"
+            - listitem [ref=f1e825] [cursor=pointer]:
+              - generic [ref=f1e826]: サンプル課題 2
+              - generic [ref=f1e827]: "34"
+            - listitem [ref=f1e828] [cursor=pointer]:
+              - generic [ref=f1e829]: サンプル課題 3
+              - generic [ref=f1e830]: "35"
+        - generic [ref=f1e831]: "32"
+      - generic [ref=f1e832]:
+        - generic [ref=f1e833]: 今月試す3つ
+        - generic [ref=f1e835]:
+          - paragraph [ref=f1e836]: "Try #1"
+          - heading "サンプル課題 1" [level=2] [ref=f1e837]
+          - generic [ref=f1e838]: 所要 60分
+          - paragraph [ref=f1e839]: 理由
+          - list [ref=f1e840]:
+            - listitem [ref=f1e841]:
+              - code [ref=f1e842]: npm create vite@latest
+              - text: を実行
+            - listitem [ref=f1e843]: 設定を眺める
+            - listitem [ref=f1e844]: ビルドして比較
+          - generic [ref=f1e845]: できたら：違いをメモする
+        - generic [ref=f1e846]: "33"
+    - generic [ref=f1e847]:
+      - generic [ref=f1e848]:
+        - generic [ref=f1e849]: 今月試す3つ
+        - generic [ref=f1e851]:
+          - paragraph [ref=f1e852]: "Try #2"
+          - heading "サンプル課題 2" [level=2] [ref=f1e853]
+          - generic [ref=f1e854]: 所要 90分
+          - paragraph [ref=f1e855]: 理由
+          - list [ref=f1e856]:
+            - listitem [ref=f1e857]: 手順 1
+            - listitem [ref=f1e858]: 手順 2
+            - listitem [ref=f1e859]: 手順 3
+        - generic [ref=f1e860]: "34"
+      - generic [ref=f1e861]:
+        - generic [ref=f1e862]: 今月試す3つ
+        - generic [ref=f1e864]:
+          - paragraph [ref=f1e865]: "Try #3"
+          - heading "サンプル課題 3" [level=2] [ref=f1e866]
+          - generic [ref=f1e867]: 所要 30分
+          - paragraph [ref=f1e868]: 理由
+          - list [ref=f1e869]:
+            - listitem [ref=f1e870]: 手順 1
+            - listitem [ref=f1e871]: 手順 2
+            - listitem [ref=f1e872]: 手順 3
+        - generic [ref=f1e873]: "35"
+    - generic [ref=f1e874]:
+      - generic [ref=f1e875]:
+        - generic [ref=f1e876]: 新語辞典
+        - generic [ref=f1e878]:
+          - generic [ref=f1e879]: "11"
+          - paragraph [ref=f1e880]: Section 11
+          - heading "新語辞典" [level=2] [ref=f1e881]
+          - list [ref=f1e882]:
+            - listitem [ref=f1e883] [cursor=pointer]:
+              - generic [ref=f1e884]: サンプル語 A 〜 サンプル語 E
+              - generic [ref=f1e885]: "37"
+        - generic [ref=f1e886]: "36"
+      - generic [ref=f1e887]:
+        - generic [ref=f1e888]: 新語辞典
+        - generic [ref=f1e890]:
+          - paragraph [ref=f1e891]: Glossary
+          - heading "新語辞典" [level=2] [ref=f1e892]
+          - generic [ref=f1e894]:
+            - term [ref=f1e895]: サンプル語 A
+            - definition [ref=f1e896]: 説明 A。
+            - term [ref=f1e897]: サンプル語 B
+            - definition [ref=f1e898]: 説明 B。
+            - term [ref=f1e899]: サンプル語 C
+            - definition [ref=f1e900]: 説明 C。
+            - term [ref=f1e901]: サンプル語 D
+            - definition [ref=f1e902]: 説明 D。
+            - term [ref=f1e903]: サンプル語 E
+            - definition [ref=f1e904]: 説明 E。
+        - generic [ref=f1e905]: "37"
+    - generic [ref=f1e906]:
+      - generic [ref=f1e907]:
+        - generic [ref=f1e908]: 奥付・出典
+        - generic [ref=f1e910]:
+          - paragraph [ref=f1e911]: Colophon
+          - heading "奥付" [level=2] [ref=f1e912]
+          - paragraph [ref=f1e913]: magazine 2000年1月号 発行日：2000-01-01 編集・執筆：Claude（sample）— Web 調査にもとづく自動生成 生成時刻：2026-11-09 00:52 UTC 出典数：18 ページ数：38
+          - heading "出典一覧" [level=3] [ref=f1e914]
+          - list [ref=f1e915]:
+            - listitem [ref=f1e916]:
+              - link "Sample source A" [ref=f1e917] [cursor=pointer]:
+                - /url: https://example.com/a
+              - text: (2000-01-01)https://example.com/a
+            - listitem [ref=f1e918]:
+              - link "Sample source B" [ref=f1e919] [cursor=pointer]:
+                - /url: https://example.com/b
+              - text: (2000-01-02)https://example.com/b
+            - listitem [ref=f1e920]:
+              - link "S" [ref=f1e921] [cursor=pointer]:
+                - /url: https://example.com/fe1
+              - text: (2000-01-03)https://example.com/fe1
+            - listitem [ref=f1e922]:
+              - link "S" [ref=f1e923] [cursor=pointer]:
+                - /url: https://example.com/fe2
+              - text: (2000-01-03)https://example.com/fe2
+            - listitem [ref=f1e924]:
+              - link "S" [ref=f1e925] [cursor=pointer]:
+                - /url: https://example.com/fe3
+              - text: (2000-01-03)https://example.com/fe3
+            - listitem [ref=f1e926]:
+              - link "S" [ref=f1e927] [cursor=pointer]:
+                - /url: https://example.com/be1
+              - text: (2000-01-03)https://example.com/be1
+            - listitem [ref=f1e928]:
+              - link "S" [ref=f1e929] [cursor=pointer]:
+                - /url: https://example.com/be2
+              - text: (2000-01-03)https://example.com/be2
+            - listitem [ref=f1e930]:
+              - link "S" [ref=f1e931] [cursor=pointer]:
+                - /url: https://example.com/be3
+              - text: (2000-01-03)https://example.com/be3
+            - listitem [ref=f1e932]:
+              - link "S" [ref=f1e933] [cursor=pointer]:
+                - /url: https://example.com/in1
+              - text: (2000-01-03)https://example.com/in1
+            - listitem [ref=f1e934]:
+              - link "S" [ref=f1e935] [cursor=pointer]:
+                - /url: https://example.com/in2
+              - text: (2000-01-03)https://example.com/in2
+            - listitem [ref=f1e936]:
+              - link "S" [ref=f1e937] [cursor=pointer]:
+                - /url: https://arxiv.org/abs/0000.00001
+              - text: (2000-01-03)https://arxiv.org/abs/0000.00001
+            - listitem [ref=f1e938]:
+              - link "S" [ref=f1e939] [cursor=pointer]:
+                - /url: https://arxiv.org/abs/0000.00002
+              - text: (2000-01-03)https://arxiv.org/abs/0000.00002
+            - listitem [ref=f1e940]:
+              - link "S" [ref=f1e941] [cursor=pointer]:
+                - /url: https://example.com/ai1
+              - text: (2000-01-03)https://example.com/ai1
+            - listitem [ref=f1e942]:
+              - link "S" [ref=f1e943] [cursor=pointer]:
+                - /url: https://example.com/ai2
+              - text: (2000-01-03)https://example.com/ai2
+            - listitem [ref=f1e944]:
+              - link "S" [ref=f1e945] [cursor=pointer]:
+                - /url: https://example.com/ai3
+              - text: (2000-01-03)https://example.com/ai3
+            - listitem [ref=f1e946]:
+              - link "S" [ref=f1e947] [cursor=pointer]:
+                - /url: https://example.com/dx1
+              - text: (2000-01-03)https://example.com/dx1
+            - listitem [ref=f1e948]:
+              - link "S" [ref=f1e949] [cursor=pointer]:
+                - /url: https://example.com/dx2
+              - text: (2000-01-03)https://example.com/dx2
+            - listitem [ref=f1e950]:
+              - link "S" [ref=f1e951] [cursor=pointer]:
+                - /url: https://example.com/sec1
+              - text: (2000-01-03)https://example.com/sec1
+        - generic [ref=f1e952]: "38"
+      - generic [ref=f1e953]: magazine
+  - generic "次のページ (←)" [ref=f1e955] [cursor=pointer]
+  - generic "前のページ (→)" [ref=f1e956] [cursor=pointer]
+  - generic [ref=f1e957]:
+    - button "←" [ref=f1e960] [cursor=pointer]
+    - button "→" [ref=f1e961] [cursor=pointer]
+    - generic [ref=f1e962]: p.1 / 38
+    - generic [ref=f1e963]: 右から左へめくります ← 次 → 前 t 目次 p 印刷
+    - button "目次" [ref=f1e964] [cursor=pointer]
+    - button "?" [ref=f1e965] [cursor=pointer]

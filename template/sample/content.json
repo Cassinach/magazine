@@ -1,0 +1,74 @@
+{
+  "title": "magazine",
+  "issue": "2000-01",
+  "volume": 1,
+  "published_at": "2000-01-01",
+  "model": "sample",
+  "incomplete": false,
+  "headlines": [
+    { "kicker": "Frontend", "text": "サンプル見出し：メタフレームワークの勢力図が動いた" },
+    { "kicker": "AI", "text": "サンプル見出し：ローカル LLM が実用ラインを超えた月" },
+    { "kicker": "3D", "text": "サンプル見出し：feed-forward 再構成が SfM を置き換え始めた" }
+  ],
+  "editorial": "これは**テンプレート検証用のサンプル号**です。本文はダミーで、出典 URL も例示です。\n\n- 右から左へめくれること\n- 見開き／単ページの切り替え\n- 目次ジャンプと印刷レイアウト\n\nを確認するために使います。",
+  "sections": [
+    { "id": "dashboard", "lead": "各層で「いま新規に始めるならこれ」を一つ選び、前号からの変化を矢印で示します。" },
+    { "id": "feature", "title": "巻頭特集", "lead": "今月いちばん大きかった動きを一本だけ深掘りします。",
+      "articles": [
+        { "headline": "サンプル特集：ビルドツールの Rust 化は何を変えるか", "topic": "Build", "impact": "high", "tags": ["Vite", "Rolldown", "Rust"],
+          "lead": "リード文です。結論を先に書きます。ここではダミーの説明文が入ります。",
+          "body": "## 何が起きたか\n\n本文の段落です[1]。`code` や **太字** も混ざります。次の段落では表を使います。\n\n| ツール | 言語 | 特徴 |\n|---|---|---|\n| Vite | TS→Rust | プラグイン互換 |\n| Turbopack | Rust | Next 専用 |\n\n## なぜ重要か\n\n- 箇条書き一つ目[2]\n- 箇条書き二つ目\n\n```ts\nexport default defineConfig({ plugins: [] })\n```\n\n> 引用ブロックのサンプルです。",
+          "next_step": "新規プロジェクトでは Vite 系を既定にし、設定ファイルは最小限に保つ。",
+          "sources": [
+            { "title": "Sample source A", "url": "https://example.com/a", "date": "2000-01-01" },
+            { "title": "Sample source B", "url": "https://example.com/b", "date": "2000-01-02" }
+          ] }
+      ] },
+    { "id": "frontend", "lead": "構成・パッケージマネージャー・ライブラリの動向。", "articles": [
+      { "headline": "FE 記事 1", "topic": "構成", "impact": "mid", "tags": ["Next.js"], "lead": "リード", "body": "本文[1]。", "sources": [{ "title": "S", "url": "https://example.com/fe1", "date": "2000-01-03" }] },
+      { "headline": "FE 記事 2", "topic": "パッケージマネージャー", "impact": "low", "tags": ["pnpm"], "lead": "リード", "body": "本文[1]。", "sources": [{ "title": "S", "url": "https://example.com/fe2", "date": "2000-01-03" }] },
+      { "headline": "FE 記事 3", "topic": "ライブラリ", "impact": "mid", "tags": ["TanStack"], "lead": "リード", "body": "本文[1]。", "sources": [{ "title": "S", "url": "https://example.com/fe3", "date": "2000-01-03" }] }
+    ] },
+    { "id": "backend", "lead": "言語・フレームワーク・ORM。", "articles": [
+      { "headline": "BE 記事 1", "impact": "mid", "tags": ["Hono"], "lead": "リード", "body": "本文[1]。", "sources": [{ "title": "S", "url": "https://example.com/be1", "date": "2000-01-03" }] },
+      { "headline": "BE 記事 2", "impact": "mid", "tags": ["Drizzle"], "lead": "リード", "body": "本文[1]。", "sources": [{ "title": "S", "url": "https://example.com/be2", "date": "2000-01-03" }] },
+      { "headline": "BE 記事 3", "impact": "low", "tags": ["uv"], "lead": "リード", "body": "本文[1]。", "sources": [{ "title": "S", "url": "https://example.com/be3", "date": "2000-01-03" }] }
+    ] },
+    { "id": "infra", "lead": "構成の潮流。", "articles": [
+      { "headline": "Infra 記事 1", "impact": "mid", "tags": ["IaC"], "lead": "リード", "body": "本文[1]。", "sources": [{ "title": "S", "url": "https://example.com/in1", "date": "2000-01-03" }] },
+      { "headline": "Infra 記事 2", "impact": "low", "tags": ["DB"], "lead": "リード", "body": "本文[1]。", "sources": [{ "title": "S", "url": "https://example.com/in2", "date": "2000-01-03" }] }
+    ] },
+    { "id": "recon3d", "lead": "研究とツール。", "articles": [
+      { "headline": "3D 記事 1", "impact": "high", "tags": ["Splatting"], "lead": "リード", "body": "本文[1]。", "sources": [{ "title": "S", "url": "https://arxiv.org/abs/0000.00001", "date": "2000-01-03" }] },
+      { "headline": "3D 記事 2", "impact": "mid", "tags": ["SLAM"], "lead": "リード", "body": "本文[1]。", "sources": [{ "title": "S", "url": "https://arxiv.org/abs/0000.00002", "date": "2000-01-03" }] }
+    ] },
+    { "id": "ai", "lead": "モデル比較とローカル LLM。", "articles": [
+      { "headline": "AI 記事 1：各社比較", "impact": "high", "tags": ["比較"], "lead": "リード", "body": "| 社 | モデル | 強み |\n|---|---|---|\n| A | x | y |\n| B | x | y |\n\n本文[1]。", "sources": [{ "title": "S", "url": "https://example.com/ai1", "date": "2000-01-03" }] },
+      { "headline": "AI 記事 2：ローカル", "impact": "mid", "tags": ["llama.cpp"], "lead": "リード", "body": "本文[1]。", "sources": [{ "title": "S", "url": "https://example.com/ai2", "date": "2000-01-03" }] },
+      { "headline": "AI 記事 3：ツール", "impact": "low", "tags": ["MCP"], "lead": "リード", "body": "本文[1]。", "sources": [{ "title": "S", "url": "https://example.com/ai3", "date": "2000-01-03" }] }
+    ] },
+    { "id": "devtools", "lead": "DX。", "articles": [
+      { "headline": "DX 記事 1", "impact": "mid", "tags": ["Vitest"], "lead": "リード", "body": "本文[1]。", "sources": [{ "title": "S", "url": "https://example.com/dx1", "date": "2000-01-03" }] },
+      { "headline": "DX 記事 2", "impact": "low", "tags": ["CI"], "lead": "リード", "body": "本文[1]。", "sources": [{ "title": "S", "url": "https://example.com/dx2", "date": "2000-01-03" }] }
+    ] },
+    { "id": "security", "lead": "サプライチェーン。", "articles": [
+      { "headline": "Sec 記事 1", "impact": "high", "tags": ["npm"], "lead": "リード", "body": "本文[1]。", "sources": [{ "title": "S", "url": "https://example.com/sec1", "date": "2000-01-03" }] }
+    ] },
+    { "id": "releases", "items": [
+      { "name": "Node.js", "version": "99.0.0", "date": "2000-01-05", "note": "サンプル", "url": "https://example.com/node" },
+      { "name": "TypeScript", "version": "9.9", "date": "2000-01-06", "note": "サンプル", "url": "https://example.com/ts" },
+      { "name": "React", "version": "99", "date": "2000-01-07", "note": "サンプル" },
+      { "name": "Go", "version": "9.99", "date": "2000-01-08", "note": "サンプル" },
+      { "name": "Python", "version": "9.99", "date": "2000-01-09", "note": "サンプル" }
+    ], "upcoming": [ { "name": "Rust", "expected": "2000-02", "note": "サンプル" } ] },
+    { "id": "try", "items": [
+      { "title": "サンプル課題 1", "time": "60分", "why": "理由", "steps": ["`npm create vite@latest` を実行", "設定を眺める", "ビルドして比較"], "done": "違いをメモする", "sources": [] },
+      { "title": "サンプル課題 2", "time": "90分", "why": "理由", "steps": ["手順 1", "手順 2", "手順 3"] },
+      { "title": "サンプル課題 3", "time": "30分", "why": "理由", "steps": ["手順 1", "手順 2", "手順 3"] }
+    ] },
+    { "id": "glossary", "items": [
+      { "term": "サンプル語 A", "desc": "説明 A。" }, { "term": "サンプル語 B", "desc": "説明 B。" }, { "term": "サンプル語 C", "desc": "説明 C。" },
+      { "term": "サンプル語 D", "desc": "説明 D。" }, { "term": "サンプル語 E", "desc": "説明 E。" }
+    ] }
+  ]
+}
