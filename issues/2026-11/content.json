@@ -1,0 +1,1915 @@
+{
+  "title": "magazine",
+  "issue": "2026-11",
+  "volume": 1,
+  "published_at": "2026-11-09",
+  "model": "claude-fable-5-1",
+  "incomplete": false,
+  "incomplete_note": "",
+  "headlines": [
+    {
+      "kicker": "特集",
+      "text": "署名付きでも汚染される——tensorlake 事件と、既定で守るパッケージマネージャー"
+    },
+    {
+      "kicker": "AI",
+      "text": "Claude 5.5 世代が 3 週間で出揃い、Sonnet 5.5 が Opus を抜く価格逆転"
+    },
+    {
+      "kicker": "3D",
+      "text": "3DGS が three.js のコアに入り、feed-forward 再構成は SLAM の既定になった"
+    }
+  ],
+  "editorial": "創刊号です。この雑誌は、Web のフルスタック開発と三次元再構成を行き来する一人の読者のために、Claude が毎月 Web を調べて編集します。「最近アンテナが鈍っている」という感覚を、1 冊読めば取り戻せることが目標です。\n\n2026 年 8 月から 11 月にかけての空気を一言でいえば、**「前提が入れ替わった秋」**でした。TypeScript は Go 製が当たり前になり、Vite 8 と Node 22 を要求しないフレームワークはほぼ消え、pnpm は Rust 製になり、Claude のモデルは 3 週間で総入れ替え、three.js には Gaussian Splat がコアで入りました。どれも単体では「アップデート」ですが、まとめて見ると開発環境の地面が一段高くなっています。\n\n一方で、便利になった分だけ攻撃面も増えました。巻頭特集では、正規の署名が付いたまま公開された npm のマルウェアと、それに先回りして「既定で守る」方向に舵を切ったパッケージマネージャーの話を扱います。セキュリティ欄の Next.js / React の Critical RCE 3 連発や、MCP SDK と Claude Code の High 連発も、同じ文脈で読んでいただけると思います。\n\nなお本号の調査環境は GitHub・npm・PyPI・nodejs.org・anthropic.com 以外のサイトに直接アクセスできず、arXiv や各社ブログの内容は検索結果から確認したものが含まれます。該当箇所は本文で明示しました。右から左へ、どうぞ。",
+  "sections": [
+    {
+      "id": "dashboard",
+      "lead": "各層で「いま新規に始めるならこれ」を一つ選び、前号からの変化を示します。創刊号なので全項目が新規です。版と日付は 2026-11-09 時点。"
+    },
+    {
+      "id": "feature",
+      "title": "巻頭特集",
+      "lead": "今月いちばん大きかった動きを一本だけ深掘りします。創刊号は、10 月の tensorlake 事件が示した「署名付きマルウェア」と、それに先回りするように既定化したパッケージマネージャーの防御です。",
+      "articles": [
+        {
+          "headline": "署名付きでも汚染される——tensorlake 事件と、既定で守るパッケージマネージャー",
+          "topic": "サプライチェーン",
+          "impact": "high",
+          "tags": [
+            "npm",
+            "pnpm",
+            "Trusted Publishing",
+            "provenance",
+            "GitHub Actions"
+          ],
+          "lead": "10 月 8 日、npm の tensorlake 0.5.144 は正規ワークフローから Sigstore provenance 付きで公開された悪性版でした。provenance は「どこから出たか」しか証明しません。同じ秋、pnpm 11/12 と npm 12 は公開直後のバージョンを待つ設定と install スクリプトのブロックを既定にしました。今週やるべき 3 つの設定を示します。",
+          "next_step": "pnpm に minimumReleaseAge を明示し、公開パッケージは Trusted Publishing + staged publish、CI のアクションは actions.lock か SHA で固定する。",
+          "sources": [
+            {
+              "title": "PR #1016: Revert the 0.5.144 supply-chain compromise and harden the npm release path",
+              "url": "https://github.com/tensorlakeai/tensorlake/pull/1016",
+              "date": "2026-10-08"
+            },
+            {
+              "title": "tensorlakeai/tensorlake commits 2026-10-06..10-10",
+              "url": "https://github.com/tensorlakeai/tensorlake/commits/main?since=2026-10-06&until=2026-10-10",
+              "date": "2026-10-08"
+            },
+            {
+              "title": "npm registry: tensorlake（版の公開時刻）",
+              "url": "https://registry.npmjs.org/tensorlake",
+              "date": "2026-10-08"
+            },
+            {
+              "title": "pnpm v11.0.0 リリースノート",
+              "url": "https://github.com/pnpm/pnpm/releases/tag/v11.0.0",
+              "date": "2026-04-28"
+            },
+            {
+              "title": "npm CLI v12.0.0 リリースノート",
+              "url": "https://github.com/npm/cli/releases/tag/v12.0.0",
+              "date": "2026-07-08"
+            },
+            {
+              "title": "npm Docs: Trusted publishers",
+              "url": "https://raw.githubusercontent.com/npm/documentation/main/content/packages-and-modules/securing-your-code/trusted-publishers.mdx",
+              "date": "2026-09-03"
+            },
+            {
+              "title": "GitHub Docs: Workflow dependency lockfiles",
+              "url": "https://raw.githubusercontent.com/github/docs/main/content/actions/concepts/security/workflow-dependency-lockfiles.md",
+              "date": "2026-11-09"
+            },
+            {
+              "title": "pnpm v12.0.0 リリースノート",
+              "url": "https://github.com/pnpm/pnpm/releases/tag/v12.0.0",
+              "date": "2026-08-26"
+            },
+            {
+              "title": "What's different in pnpm 12（pnpm Blog）",
+              "url": "https://pnpm.io/blog/2026/08/10/whats-different-in-pnpm-12",
+              "date": "2026-08-10"
+            }
+          ],
+          "body": "## 何が起きたか\n\n10 月 7 日、npm パッケージ `tensorlake` のリポジトリに、管理者権限を持つアカウントから GitHub の Web UI 経由で main へ直接 push がありました。コミットは「Add files via upload」が 5 回、「Add preinstall script to package.json」、「bump version to 0.5.144」と続き、TypeScript SDK に `lib/setup.mjs` と `preinstall` フックが足されています[2]。翌 8 日 01:12 UTC、悪性版 0.5.144 が **正規の公開ワークフローの手動実行**で公開されました。つまり Sigstore の provenance が付いた、署名として完全に正しいマルウェアです[1][3]。npm は約 3 時間後の 04:15 UTC に `0.0.1-security` のプレースホルダ版を公開して封じました。\n\n同日、メンテナは PR #1016 で最後のクリーンなコミットまで全戻しし、CI を `npm ci --ignore-scripts` に変え、install スクリプトの混入を検知するトリップワイヤを足し、main への直接 push と管理者バイパスを禁止し、npm 公開環境に 2 人承認を導入し、鍵をローテーションし、6 つのネイティブパッケージを unpublish しました。クリーン版 0.5.145 は同日 20:24 UTC、以後はスコープ付きの `@tensorlakeai/tensorlake` に移行しています[1]。ペイロードの挙動（トークンや AI エージェントの設定ファイルの窃取、自己複製）はセキュリティ企業の報道のみで、編集部では一次確認できていません。\n\n## なぜ重要か\n\nこの事件は「provenance を検証すれば安全」という前提を正面から壊しました。provenance が証明するのは「このリポジトリのこのワークフローから出た」ことだけで、ワークフローを起動した人間が正当かどうかは証明しません。GitHub Advisory Database に登録されたマルウェアは 11 月 9 日時点で npm 109,815 件、PyPI 11,971 件で、11 月 6〜9 日だけでも双方に 25 件以上が追加されています。\n\n## 防御は「既定」に移った\n\n同じ秋に、パッケージマネージャー側の防御は「設定すれば使える」から「既定で有効」に変わりました。\n\n| 仕組み | pnpm | npm | Bun / Yarn |\n|---|---|---|---|\n| 公開直後のバージョンを待つ | `minimumReleaseAge` 既定 1440 分（11.0 以降）[4] | `min-release-age`（11.10 以降、既定なし） | Bun `[install] minimumReleaseAge`、Yarn `npmMinimalAgeGate: 1d` 既定 |\n| 依存の install スクリプト | `strictDepBuilds` 既定、`allowBuilds` で許可[4] | 12.0 で既定ブロック、`allowScripts` で許可[5] | — |\n| 実装言語・権限 | 12.0 は Rust 製、`sudo` 拒否 | `allow-git` / `allow-remote` 既定 none | — |\n\npnpm 12.0.0（8 月 26 日）は Rust への全面書き換えでありながら pnpm 11 のロックファイルと安全既定をそのまま引き継ぎ、11 月 5 日の 12.18.0 ではエージェントスキルの個別承認まで入りました。npm 側は Trusted Publishing の未検証設定が 2 日で失効するようになり、2026 年 9 月 3 日以降に作った複数パブリッシャー設定は既定で `npm stage publish`（公開前のステージング）のみ許可です[6]。GitHub Actions には、全アクションを推移的依存まで commit SHA とリポジトリ ID で固定する **workflow dependency lockfile**（`.github/workflows/actions.lock`）がドキュメントに登場しました。「SHA ピン留めを上回る最強の保護」と位置づけられています[7]。\n\n## 反対意見と注意点\n\n`minimumReleaseAge` を 1 日にすると、セキュリティ修正の取り込みも 1 日遅れます。Next.js の月例セキュリティリリースのように「出た当日に上げたい」ものは `minimumReleaseAgeExclude` で例外にする運用が必要です。また、staged publishing と 2 人承認は個人開発では形骸化しがちで、結局は「自分の GitHub アカウントの 2FA とトークンの棚卸し」が最後の砦になります。tensorlake の侵害経路も、ワークフローではなくアカウントでした。\n\n## 読者への影響\n\n今週やることは 3 つです。`pnpm-workspace.yaml` に `minimumReleaseAge: 1440` を明示し（npm なら `allowScripts` を監査し）、自分が公開しているパッケージを Trusted Publishing + staged publish に移し、CI のアクションを actions.lock か 40 桁 SHA で固定する。この 3 つで「正しく署名された悪性版」を踏む確率と、踏んだときの被害範囲の両方が下がります。"
+        }
+      ]
+    },
+    {
+      "id": "frontend",
+      "lead": "Next.js 16.4 と React 19.3、そして 10 月 1 日に重なった SvelteKit 3 と Remix 3、TanStack Start 1.0。Vite 8 と TypeScript 7 が「前提」になった秋でした。",
+      "articles": [
+        {
+          "headline": "Next.js 16.4、Cache Components が標準路線に——ただし脆弱性も集中",
+          "topic": "メタフレームワーク",
+          "impact": "high",
+          "tags": [
+            "Next.js",
+            "Cache Components",
+            "Turbopack"
+          ],
+          "lead": "16.4 で Partial Prefetching が安定化し、create-next-app は Cache Components を既定で有効にします。一方で 10 月の Critical RCE 2 件と 11 月 3 日の Moderate 7 件の大半が use cache まわりでした。self-hosted は 16.4.5 以上が必須です。",
+          "next_step": "16.4.5 以上に更新し、cacheComponents を使うなら partialPrefetching: true を設定する。",
+          "sources": [
+            {
+              "title": "Release v16.4.0 · vercel/next.js",
+              "url": "https://github.com/vercel/next.js/releases/tag/v16.4.0",
+              "date": "2026-10-06"
+            },
+            {
+              "title": "Release v16.4.5 · vercel/next.js",
+              "url": "https://github.com/vercel/next.js/releases/tag/v16.4.5",
+              "date": "2026-11-03"
+            },
+            {
+              "title": "GHSA-2464-fhr4-w9xw: Unauthenticated RCE in Image Optimization API (SVG)",
+              "url": "https://github.com/vercel/next.js/security/advisories/GHSA-2464-fhr4-w9xw",
+              "date": "2026-10-14"
+            },
+            {
+              "title": "Upcoming Next.js Security Release — November 2026",
+              "url": "https://nextjs.org/blog/upcoming-nextjs-security-release-november-2026",
+              "date": "2026-11-03"
+            }
+          ],
+          "body": "## 何が起きたか\n\nNext.js 16.4.0 は 10 月 6 日に出ました[1]。目玉は **Partial Prefetching の安定化**です。`navigation()` と `prefetch()` から `unstable_` が外れ、`ensureStatic` は \"shell\" / \"prefetch\" / \"navigation\" の 3 段階で安定化しました。内部的には Cache Components が PPR（Partial Prerendering）のシグナルとなり、旧 PPR のコードパスは削除されています。`create-next-app` は Cache Components を既定で有効にするようになりました。\n\nほかに Turbopack のエクスポート名マングリングと共有ランタイムがビルドで既定 on、`next analyze` が experimental から昇格してルート別サマリーと比較ビューを備え、エージェントにアップグレード手順を渡す `next upgrade --ai` が追加されました。React 19.3 の `browser()` を使った「browser bailouts」が CSR bailout エラーを置き換え、Pages Router の React 18 サポートは非推奨になっています。ルートマッチングは strict が既定になり、どのルートにも一致しない app ページはエラーになります[1]。\n\n## 10 月と 11 月のセキュリティリリース\n\n16.4.0 の 8 日後、16.4.1 / 15.5.28 で Critical 2 件と High 1 件が修正されました。1 つは画像最適化 API の SVG 経由の未認証 RCE（CVE-2026-96889、CVSS 9.5。上流は sharp 同梱の librsvg で、sharp 0.35.5 以降で修正）、もう 1 つは typed array を返す `use cache` 関数経由の未認証 RCE です[3]。\n\n11 月 3 日の定例セキュリティリリース（16.4.5 / 15.5.29）は Moderate 7 件で、うち 5 件が `use cache` や Cache Components のキャッシュキー・フォールバックシェルに関するユーザー間の漏えい・汚染です[2][4]。詳細はセキュリティ欄で扱います。\n\n## 読者への影響\n\n16.4 が推す Cache Components は、同時に今季いちばん脆弱性が見つかったコンポーネントでもあります。採用自体は妥当ですが、self-hosted なら 16.4.5 以上への更新は必須で、`cacheComponents: true` を使うなら `partialPrefetching: true` も設定してください。Next.js 17 で Cache Components が既定になる、という報道もありますが、公式発表はまだ確認できていません。"
+        },
+        {
+          "headline": "React 19.3：View Transitions と Fragment Refs が安定版に",
+          "topic": "React",
+          "impact": "high",
+          "tags": [
+            "React",
+            "View Transitions",
+            "RSC"
+          ],
+          "lead": "React 19.3 は破壊的変更なしで <ViewTransition /> と Fragment Refs を安定化しました。React Router は自前の遷移 API を非推奨にして React 側へ寄せています。10 月 14 日の 19.3.1 系パッチは RSC の Critical RCE 修正を含むため、RSC 利用者は先に更新を。",
+          "next_step": "遷移アニメーションは React 本体の ViewTransition で書き、ライブラリ独自 API を避ける。",
+          "sources": [
+            {
+              "title": "React 19.3 – React Blog",
+              "url": "https://react.dev/blog/2026/09/09/react-19-3",
+              "date": "2026-09-09"
+            },
+            {
+              "title": "facebook/react CHANGELOG.md（19.3.0）",
+              "url": "https://github.com/facebook/react/blob/main/CHANGELOG.md",
+              "date": "2026-09-09"
+            },
+            {
+              "title": "Release v19.3.1 · facebook/react",
+              "url": "https://github.com/facebook/react/releases/tag/v19.3.1",
+              "date": "2026-10-14"
+            },
+            {
+              "title": "react-router CHANGELOG（v8.5.0）",
+              "url": "https://github.com/remix-run/react-router/blob/main/packages/react-router/CHANGELOG.md",
+              "date": "2026-10-19"
+            }
+          ],
+          "body": "## 何が起きたか\n\nReact 19.3.0 は 9 月 9 日にリリースされました。破壊的変更なしのマイナーで、長く experimental だった 2 つの機能が安定版に入っています[1][2]。\n\n**`<ViewTransition />`** と `addTransitionType` は、ブラウザの View Transition API を使って要素の enter / exit / move / resize をアニメーションさせます。ルーターが独自に持っていた遷移アニメーション層が不要になり、React Router は 8.5.0（10 月 19 日）で自前の view-transition API を非推奨にして React 側に寄せました[4]。\n\n**Fragment Refs** は `<Fragment>` に ref を渡せるようにするもので、ラッパー div を増やさずに兄弟 DOM ノードに対するイベント登録・フォーカス・Observer・計測・スクロールができます。レイアウト用に挟んでいた div を消せるので、Tailwind 系の UI では地味に効きます。\n\n## その他の変更\n\n- react-dom に `browser()` が追加され、`use(browser())` を Suspense 内で使うとサブツリーをブラウザ専用として扱えます。サーバー API には `onBrowserBailout` が増えました。\n- Trusted Types API に対応し、CSP の `require-trusted-types-for 'script'` が使えるようになりました。\n- Server Components の中で `<Context>` を直接レンダーできます。\n- トランジションが独立してレンダーされ、遅いトランジションが無関係なものをブロックしなくなりました。\n- 条件付き `use()` に DEV 警告が出ます。\n\n10 月 14 日の 19.3.1 は RSC の transport protocol 改善 1 件ですが、同日に 19.2.9 / 19.1.10 / 19.0.9 も出ており、これは react-server-dom-* の Critical RCE と DoS の修正を含むセキュリティリリースでした[3]。\n\nReact 20 は 11 月 9 日時点で npm に存在せず、canary は 19.3.0 系のままです。\n\n## 読者への影響\n\nルーターや UI ライブラリの「遷移アニメーション」機能は、今後 React 本体の `<ViewTransition>` に収斂していきます。新規に書くなら最初から React の API を使い、ライブラリ独自のものは避けるのが安全です。RSC を使っているなら 19.3.1 以上（または各系列の修正版）への更新を先に済ませてください。"
+        },
+        {
+          "headline": "10 月はメジャー版ラッシュ：SvelteKit 3、Remix 3、TanStack Start 1.0",
+          "topic": "メタフレームワーク",
+          "impact": "high",
+          "tags": [
+            "SvelteKit",
+            "TanStack Start",
+            "Remix",
+            "Nuxt",
+            "Astro"
+          ],
+          "lead": "SvelteKit 3 と Remix 3 が 10 月 1 日に同時リリース、TanStack Start は 10 月 13 日に 1.0 安定版を宣言しました。共通項は Vite 8 と Node 22 の前提化。Remix 3 は React 非依存の別物になった点に注意です。",
+          "next_step": "React で Vite ネイティブを選ぶなら TanStack Start 1.0 を一度触り、Remix 3 は観察対象に置く。",
+          "sources": [
+            {
+              "title": "SvelteKit 3 is here（Svelte Blog）",
+              "url": "https://svelte.dev/blog/sveltekit-3-is-here",
+              "date": "2026-10-01"
+            },
+            {
+              "title": "Release @sveltejs/kit@3.0.0",
+              "url": "https://github.com/sveltejs/kit/releases/tag/%40sveltejs%2Fkit%403.0.0",
+              "date": "2026-10-01"
+            },
+            {
+              "title": "TanStack Start 1.0 is Stable",
+              "url": "https://tanstack.com/blog/tanstack-start-1-0",
+              "date": "2026-10-13"
+            },
+            {
+              "title": "GHSA-qx66-fv34-fjm8: TanStack Start reflected XSS",
+              "url": "https://github.com/TanStack/router/security/advisories/GHSA-qx66-fv34-fjm8",
+              "date": "2026-09-30"
+            },
+            {
+              "title": "Release remix@3.0.0",
+              "url": "https://github.com/remix-run/remix/releases/tag/remix%403.0.0",
+              "date": "2026-10-01"
+            },
+            {
+              "title": "Remix 3 Release Candidate（Remix Blog）",
+              "url": "https://remix.run/blog/remix-3-release-candidate",
+              "date": "2026-08-31"
+            },
+            {
+              "title": "Release v4.6.0 · nuxt/nuxt",
+              "url": "https://github.com/nuxt/nuxt/releases/tag/v4.6.0",
+              "date": "2026-10-05"
+            },
+            {
+              "title": "Release astro@7.4.0",
+              "url": "https://github.com/withastro/astro/releases/tag/astro%407.4.0",
+              "date": "2026-10-15"
+            }
+          ],
+          "body": "## 10 月 1 日に 2 つのメジャー\n\n**SvelteKit 3.0.0** は 10 月 1 日に出ました。Node 22.17 以上、Vite 8（Rolldown 1.0 を含む 8.0.12 以上）、Svelte 5.56.4 以上、TypeScript 6 以上が必須です。`$lib` は Node のサブパス import を使う `#lib` に、`$app/stores` は削除されて `$app/state` に、`invalidateAll` は `refreshAll` に、`checkOrigin` は `trustedOrigins` になりました。`+server` で QUERY メソッドが使え、本番 sourcemap と `cookies.parse` が追加されています。移行は `npx sv migrate sveltekit-3` でほぼ自動です[1][2]。3.1.0（10 月 14 日）では CSP の `report-sha256` 系と `sveltekit.endpoint` のトレーシングスパンが入りました。\n\n同日の **Remix 3.0.0** は、名前こそ Remix ですが React には依存しません。独自の JSX ランタイム `remix/component` を持つ、単一依存のフルスタックフレームワークとして「初の安定版」を名乗っています[5][6]。11 月 4 日の 3.2.0 では nonce ベースの CSP ミドルウェアが入りました。React 向けの系譜は React Router 8（8.5.1、10 月 27 日）が引き継いでいます。\n\n## TanStack Start 1.0\n\n10 月 13 日、Tanner Linsley が **TanStack Start 1.0 の安定版**を宣言しました。npm では `@tanstack/react-start` 1.169.0（10 月 12 日）から peer の Vite が 8 以上になり、React だけでなく Solid と Vue の Start も同じ基盤で提供されます。ブログはフレームワーク非依存と同型のサーバー関数を強調し、RSC には慎重な姿勢です[3]。注意点として、9 月 30 日に Critical（CVSS 9.3）のサーバー関数レスポンス経由の反射型 XSS（CVE-2026-102989）が公開されており、1.168.60 以降が必要です[4]。\n\n## Nuxt と Astro\n\nNuxt 4.6.0（10 月 5 日）は 420 以上のコミットで、Nitro v2 / v3 と新しい Vite 専用サーバーの間で可搬な `nuxt/server`、対話型 TUI を備えた Nuxt CLI v4、セッション、Vue Vapor のオプトインが入りました。Nuxt 5 の変更の多くは `future.compatibilityVersion: 5` で先取りできます[7]。Astro 7.4.0（10 月 15 日）は `astro build --timings` とマルチコアで静的生成する実験的 `parallelPrerender` を追加し、Node の最低版を 22.22 に上げています[8]。\n\n## 読者への影響\n\nVite 8 と Node 22 を前提にしないフレームワークは、この秋でほぼ消えました。Next.js 以外を選ぶなら、React で Vite ネイティブを取るなら TanStack Start 1.0、Svelte なら 3 系、という選択が今月から現実的です。Remix 3 は「React を捨てた別物」として観察対象に置いておきましょう。"
+        },
+        {
+          "headline": "Vite 8.3・Rolldown 1.3・oxlint 型対応——Rust/Go ツールチェーンが出揃った",
+          "topic": "ビルド／Lint",
+          "impact": "mid",
+          "tags": [
+            "Vite",
+            "Rolldown",
+            "oxc",
+            "Biome",
+            "TypeScript"
+          ],
+          "lead": "Vite 8.3 と Rolldown 1.3、tsgo ベースの型対応 lint を得た oxlint、HTML / Vue 整形に広げた oxfmt、2.6 系の Biome。TypeScript 7 を前提に、フロントエンドのツールチェーンは JS 実装からほぼ入れ替わりました。",
+          "next_step": "新規は Vite 8 + TypeScript 7 + Biome 2.6 を既定にし、oxfmt は 1.0 まで様子見。",
+          "sources": [
+            {
+              "title": "microsoft/TypeScript Releases（v7.1-beta）",
+              "url": "https://github.com/microsoft/TypeScript/releases/tag/v7.1-beta",
+              "date": "2026-10-20"
+            },
+            {
+              "title": "Vite 8.1 is out!",
+              "url": "https://vite.dev/blog/announcing-vite8-1",
+              "date": "2026-06-23"
+            },
+            {
+              "title": "rolldown/rolldown Releases（v1.3.0）",
+              "url": "https://github.com/rolldown/rolldown/releases",
+              "date": "2026-11-05"
+            },
+            {
+              "title": "oxc-project/oxc Releases（oxlint v1.92.0 / oxfmt v0.77.0）",
+              "url": "https://github.com/oxc-project/oxc/releases",
+              "date": "2026-11-06"
+            },
+            {
+              "title": "biomejs/biome Releases",
+              "url": "https://github.com/biomejs/biome/releases",
+              "date": "2026-11-06"
+            }
+          ],
+          "body": "## Vite 8.3 と Rolldown 1.3\n\nVite は 3 月の 8.0 で Rolldown を単一バンドラとして採用し、6 月の 8.1 で実験的な Bundled Dev Mode（1 万コンポーネント規模で起動が約 15 倍速いと公式ブログは述べています）を入れました[2]。9 月 10 日の 8.3.0 では devtools の開発サーバー統合、トップレベルの `tsconfig` オプション、`server.watch` での Rolldown の watch オプションが加わり、11 月 5 日の 8.3.6 が最新です。\n\nRolldown 本体は 11 月 5 日に 1.3.0 を出しました。実験的な import attributes、`devtools: { mode: 'report' }` で Markdown / JSON のビルドレポートを吐く「エージェント向けレポート」、`@rolldown/perf-kit` が新機能です。リリースノートは Vite 利用者に対して overrides で rolldown@1.3.0 を強制しないよう注意しています[3]。\n\n## oxc と Biome\n\noxlint は 11 月 6 日の 1.92.0 で型対応 lint のための tsrs を自動検出するようになり、1.90.0 からは tsgo ベースの `oxlint-tsgolint` を最低版として要求します。フォーマッタの oxfmt は 0.76.0 で HTML、0.77.0 で Vue テンプレートの整形に対応しましたが、まだ 0.x で週次リリース中です[4]。Biome は 10 月 21 日に 2.6.0、11 月 6 日に 2.6.6 を出しており、2.5.15 では HTML フォーマッタが最大 4 倍高速化しています[5]。\n\n## TypeScript 7 が「前提」になった\n\nSvelteKit 3 は TypeScript 6 以上を必須にし、Effect 4.0（10 月 1 日）は「TypeScript 7 推奨」と明記しています。TypeScript 7.1 Beta（10 月 20 日）は Iteration Plan で union 構築と narrowing の高速化を掲げており、Rust / Go 製ツールチェーンの最後のピースだった型チェッカーも揃いました[1]。\n\n## 読者への影響\n\n新規プロジェクトの構成は「Vite 8 + TypeScript 7 + Biome（または oxlint/oxfmt）」で迷う余地がほぼなくなりました。oxfmt を採用するなら 0.x の破壊的変更を追う覚悟が要るので、個人開発なら Biome 2.6 の単一バイナリのほうが手離れが良いでしょう。"
+        },
+        {
+          "headline": "Zod 4.5 / 4.6：z.compile() で 3〜9 倍、検証は「ビルド時最適化」へ",
+          "topic": "スキーマ／バリデーション",
+          "impact": "mid",
+          "tags": [
+            "Zod",
+            "Valibot",
+            "Effect"
+          ],
+          "lead": "Zod 4.5 の z.compile() と 4.6 の高速化で、Valibot や ArkType との速度差はほぼ埋まりました。shadcn も内部スキーマを Zod 4 に移行し、TypeScript エコシステムのバリデーションは Zod 4 に収斂しています。",
+          "next_step": "Zod 3 のプロジェクトは 4.6 に上げ、import \"zod/compile\" を 1 行足す。",
+          "sources": [
+            {
+              "title": "Release v4.5.0 · colinhacks/zod",
+              "url": "https://github.com/colinhacks/zod/releases/tag/v4.5.0",
+              "date": "2026-08-28"
+            },
+            {
+              "title": "colinhacks/zod Releases（v4.6.0）",
+              "url": "https://github.com/colinhacks/zod/releases",
+              "date": "2026-09-09"
+            },
+            {
+              "title": "shadcn-ui/ui Releases（shadcn@4.22.0 / 4.23.0）",
+              "url": "https://github.com/shadcn-ui/ui/releases",
+              "date": "2026-10-27"
+            },
+            {
+              "title": "Release effect@4.0.0",
+              "url": "https://github.com/Effect-TS/effect/releases/tag/effect%404.0.0",
+              "date": "2026-10-01"
+            }
+          ],
+          "body": "## 何が起きたか\n\nZod 4.5.0（8 月 28 日）で **`z.compile()`** が入りました。スキーマを事前コンパイルしてオブジェクト・配列・union のパースを 3〜9 倍速くするもので、`import \"zod/compile\"` を 1 行足せば自動コンパイルになります。真偽値だけを返す `z.validate()` は `safeParse().success` より最大 16 倍速く、`z.string()` のメモリは 7.5 KB から 784 バイトに減りました。`z.creditCard()` と `z.deepPartial()` も追加されています[1]。\n\n9 月 9 日の 4.6.0 では、コンパイル済みスキーマでの `.validate()` が最大 35 倍速くなり、`z.instanceof().properties()`、`z.iban()`、`new Function` を使わず厳格な CSP 環境でも動く `z.withParser()`、スタンドアロンの `@zod/mini` が入りました。JSON Schema からの変換は `minProperties` / `maxProperties` / `uniqueItems` / `contains` を強制するようになっています[2]。最新は 4.6.7（10 月 12 日）です。\n\n## エコシステムの収斂\n\nshadcn は 4.22.0（10 月 16 日）で内部スキーマを Zod 4 に移行しました[3]。TanStack や各種アダプタも Zod 4 を前提にしており、「バリデーションは Zod、ただし速度が要るなら Valibot か ArkType」という従来の住み分けは、`z.compile()` でかなり崩れています。Effect 4.0（10 月 1 日）は新しい Schema 実装と JSON Schema の入出力を持ち、Effect を使う人にはこちらが自然です[4]。\n\n## 読者への影響\n\nZod 3 のまま止まっているプロジェクトは、4.6 に上げて `import \"zod/compile\"` を足すだけでホットパスの検証コストが下がります。Edge や Workers で CSP を厳しくしているなら `z.withParser()` を確認してください。"
+        }
+      ]
+    },
+    {
+      "id": "backend",
+      "lead": "Node.js 26 の LTS 入りと Python 3.15 という二大ランタイムの節目に、Deno の Cloudflare 合流、ORM と認証ライブラリの RC ラッシュが重なった 3 か月でした。",
+      "articles": [
+        {
+          "headline": "Node.js 26 が LTS 入り、27 から「アルファ→LTS」の新モデルへ",
+          "topic": "ランタイム",
+          "impact": "high",
+          "tags": [
+            "Node.js",
+            "LTS",
+            "V8"
+          ],
+          "lead": "26.13.0 で Node.js 26 が Active LTS になり 2029 年 4 月までサポートされます。翌日に出た初のアルファ版 27 からは、Maintenance フェーズのない 36 か月の新リリースモデルに移行します。",
+          "next_step": "新規は Node 26 に固定し、Dockerfile の slim イメージには libatomic1 を追加しておく。",
+          "sources": [
+            {
+              "title": "Node.js 26.13.0 (LTS) リリースノート",
+              "url": "https://nodejs.org/en/blog/release/v26.13.0",
+              "date": "2026-10-28"
+            },
+            {
+              "title": "Node.js 27.0.0-alpha.0.0.0 リリースノート",
+              "url": "https://nodejs.org/en/blog/release/v27.0.0-alpha.0.0.0",
+              "date": "2026-10-29"
+            },
+            {
+              "title": "Node.js 26.12.1 (Current) セキュリティリリース",
+              "url": "https://nodejs.org/en/blog/release/v26.12.1",
+              "date": "2026-10-21"
+            },
+            {
+              "title": "nodejs/Release — リリーススケジュール",
+              "url": "https://github.com/nodejs/Release",
+              "date": "2026-10-28"
+            }
+          ],
+          "body": "## 何が起きたか\n\nNode.js 26.x は 2026-10-28 の 26.13.0 'Lithium' で Active LTS に入りました。サポートは 2029 年 4 月末までです[1]。同じ週、24.x は 10 月 20 日付で Maintenance に移り、22.x の EOL は 2027-04-30、奇数版の 25.x は 2026-06-01 ですでに終了しています[4]。\n\nその翌日 10 月 29 日には、Node.js 史上初の「アルファ版」となる 27.0.0-alpha.0.0.0 が出ました[2]。V8 は 15.6 に上がり、`Math.sumPrecise` や `Iterator.zip` が既定で有効になります。SEMVER-MAJOR の変更としては、OpenSSL 3 以上が必須になりバンドル版は 4.1.0 へ、FIPS プロバイダのビルドは削除、Intel Mac は experimental に格下げ、`domain` モジュールが runtime deprecation、HTTP の `keepAliveTimeout` 既定が 65 秒に、`req.headers` が null プロトタイプになる、といった項目が並びます。ヒープ上限の既定も「物理メモリの半分を 256MB〜4GB にクランプ」に変わり、Buffer のメモリも上限の対象になりました[2]。\n\n## リリースモデルが変わる\n\n27 から適用される新モデルでは、各ラインが「Alpha 6 か月 → Current 6 か月 → Active LTS 30 か月」の計 36 か月を歩み、Maintenance フェーズはなくなります。毎年 10 月に新ラインが分岐し、偶数・奇数の区別も消えます。27 のスケジュールは Current 2027-04-22、LTS 2027-10-20、EOL 2030-04-30 です[4]。\n\n## セキュリティリリースも忘れずに\n\n10 月 21 日には 26.12.1 / 24.22.1 / 22.23.4 の協調セキュリティリリースがあり、TLS・DNS・Brotli にまたがる 9 件の CVE（High 5 件）が修正されています[3]。まだ 26.12.0 以前や 24.22.0 以前を使っているなら、LTS 入りとは別に今すぐ上げる理由があります。\n\n## 読者への影響\n\n新規プロジェクトは迷わず 26 です。Node 25 以降の公式 Linux バイナリは libatomic にリンクされているので、slim なコンテナイメージでは `libatomic1` を入れる必要があります[1]。27 のヒープ上限と OpenSSL 4 への移行は、コンテナのメモリ制限や TLS まわりのネイティブ依存に効いてくるので、2027 年春までに一度アルファで動かしておくと安心です。"
+        },
+        {
+          "headline": "Python 3.15 正式版、uv 0.13 は既定 Python を 3.15 に切り替え",
+          "topic": "言語／パッケージ管理",
+          "impact": "high",
+          "tags": [
+            "Python",
+            "uv",
+            "pip"
+          ],
+          "lead": "Python 3.15.0 が 10 月 9 日にリリースされ、lazy imports と frozendict、free-threaded 向け安定 ABI が入りました。同日公開の uv 0.13 は未指定時の Python を 3.15 にするため、CI のバージョン固定を確認する必要があります。",
+          "next_step": ".python-version を固定したうえで、起動が遅い CLI に lazy import を試す。",
+          "sources": [
+            {
+              "title": "PEP 790 – Python 3.15 Release Schedule",
+              "url": "https://peps.python.org/pep-0790/",
+              "date": "2026-10-26"
+            },
+            {
+              "title": "What's New In Python 3.15",
+              "url": "https://docs.python.org/3.15/whatsnew/3.15.html",
+              "date": "2026-10-09"
+            },
+            {
+              "title": "uv 0.13.0 リリースノート",
+              "url": "https://github.com/astral-sh/uv/releases/tag/0.13.0",
+              "date": "2026-10-09"
+            },
+            {
+              "title": "pip NEWS（26.3）",
+              "url": "https://github.com/pypa/pip/blob/main/NEWS.rst",
+              "date": "2026-11-02"
+            }
+          ],
+          "body": "## 何が起きたか\n\nPython 3.15.0 は予定より約 1 週間遅れて 2026-10-09 に正式リリースされ、10 月 21 日に 3.15.1、26 日に 3.15.2 と矢継ぎ早にバグフィックスが出ています。次の 3.15.3 は 12 月 1 日予定で、セキュリティ修正は 2031 年 10 月まで続きます[1]。\n\n目玉は PEP 810 の **lazy imports** です。`lazy import foo` と書くとモジュールスコープの import が初回アクセスまで遅延され、CLI ツールやサーバーレス関数の起動時間を削れます。ほかに組み込み `frozendict`（PEP 814）、`sentinel`（PEP 661）、UTF-8 を既定エンコーディングにする PEP 686、内包表記でのアンパック（PEP 798）、サンプリングプロファイラ Tachyon を含む新 `profiling` パッケージ（PEP 799。従来の `profile` は非推奨）が入りました[2]。\n\n## free-threaded と JIT\n\nfree-threaded ビルド向けには、安定 ABI `abi3t`（PEP 803）が導入され、C 拡張は 1 つの wheel で free-threaded CPython に対応できるようになりました。mimalloc が free-threaded ビルドの既定アロケータになり、macOS 公式インストーラは free-threading を同梱します。JIT はトレーシングフロントエンドとレジスタ割り当てが入り、x86-64 Linux で pyperformance の幾何平均 7〜8% 高速化とされますが、依然 experimental です[2]。\n\n## uv 0.13 が既定を 3.15 に\n\n同じ 10 月 9 日に出た uv 0.13.0 は、バージョン指定がない場合にダウンロードする Python を 3.15 に切り替えました。あわせて tar コーデックの刷新、キャッシュ形式の変更、`-c` 制約ファイルでの `--require-hashes` 尊重など破壊的変更が含まれます[3]。その後 0.13.4 で侵害された ルート証明書の除去（GHSA-hq85-5cpj-mr62）、0.13.7（11 月 3 日）で `uv audit` の OSV レコードのグルーピングが入っています。pip も 11 月 2 日の 26.3 で、インストール中の予期しない import をブロックする防御と、`pylock.toml` の extras 選択に対応しました[4]。\n\n## 読者への影響\n\nCI で `uv python install` をバージョン指定なしで叩いているなら、3.15 に勝手に上がって壊れる前に `.python-version` か `requires-python` を固定してください。逆に新規なら 3.15 を選び、起動の遅い CLI には `lazy import` を試す価値があります。free-threading を本気で使うなら、依存 wheel が `abi3t` を出しているかを確認する月です。"
+        },
+        {
+          "headline": "Deno チームが Cloudflare へ、Bun 1.4 は Rust 製に——ランタイム再編",
+          "topic": "ランタイム",
+          "impact": "high",
+          "tags": [
+            "Deno",
+            "Bun",
+            "Cloudflare Workers"
+          ],
+          "lead": "Deno は 10 月 9 日に Cloudflare への合流を発表し、報道ではランタイムは約 1 年の保守後に開発終了とされています。Bun は 1.4 で実装言語を Rust に切り替えました。ランタイム選びは「どこにデプロイするか」で決める局面です。",
+          "next_step": "Node 26 LTS を既定にし、エッジに載せる部分はランタイム非依存のフレームワークで書く。",
+          "sources": [
+            {
+              "title": "Deno is joining Cloudflare（Deno 公式ブログ）",
+              "url": "https://deno.com/blog/cloudflare",
+              "date": "2026-10-09"
+            },
+            {
+              "title": "Node.js creator ditches Deno to work on open source Cloudflare Workers（DevClass）",
+              "url": "https://www.devclass.com/devops/2026/10/17/nodejs-creator-ditches-deno-to-work-on-open-source-cloudflare-workers/5303692",
+              "date": "2026-10-17"
+            },
+            {
+              "title": "denoland/deno Releases（v2.9.8）",
+              "url": "https://github.com/denoland/deno/releases",
+              "date": "2026-10-21"
+            },
+            {
+              "title": "oven-sh/bun Releases（v1.4.0〜v1.4.4）",
+              "url": "https://github.com/oven-sh/bun/releases",
+              "date": "2026-10-22"
+            },
+            {
+              "title": "Bun v1.4（Bun 公式ブログ）",
+              "url": "https://bun.com/blog/bun-v1.4",
+              "date": "2026-08-20"
+            }
+          ],
+          "body": "## 何が起きたか\n\n10 月 9 日、Deno は公式ブログでチームが Cloudflare に加わることを発表しました[1]。報道によれば、Deno ランタイム本体は約 12 か月のバグ修正・セキュリティ修正の後に開発を終え、Deno Deploy は約 6 か月で終了、JSR は Cloudflare のインフラに移して継続。Ryan Dahl と Bert Belder は Deno の自前 Workers 実装「celld」を Cloudflare のオープンソースランタイム workerd に統合する作業に移るとされています[2]。この時系列は二次情報であり、GitHub の README にはまだ告知がない点に注意してください。\n\n一方でリリース自体は続いており、2.9.8（10 月 21 日）ではコンパイル済みアプリの権限まわりの修正と、eMudhra 社の CA の不信頼化が入っています[3]。\n\n## Bun 1.4 は Rust 製に\n\nBun は 8 月 20 日の 1.4.0 から 10 月 22 日の 1.4.4 まで着実にリリースを重ねています[4]。公式ブログによると 1.4 は Zig ではなく Rust で書かれた最初の Bun で、Node.js 26 互換、Windows での起動高速化、`bun build --react-compiler`、`Bun.Image` や `Bun.cron` などの新 API、`bun audit fix` が含まれます[5]。ただし GitHub Releases の本文は bun.com へのリンクのみで、ここで挙げた数値は編集部では直接確認できていません。\n\n## 勢力図の読み方\n\n- **Node.js**: 26 が LTS 入り（2029 年 4 月まで）。最も保守的で、最も安全。\n- **Bun**: 実装言語を入れ替えたばかり。速度と DX は魅力だが、1.4.x の安定を数か月見たい。\n- **Deno**: 新規採用は「1 年後にどこへ移るか」を決めてから。Deno Deploy の新規利用は避ける。\n- **Cloudflare Workers / workerd**: Deno の人材と技術が流れ込む先。エッジ前提なら本命。\n\n## 読者への影響\n\nランタイムの選択は、もはや「好み」ではなく「どこにデプロイするか」で決まります。Node 26 LTS を既定にしつつ、Workers に載せるものは Hono のようにランタイムをまたげるフレームワークで書いておくと、Deno の移行先問題がそのまま自分の問題にならずに済みます。"
+        },
+        {
+          "headline": "Drizzle 1.0 も Prisma 8 も RC 止まり、ORM は安定版を選ぶ月",
+          "topic": "ORM",
+          "impact": "mid",
+          "tags": [
+            "Drizzle",
+            "Prisma",
+            "Kysely"
+          ],
+          "lead": "Drizzle ORM 1.0 は rc.5、Prisma 8 は rc.23 まで進みましたが、どちらも安定版の日付はありません。新規なら Drizzle 0.45.x か Prisma 7.10 を選び、Prisma 6 は 11 月 19 日のサポート終了前に上げてください。",
+          "next_step": "Drizzle 0.45.x で始め、RQBv2 と EmptyFilter の挙動だけ先に読んでおく。",
+          "sources": [
+            {
+              "title": "drizzle-team/drizzle-orm Releases",
+              "url": "https://github.com/drizzle-team/drizzle-orm/releases",
+              "date": "2026-10-21"
+            },
+            {
+              "title": "drizzle-orm v1.0.0-rc.5 リリースノート",
+              "url": "https://github.com/drizzle-team/drizzle-orm/releases/tag/v1.0.0-rc.5",
+              "date": "2026-10-21"
+            },
+            {
+              "title": "prisma/prisma Releases（7.10.1 / 8.0.0-rc.23）",
+              "url": "https://github.com/prisma/prisma/releases",
+              "date": "2026-11-06"
+            },
+            {
+              "title": "Prisma ORM release status",
+              "url": "https://www.prisma.io/docs/orm/release-status",
+              "date": "2026-10-02"
+            },
+            {
+              "title": "SQLAlchemy 2.1.0 リリース",
+              "url": "https://github.com/sqlalchemy/sqlalchemy/releases/tag/rel_2_1_0",
+              "date": "2026-09-24"
+            }
+          ],
+          "body": "## 何が起きたか\n\nTypeScript の二大 ORM が、どちらも「次のメジャーは RC のまま」で 11 月を迎えています。\n\n**Drizzle ORM** の安定版は 0.45.4（10 月 8 日）で、1.0.0 は 4 月末の rc.1 から 10 月 21 日の rc.5 まで RC が続いています[1]。rc.5 の破壊的変更は小さくありません。リレーショナルクエリの `where` に `undefined` を渡すと例外になり（空フィルタには新しい `EmptyFilter` を使う）、`withReplicas` は `db.$replica` を明示しない限りプライマリに流れ、Relational Query Builder v2 のビルド戦略が mysql / postgres / cockroach / mssql で既定になります（`strategy: 'basic'` で退避可能）。新機能としてリレーションでの order-by、リレーショナルクエリの `withCache`、PostgreSQL のトランザクションスナップショット、drizzle-kit の増分スナップショットが入りました[2]。\n\n**Prisma** は安定版が 7.10.1（10 月 19 日）で、8.0.0 は rc.15 から 11 月 6 日の rc.23 まで、ほぼ毎週 RC が出ています[3]。公式の release status ページは「GA は 2026 年 10 月見込み」としていましたが、その期限は過ぎました[4]。RC ごとに `@default` の意味が「DB 側の既定値」に変わり生成値は `@onCreate` / `@onUpdate` へ移る（rc.19）、PostgreSQL の日時型が convenience 型になり `Duration` 型が加わる（rc.22）など、アップグレード手順つきの破壊的変更が続いています。Prisma 6 のセキュリティパッチは 11 月 19 日で終了します[4]。\n\n## 周辺の選択肢\n\nKysely は 0.29.8（11 月 1 日）で pg のトランザクション安全性を修正、TypeORM は 5 月の 1.0 に続き 1.1.2（10 月 8 日）で接続リークを直しました。Python 側では SQLAlchemy 2.1.0 が 9 月 24 日に出て、11 月 3 日の 2.1.8 まで回帰修正が続いています[5]。\n\n## 読者への影響\n\n今月新規に始めるなら、Drizzle 0.45.x か Prisma 7.10 の安定版を選び、RC は追わないのが無難です。Drizzle を選ぶなら RQBv2 と `EmptyFilter` の挙動だけ先に読んでおくと、1.0 が出た日に移行コストがほぼゼロになります。Prisma 6 に残っている既存プロジェクトは、11 月 19 日までに 7 へ上げる判断が必要です。"
+        },
+        {
+          "headline": "Better Auth、連日のセキュリティ修正と 1.8 ベータで「週次更新」が前提に",
+          "topic": "認証",
+          "impact": "mid",
+          "tags": [
+            "Better Auth",
+            "Auth.js",
+            "Passkey"
+          ],
+          "lead": "Vercel 傘下の Better Auth は 11 月第 1 週だけで 1.7.15〜1.7.18 を出し、12 件のアドバイザリを修正しました。Auth.js 4.x はセキュリティパッチのみで、TypeScript の自前認証は Better Auth に収斂しつつあります。",
+          "next_step": "Better Auth を 1.7.x に固定し、Dependabot で週次アップデートを回す。",
+          "sources": [
+            {
+              "title": "better-auth/better-auth Releases",
+              "url": "https://github.com/better-auth/better-auth/releases",
+              "date": "2026-11-05"
+            },
+            {
+              "title": "Vercel acquires Better Auth",
+              "url": "https://vercel.com/blog/vercel-acquires-better-auth",
+              "date": "2026-07-07"
+            },
+            {
+              "title": "Better Auth Security Release 2026-11-03",
+              "url": "https://better-auth.com/blog/security-release-2026-11-03",
+              "date": "2026-11-03"
+            },
+            {
+              "title": "nextauthjs/next-auth Releases（next-auth@4.24.15）",
+              "url": "https://github.com/nextauthjs/next-auth/releases",
+              "date": "2026-07-20"
+            }
+          ],
+          "body": "## 何が起きたか\n\nBetter Auth は 7 月に Vercel に買収されて以降も MIT ライセンスのまま開発が続いており[2]、10 月末から 11 月上旬にかけて 1.7.14 → 1.7.18 と、ほぼ連日のパッチリリースになっています[1]。1.7.15 は metadata 経由のプロトタイプ汚染と、admin update によるユーザー ID 変更をふさぎ、1.7.16 は失効済みセッションの確実な終了、未検証の電話番号を保存しない変更、並行アクセス時の email OTP 試行回数制限を入れました。11 月 3 日には 1.7.x と 1.8.0-beta.x にまたがる 12 件のアドバイザリをまとめたセキュリティリリースの告知も出ています[3]。\n\n並行して 1.8.0-beta.3（10 月 27 日）から beta.6（11 月 5 日）が進んでおり、beta.5 ではパスキー登録や 2FA 登録といった機微な操作にストアで有効なセッションを要求し、パスキーの `userVerification: \"required\"` を強制するようになりました。beta.6 では OAuth プロバイダが重複した標準パラメータを `invalid_request` で拒否し、トークン交換に DPoP のキーバインディングが入っています[1]。\n\n## Auth.js は事実上メンテナンスモード\n\nnext-auth 4.x の最新は 7 月 20 日の 4.24.15 で、これは「4.x 系のセキュリティパッチリリース」と明記されています。GitHub Releases に v5 の安定版は見当たりません[4]。Better Auth 側のブログには「Auth.js joins Better Auth」という記事が存在しますが、内容は編集部で確認できていません。\n\n## 読者への影響\n\nTypeScript でセルフホストする認証ライブラリの選択肢は、実質的に Better Auth 一択に近づいています。採用するなら 1.7.x に固定し、Renovate や Dependabot で**週次**に上げる運用が前提です。1.8 のセッション・パスキー周りの厳格化は既存フローを壊す可能性があるので、beta のうちにステージングで一度通しておきましょう。"
+        }
+      ]
+    },
+    {
+      "id": "infra",
+      "lead": "観測基盤の課金統一、普通の HTTP サーバーを動かすサーバーレス、Supabase の Turso 買収。インフラは「何を選ぶか」より「どの課金モデルに乗るか」の話になってきました。",
+      "articles": [
+        {
+          "headline": "Cloudflare Observability が統合、12 月 1 日から GB 課金に",
+          "topic": "ホスティング／観測",
+          "impact": "high",
+          "tags": [
+            "Cloudflare",
+            "Workers",
+            "Observability"
+          ],
+          "lead": "Birthday Week 2026 でログ・トレース・アラートが 1 つの Observability に統合され、取り込み GB と保存 GB・月の課金に一本化されました。Workers Logs も 12 月 1 日から対象です。Paid は月 50 GB まで込み。",
+          "next_step": "Workers Logs の月間取り込み量を確認し、50 GB の枠に収まるかを 11 月中に見る。",
+          "sources": [
+            {
+              "title": "Everything we launched during Birthday Week 2026",
+              "url": "https://blog.cloudflare.com/birthday-week-2026-wrap-up/",
+              "date": "2026-10-02"
+            },
+            {
+              "title": "8 major updates to Cloudflare Observability",
+              "url": "https://blog.cloudflare.com/one-observability-platform/",
+              "date": "2026-10-02"
+            },
+            {
+              "title": "Cloudflare Observability — Pricing（docs）",
+              "url": "https://developers.cloudflare.com/observability/pricing/",
+              "date": "2026-10-02"
+            },
+            {
+              "title": "Introducing Workers KV Instant — powered by Quicksilver",
+              "url": "https://blog.cloudflare.com/workers-kv-instant/",
+              "date": "2026-10-01"
+            },
+            {
+              "title": "wrangler@4.158.0（cloudflare/workers-sdk Releases）",
+              "url": "https://github.com/cloudflare/workers-sdk/releases",
+              "date": "2026-11-05"
+            }
+          ],
+          "body": "## 何が起きたか\n\nCloudflare の Birthday Week（9 月 28 日〜10 月 2 日）は 46 本の発表で締めくくられました[1]。開発者にいちばん効くのは最終日の「Cloudflare Observability への 8 つの大型更新」です。これまで別々だったログ・トレース・アナリティクス・アラート・ダッシュボード・クエリ・エクスポートが 1 つのプラットフォームにまとまり、課金もイベント数やスパン数ではなく「取り込んだ GB」と「保存した GB・月」の 2 軸に統一されました[2]。\n\n新価格は **2026-12-01** から Paid プランに適用されます。Paid には毎月 50 GB の取り込みが含まれ、超過は取り込み $0.25/GB と保存 $0.10/GB・月。Free は 1 日 0.5 GB、保持 7 日です[3]。Workers Logs も同日からこの価格体系に入るため、Workers で大量にログを吐いている人は 11 月中に取り込み量を見ておく必要があります。\n\n## KV Instant とその他\n\n10 月 1 日には Workers KV の新モード「Instant」がプライベートベータとして発表されました。Cloudflare 内部の設定配信基盤 Quicksilver の上に作られ、p99 2 ms 未満の読み取りと約 250 ms でのグローバル複製を、既存の KV API のまま提供するとしています。読み取り課金は 100 万キーあたり $0.20 と案内されています[4]。\n\nほかに Workers での ML-KEM / ML-DSA（耐量子暗号）のオプトイン対応、Workers のエラーをグルーピングしてコーディングエージェントや webhook に送る「Issues」、wasm-bindgen の Emscripten ターゲット（Rust を Workers でネイティブに近い形で動かす）などが並びました[1]。wrangler は 11 月 5 日の 4.158.0 で Artifacts バインディングのローカルシミュレーションに対応し、既定の互換日付は 2026-11-04 です[5]。\n\n## 読者への影響\n\n4 月に Containers と Sandboxes が GA になったことで、Workers + Containers + D1/KV/R2 + Workflows + Observability が 1 社で揃う「個人開発の完結スタック」が成立しました。12 月 1 日の請求変更が初めての「Cloudflare に依存しすぎたときのコスト」を可視化するタイミングです。ダッシュボードで Workers Logs の月間 GB を確認し、50 GB に収まるかを見ておきましょう。"
+        },
+        {
+          "headline": "サーバーレスが「普通の HTTP サーバー」を動かす時代に",
+          "topic": "構成",
+          "impact": "high",
+          "tags": [
+            "AWS Lambda",
+            "Vercel",
+            "Serverless"
+          ],
+          "lead": "AWS Lambda Web Functions はポートを listen する通常の Web アプリをそのまま Lambda で動かします。Vercel も Python GA と長時間ワーカー Daemons を発表。関数シグネチャへのロックインは消え、差は課金モデルとバックグラウンド処理に移りました。",
+          "next_step": "次のサービスは Hono か FastAPI の普通の HTTP サーバーとして書き、デプロイ先は後から決める。",
+          "sources": [
+            {
+              "title": "AWS Weekly Roundup: AWS Lambda Web Functions, Amazon S3 on the Vercel Marketplace, and more",
+              "url": "https://aws.amazon.com/blogs/aws/aws-weekly-roundup-aws-lambda-web-functions-amazon-s3-on-the-vercel-marketplace-and-more-october-19-2026/",
+              "date": "2026-10-19"
+            },
+            {
+              "title": "AWS launches Lambda Web Functions for HTTP apps（IT Brief）",
+              "url": "https://itbrief.co.uk/story/aws-launches-lambda-web-functions-for-http-apps",
+              "date": "2026-10-12"
+            },
+            {
+              "title": "Vercel Ship 2026 recap",
+              "url": "https://vercel.com/blog/vercel-ship-2026-recap",
+              "date": "2026-10-15"
+            },
+            {
+              "title": "Vercel faces its Daemons（The New Stack）",
+              "url": "https://thenewstack.io/vercel-faces-its-daemons/",
+              "date": "2026-10-15"
+            }
+          ],
+          "body": "## 何が起きたか\n\n10 月 12 日、AWS は **Lambda Web Functions** を発表しました。コードがポートを listen する普通の HTTP サーバー（Express でも Hono でも FastAPI でも）を、イベントハンドラに書き換えることなく Lambda にデプロイできる新しい形態です。HTTPS の終端・スケーリング・配信は Lambda が担い、既存の関数は「Lambda Event Functions」と呼び分けられます。提供リージョンは us-east-1 / us-east-2 / us-west-2 / ap-northeast-1（東京）/ eu-west-1 です[1]。報道では起動時ランタイムは Arm64 の Node.js 24、課金はアクティブ CPU 時間、環境あたり最大 128 同時リクエストとされますが、この 3 点は AWS 公式ドキュメントで未確認です[2]。\n\n3 日後の 10 月 15 日、Vercel Ship 2026 では Python が GA になり（FastAPI / Flask / Django を自動検出）、HTTP サーバーを持たずキューや DB から仕事を取りに行く長時間ワーカー「Daemons」がパブリックベータ、Sandbox 用の永続ストレージ「Drives」が GA になりました[3][4]。Vercel の既定コンピュートはすでに Fluid compute で、こちらもアクティブ CPU ベースの課金です。\n\n## 何が変わったのか\n\n- **アプリの形**: 「サーバーレス＝イベントハンドラ」という前提が崩れ、ローカルで動く HTTP サーバーをそのまま置ける。\n- **課金の形**: AWS も Vercel も Cloudflare も「壁時計時間」ではなく「CPU を使った時間」へ。I/O 待ちの多い LLM 呼び出しが安くなる。\n- **残る差分**: バックグラウンド処理（Daemons / Workflows / Queues）と、コンテナを使えるか。AWS App Runner は 4 月末で新規受付を止め、ECS Express Mode を案内しています。\n\n## 読者への影響\n\n次に作るサービスは、まず Hono や FastAPI で普通の HTTP サーバーとして書き、デプロイ先は後から選ぶ、という順番で問題ありません。ロックインの単位はもはや「関数シグネチャ」ではなく「バックグラウンドジョブの仕組み」と「価格モデル」に移っています。"
+        },
+        {
+          "headline": "Supabase が Turso を買収、PostgreSQL 19 は 11 月 19 日 GA 予定",
+          "topic": "マネージド DB",
+          "impact": "high",
+          "tags": [
+            "Supabase",
+            "Turso",
+            "PostgreSQL",
+            "PlanetScale"
+          ],
+          "lead": "Supabase は $150M の調達と同時に SQLite の Turso を買収し、「大きな Postgres」と「小さな SQLite 多数」の両方を持つ唯一のベンダーになりました。PlanetScale は自作シャーディング Postgres の Neki を公開。PostgreSQL 19 は 11 月 19 日予定です。",
+          "next_step": "Supabase の無料枠で始め、PostgreSQL 14 が残っていれば 11 月 12 日の最終リリース前に移行計画を立てる。",
+          "sources": [
+            {
+              "title": "Supabase raises $150M and acquires Turso（SiliconANGLE）",
+              "url": "https://siliconangle.com/?p=849239",
+              "date": "2026-10-02"
+            },
+            {
+              "title": "Supabase Raises $150M, Buys Turso（Verdict）",
+              "url": "https://www.verdict.co.uk/supabase-150m-funding-turso-acquisition/",
+              "date": "2026-10-02"
+            },
+            {
+              "title": "tursodatabase/turso Releases",
+              "url": "https://github.com/tursodatabase/turso/releases",
+              "date": "2026-10-28"
+            },
+            {
+              "title": "Neki, sharded Postgres, is now available（PlanetScale changelog）",
+              "url": "https://planetscale.com/changelog/neki",
+              "date": "2026-09-10"
+            },
+            {
+              "title": "PostgreSQL 19 RC 1 Released",
+              "url": "https://www.postgresql.org/about/news/postgresql-19-rc-1-released-3409/",
+              "date": "2026-10-15"
+            },
+            {
+              "title": "Prisma changelog 2026-10-02",
+              "url": "https://www.prisma.io/changelog/2026-10-02",
+              "date": "2026-10-02"
+            }
+          ],
+          "body": "## 何が起きたか\n\n10 月 2 日、Supabase は GIC 主導の $150M の資金調達と、SQLite ベースの「エージェントごとに 1 データベース」を掲げる **Turso** の買収を発表しました。6 月の Series F（$500M、評価額 $10.5B）から 4 か月での動きです。Turso の共同創業者 Pekka Enberg とチームは Supabase に合流し、Turso Database はオープンソースのまま続くとされています[1][2]。Turso の Rust 製 SQLite 再実装は 9 月 28 日の 0.8.0 で実験的な PostgreSQL ワイヤプロトコル対応と Rust サーバーレスドライバを加え、10 月 12 日の 0.8.3 が最新安定版です[3]。\n\n一方 PlanetScale は 9 月 10 日、Vitess 移植ではなくゼロから作った水平シャーディング Postgres「Neki」をプラットフォームプレビューで公開しました。ルーター経由の単一接続文字列とオンライン DDL が売りですが、SLA なし・破壊的変更ありのベータ条件です[4]。\n\n## PostgreSQL 19 は 11 月 19 日\n\nPostgreSQL 19 は 10 月 15 日に RC1 が出て、RC2 が 11 月 12 日、GA は 11 月 19 日の予定です（遅れる可能性あり）。ベータ時点の目玉は SQL/PGQ によるプロパティグラフクエリ、`WAIT FOR LSN`、並列 autovacuum です。同じ 11 月 12 日の定例マイナーリリースは PostgreSQL 14 の最終リリースでもあります[5]。\n\n周辺では Prisma が単体の Accelerate を 12 月 1 日に終了し、Prisma Postgres の Early Access データベースを 11 月 1 日に削除しています[6]。Neon は「Lakebase Postgres from Databricks」として 6 月から PG18 を新規既定にしており、10 月の価格変更は確認できませんでした。\n\n## 読者への影響\n\nマネージド DB の選択肢は「大きな Postgres を 1 つ」（Supabase / Neon / PlanetScale）と「小さな SQLite をたくさん」（Turso / D1）の二極に整理され、その両方を 1 社で持つのが Supabase になりました。個人開発なら Supabase の無料枠で始めて、エージェント用途が出てきたら Turso を同じアカウントで試す、という流れが自然です。PostgreSQL 14 に残っているデータベースは 11 月 12 日以降パッチが出ません。"
+        },
+        {
+          "headline": "Terraform 1.17 で Policy が GA、ubuntu-latest は 26.04 へ移行中",
+          "topic": "IaC／CI",
+          "impact": "mid",
+          "tags": [
+            "Terraform",
+            "OpenTofu",
+            "GitHub Actions"
+          ],
+          "lead": "Terraform 1.17 は HCL ネイティブのポリシー評価を正式機能にし、OpenTofu 1.13 は Windows ARM64 と lint 実験を追加。GitHub Actions の ubuntu-latest は 11 月 19 日までに Ubuntu 26.04 へ切り替わるため、CI が壊れたら 24.04 に固定を。",
+          "next_step": "全ワークフローの runs-on を棚卸しし、必要なら ubuntu-24.04 に固定する。",
+          "sources": [
+            {
+              "title": "hashicorp/terraform v1.17.0",
+              "url": "https://github.com/hashicorp/terraform/releases/tag/v1.17.0",
+              "date": "2026-10-21"
+            },
+            {
+              "title": "opentofu/opentofu v1.13.0",
+              "url": "https://github.com/opentofu/opentofu/releases/tag/v1.13.0",
+              "date": "2026-09-30"
+            },
+            {
+              "title": "Ubuntu 26 generally available and latest migration（GitHub Changelog）",
+              "url": "https://github.blog/changelog/2026-09-17-ubuntu-26-generally-available-and-latest-migration",
+              "date": "2026-09-17"
+            },
+            {
+              "title": "GitHub Actions: arm64 Linux and Windows runners are now generally available",
+              "url": "https://github.blog/changelog/2026-09-03-github-actions-arm64-linux-and-windows-runners-are-now-generally-available/",
+              "date": "2026-09-03"
+            },
+            {
+              "title": "actions/runner Releases（v2.338.2）",
+              "url": "https://github.com/actions/runner/releases",
+              "date": "2026-10-26"
+            }
+          ],
+          "body": "## Terraform 1.17 と OpenTofu 1.13\n\nTerraform 1.17.0（10 月 21 日）で **Terraform Policy** が GA になりました。`plan` / `apply` / `query` に `-policies` を渡すだけで、HCL で書いたポリシーを実験フラグなしに評価できます。ほかに provider requirements で変数と locals が使えるようになり、変更のあるリソースだけ refresh する `-minimal-refresh` が入りました。ビルドは Go 1.26.10 で、侵害された eMudhra の中間 CA を不信頼化しています[1]。\n\nOpenTofu は 9 月 30 日に 1.13.0 を出し、11 月 5 日の 1.13.9 まで細かくパッチを重ねています。Windows ARM64 の公式パッケージ、plan 時の unknown を減らす関数群、組み込み lint の実験、WinRM プロビジョナの削除、そして 32 ビットビルドの最終シリーズという内容で、1.13 系は 2027-08-01 までサポートされます[2]。Pulumi は 3.274.1（11 月 5 日）、AWS CDK は 2.275.0（10 月 26 日）、SST は v4 のまま 4.17.2（10 月 8 日）です。\n\n## GitHub Actions：ubuntu-latest が 26.04 へ\n\n9 月 17 日に Ubuntu 26.04 のランナーイメージが GA になり、`ubuntu-latest` は 10 月 19 日から 11 月 19 日にかけて段階的に 26.04 へ切り替わっています。22.04 イメージは同日から非推奨です[3]。26.04 ではプリインストールされるツールが一部外れているため、CI が突然壊れたら `runs-on: ubuntu-24.04` に固定するのが最短の回避策です。9 月 3 日には arm64 の Linux / Windows ホステッドランナーも GA になりました[4]。ランナー本体は 10 月 26 日の v2.338.2 で内部 Node を 24 に切り替えています（Node 20 は 9 月 23 日で撤去）[5]。\n\n## 読者への影響\n\nIaC は「Terraform か OpenTofu か」のライセンス論争よりも、Policy GA のように機能差で選ぶフェーズに入りました。個人開発でポリシー評価が要らないなら OpenTofu 1.13 で十分です。それより先に、今月中に自分の全ワークフローの `runs-on` を確認してください。"
+        }
+      ]
+    },
+    {
+      "id": "recon3d",
+      "lead": "3DGS が three.js のコアに入り、feed-forward モデルは SLAM の既定になり、NeurIPS 2026 の論文は Gaussian を「減らす」競争へ。COLMAP 4.2 は学習ベースのマッチングを内蔵しました。なお本号では arXiv ページを直接取得できず、論文の数値は検索結果に基づく著者報告として記載しています。",
+      "articles": [
+        {
+          "headline": "3DGS が Web 標準レイヤーへ——three.js ネイティブ対応と WebGPU レンダラ競争",
+          "topic": "ブラウザ表示",
+          "impact": "high",
+          "tags": [
+            "three.js",
+            "Spark",
+            "WebGPU",
+            "SPZ",
+            "glTF"
+          ],
+          "lead": "three.js r186 で Gaussian Splat のレンダラとローダがコアに入り、World Labs は WebGPU 専用の Spark Radix を公開、Babylon.js と SuperSplat も追随しました。交換形式は SPZ v4、glTF は批准済みの KHR_gaussian_splatting で、ブラウザ表示の標準が固まった秋です。",
+          "next_step": "新規ビューアは WebGPU 前提なら three.js ネイティブか Radix、互換性重視なら Spark 2.4 を選び、交換形式は SPZ v4 に統一する。",
+          "sources": [
+            {
+              "title": "three.js r186 Release",
+              "url": "https://github.com/mrdoob/three.js/releases/tag/r186",
+              "date": "2026-09-24"
+            },
+            {
+              "title": "three.js PR #33950: Gaussian Splat renderer/loader",
+              "url": "https://github.com/mrdoob/three.js/pull/33950",
+              "date": "2026-08-08"
+            },
+            {
+              "title": "Spark CHANGELOG（2.4.0）",
+              "url": "https://github.com/sparkjsdev/spark/blob/main/CHANGELOG.md",
+              "date": "2026-10-19"
+            },
+            {
+              "title": "Spark Radix（sparkjsdev/radix）",
+              "url": "https://github.com/sparkjsdev/radix",
+              "date": "2026-10-29"
+            },
+            {
+              "title": "KHR_gaussian_splatting（KhronosGroup/glTF）",
+              "url": "https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Khronos/KHR_gaussian_splatting",
+              "date": "2026-11-09"
+            },
+            {
+              "title": "BabylonJS/Babylon.js Releases（9.33.x）",
+              "url": "https://github.com/BabylonJS/Babylon.js/releases",
+              "date": "2026-11-05"
+            },
+            {
+              "title": "Open3D v0.20.0",
+              "url": "https://github.com/isl-org/Open3D/releases",
+              "date": "2026-09-16"
+            },
+            {
+              "title": "playcanvas/supersplat Releases（v3.7.0）",
+              "url": "https://github.com/playcanvas/supersplat/releases",
+              "date": "2026-10-26"
+            }
+          ],
+          "body": "## 何が起きたか\n\nthree.js **r186**（9 月 24 日）で Gaussian Splat のレンダラとローダがコアに入りました。8 月 8 日にマージされた PR #33950（Ben Houston 作）がベースで、TSL（three.js Shading Language）で実装され WebGPURenderer 向けに動きます（WebGL2 フォールバックあり）。`GaussianSplat` クラス、GPU の `CountingSort`、PLY / .splat / SPZ v4 / .ksplat のローダ、glTF の `KHR_gaussian_splatting` 拡張（オプトイン）、メッシュ単位の frustum culling、レイキャスト、球面調和による視線依存表示が揃っています。サンプルは `webgpu_gaussian_splat.html` です[1][2]。10 月 30 日の r187 に GS の変更はありません。\n\n## Spark と Radix\n\nWorld Labs の Spark（MIT、WebGL2）は 9 月 11 日の 2.2.0 でプリビルド配布とソートの約 20% 高速化、9 月 30 日の 2.3.0 でオンデマンド描画、10 月 20 日の 2.4.0 で SPZ v4 の読み込みに対応しました[3]。10 月 29 日には **Spark Radix** 0.0.1 が npm に出ています。WebGPU 専用の GS レンダラで、three.js 0.186 以上を peer に持ち、投影・圧縮・基数ソートを GPU compute で行って 1 draw call で描きます[4]。公開ベンチ（ベンダー報告）では Spark 比 1.37 倍とされますが、編集部では未確認です。\n\n## 周辺エンジンも一斉に\n\n- Babylon.js 9.33.0（10 月 29 日）は GS の WebGPU テクスチャフェッチ高速化とオプトインの GPU depth sort、9.33.3（11 月 5 日）で SPZ 圧縮 glTF splat の読み込み[6]。\n- SuperSplat は 3.x で WebGPU 必須になり、3.7.0（10 月 26 日）で copy / paste、型付きエディタ API、WebMCP ツールを追加[8]。\n- Khronos の `KHR_gaussian_splatting` は \"Complete, Ratified\" ステータス。kernel と colorSpace が必須、SH は 3 次まで、圧縮拡張は本拡張を拡張する設計です[5]。\n- Open3D 0.20.0（9 月 16 日）が PLY / SPLAT / SPZ の splat レンダリングに対応（学習はなし）[7]。Blender 5.3 のネイティブ splat 読み込みは 11 月 10 日予定と報じられていますが、GitHub のタグは 11 月 9 日時点で 5.2.3 までです。\n\n## 読者への影響\n\n「3DGS をブラウザで見せる」ための外部ライブラリ依存は、この秋でほぼ不要になりました。交換形式は SPZ v4、glTF 埋め込みは KHR 拡張、という組み合わせが事実上の標準です。既存の Spark ベースのビューアを捨てる必要はありませんが、新規に WebGPU 前提で作るなら three.js ネイティブか Radix を比較する価値があります。"
+        },
+        {
+          "headline": "Feed-forward 再構成が SLAM になった——AMB3R-SLAM と VGGT 系の実時間化",
+          "topic": "SLAM／feed-forward",
+          "impact": "high",
+          "tags": [
+            "SLAM",
+            "VGGT",
+            "Depth Anything 3",
+            "AMB3R"
+          ],
+          "lead": "UCL の AMB3R-SLAM は Depth Anything 3 や VGGT-Ω をバックボーンに、km スケールの系列を単一 GPU で処理すると報告し、Apache-2.0 でコードを公開しました。VGGT の出力を Gaussian サブマップに変換する VGGT-GS SLAM も同週に登場。feed-forward で初期化して最適化する設計が SLAM の既定になりました。",
+          "next_step": "MapAnything か AMB3R-SLAM を入口に feed-forward 初期化を試し、VGGT-Ω と DA3 Giant の非商用ライセンスを先に確認する。",
+          "sources": [
+            {
+              "title": "HengyiWang/amb3r-slam（GitHub）",
+              "url": "https://github.com/HengyiWang/amb3r-slam",
+              "date": "2026-09-17"
+            },
+            {
+              "title": "AMB3R-SLAM: Kilometer-scale SLAM with Hierarchical Backend（arXiv 2609.19518）",
+              "url": "https://arxiv.org/abs/2609.19518",
+              "date": "2026-09-17"
+            },
+            {
+              "title": "VGGT-GS SLAM: Uncalibrated Monocular Gaussian Splatting SLAM with Feed-Forward Priors（arXiv 2609.19628）",
+              "url": "https://arxiv.org/abs/2609.19628",
+              "date": "2026-09-16"
+            },
+            {
+              "title": "MIT-SPARK/VGGT-SLAM（GitHub）",
+              "url": "https://github.com/MIT-SPARK/VGGT-SLAM",
+              "date": "2026-06-01"
+            },
+            {
+              "title": "facebookresearch/vggt（GitHub）",
+              "url": "https://github.com/facebookresearch/vggt",
+              "date": "2026-05-18"
+            },
+            {
+              "title": "MapAnything CHANGELOG（1.1）",
+              "url": "https://github.com/facebookresearch/map-anything/blob/main/CHANGELOG.md",
+              "date": "2026-01-18"
+            }
+          ],
+          "body": "## 何が起きたか\n\n9 月 17 日、UCL の Hengyi Wang と Lourdes Agapito が **AMB3R-SLAM: Kilometer-scale SLAM with Hierarchical Backend**（arXiv 2609.19518）を公開し、同日に Apache-2.0 でコードを出しました[1][2]。入力は単眼（既定）/ RGB-D / ステレオ / LiDAR、バックボーンは Depth Anything 3（DA3NESTED-GIANT-LARGE-1.1）が既定で、`--model_name omega` で VGGT-Ω に切り替えられます。著者の報告では 1 万フレーム超の系列を単一のコンシューマ GPU で処理し、VBR と Oxford Spires で従来 SOTA 比 ATE を 70% 以上削減、VBR では 94.17 m から 7.42 m としています（arXiv 本文は本セッションから直接確認できておらず、数値は検索結果に基づきます）。\n\n同じ週に **VGGT-GS SLAM**（arXiv 2609.19628）も出ています。VGGT の推定した姿勢と深度を最適化可能な Gaussian サブマップに変換し、サブマップ共有の内部パラメータと radial-tangential 歪みを同時最適化する、キャリブレーション不要の単眼 3DGS SLAM です[3]。10 月には単眼屋外向けの SG²SLAM（arXiv 2610.36312）も続きました。\n\n## 系譜\n\n- **VGGT-SLAM**（MIT-SPARK、BSD-2）は 1 月公開、5 月に RSS 2026 採択、6 月にリアルタイム版と 3D シーングラフ FOUND-IT を追加[4]。\n- **VGGT** 本体は 5 月 15 日のメモリ修正で同じ GPU メモリで 2〜3 倍のフレーム数を扱えるようになり、5 月 18 日に VGGT-Ω を公開。商用利用は申請制の VGGT-1B-Commercial のみです[5]。\n- **MapAnything 1.1**（1 月）は VGGT / DUSt3R / MASt3R / Pi3-X / MoGe / DA3 を同じ出力形式で呼べる model factory で、Apache 版の重みがあります[6]。\n- MASt3R-SLAM と π³ は 2026 年の更新がなく、Depth Anything 3 は 2025 年 12 月の DA3-Streaming が最終更新です。\n\n## 読者への影響\n\n「feed-forward モデルで初期化してから最適化する」構成は、2026 年秋には SLAM の既定設計になりました。自分のパイプラインに組み込むなら、ライセンスが Apache の MapAnything か AMB3R-SLAM が入口で、VGGT-Ω と DA3 の Giant 系は非商用（CC BY-NC）である点だけ先に確認してください。"
+        },
+        {
+          "headline": "Feed-forward 3DGS は「減らす」競争へ——Anchor3DGS と NRF-GS（NeurIPS 2026）",
+          "topic": "研究動向",
+          "impact": "mid",
+          "tags": [
+            "3DGS",
+            "NeurIPS 2026",
+            "圧縮",
+            "ECCV 2026"
+          ],
+          "lead": "NeurIPS 2026 採択の Anchor3DGS は少数アンカーから局所 Gaussian をデコードして約 1 桁少ない Gaussian 数を、NRF-GS は球面調和を共有 MLP の残差に置き換えて最大 50% 削減を報告しています。符号化側も Gaussian ではなく特徴を送る方向へ。ECCV 2026 の Best Paper は測地 Gaussian でした。",
+          "next_step": "再構成パイプラインの出口に「表現を小さく保つ」段を設ける前提で、アンカー表現と残差 MLP を読む。",
+          "sources": [
+            {
+              "title": "Anchor3DGS: Feed-Forward 3D Gaussian Splatting with Compact Anchor-Based Representation（arXiv 2610.21634）",
+              "url": "https://arxiv.org/abs/2610.21634",
+              "date": "2026-10-15"
+            },
+            {
+              "title": "NRF-GS: Neural Residual Fields for Expressive and Compact Gaussian Splatting（NeurIPS 2026 poster）",
+              "url": "https://neurips.cc/virtual/2026/poster/153399",
+              "date": "2026-10-01"
+            },
+            {
+              "title": "Feed-Forward Multi-View Feature Coding for 3DGS（arXiv 2610.20590）",
+              "url": "https://arxiv.org/abs/2610.20590",
+              "date": "2026-10-14"
+            },
+            {
+              "title": "SplatQ（arXiv 2610.13503）",
+              "url": "https://arxiv.org/abs/2610.13503",
+              "date": "2026-10-09"
+            },
+            {
+              "title": "StereoGaussians（arXiv 2609.38592）",
+              "url": "https://arxiv.org/abs/2609.38592",
+              "date": "2026-09-29"
+            },
+            {
+              "title": "Heat Kernel Textures — the Geodesic Gaussians That Do Not Splat（arXiv 2609.07557）",
+              "url": "https://arxiv.org/abs/2609.07557",
+              "date": "2026-09-07"
+            }
+          ],
+          "body": "## 「増やす」から「減らす」へ\n\nNeurIPS 2026（12 月 6〜12 日、シドニー）に向けた feed-forward 3DGS の論文は、品質競争から **Gaussian の数を減らす**競争に軸足を移しています。本節の論文情報は arXiv ページを直接確認できず、検索結果で複数ソースが一致したものに限って掲載しています。数値はいずれも著者報告です。\n\n- **Anchor3DGS**（arXiv 2610.21634、10 月 15 日、NeurIPS 2026）は pose-free の feed-forward 手法で、ピクセル整列の予測を捨て、情報エントロピーに基づいて配置した少数のアンカーから局所 Gaussian をデコードします。SOTA 品質を約 1 桁少ない Gaussian 数で達成すると報告されています[1]。\n- **NRF-GS**（arXiv 2609.37115、NeurIPS 2026 ポスター）は splat ごとの球面調和係数を、視線方向・距離・特徴から残差を返す共有の軽量 MLP に置き換え、最大 50% 少ない Gaussian で同等以上としています[2]。\n- **StereoSplat**（NeurIPS 2026 ポスター）は合成データ XRStereo のみで学習して実ステレオ動画へ zero-shot で metric スケールの新規視点合成を行います。9 月 29 日の StereoGaussians（arXiv 2609.38592）も凍結ステレオ網と校正済み視差で metric 3DGS を構築する同系統です[5]。\n\n## 圧縮・符号化\n\n送る側の研究も進みます。Feed-Forward Multi-View Feature Coding for 3DGS（arXiv 2610.20590、10 月 14 日）は Gaussian ではなく多視点特徴をビットストリーム化し、受信側で Gaussian 数を選べる設計です[3]。Codec-Compatible Learned Compression（arXiv 2610.26920、VCIP 2026）は SH マップが支配的なビットを狙い、SplatQ（arXiv 2610.13503、10 月 9 日）は二次選択による interaction-aware pruning を提案しています[4]。\n\n## 学会カレンダー\n\nECCV 2026（9 月 8〜12 日、マルメ）の Best Paper は Imperial College の「Heat Kernel Textures — the Geodesic Gaussians That Do Not Splat」（arXiv 2609.07557）で、UV 展開なしにメッシュ面上の異方性熱核を Gaussian の測地的等価物として使う手法でした。SIGGRAPH Asia 2026 は 12 月 1〜4 日にクアラルンプール、3DV 2027（テッサロニキ、2027 年 4 月）は 12 月 2 日に最終通知です。いずれも検索結果ベースの日付で、公式サイトは未確認です。\n\n## 読者への影響\n\nfeed-forward で出した Gaussian をそのまま配信する設計は、1 年後には「重すぎる」と言われる可能性が高いです。アンカー表現や残差 MLP のように「表現を小さく保つ」研究を、再構成パイプラインの出口側として追っておく価値があります。"
+        },
+        {
+          "headline": "COLMAP 4.2 系で何が変わったか——多成分 Global Mapper と学習ベース LoMa",
+          "topic": "ツール",
+          "impact": "high",
+          "tags": [
+            "COLMAP",
+            "GLOMAP",
+            "gsplat",
+            "nerfstudio"
+          ],
+          "lead": "COLMAP 4.2 は global mapper が連結成分ごとにモデルを出す破壊的変更と、学習ベースの特徴マッチング LoMa を内蔵しました。gsplat は PyPI 未更新のまま main に v1.6.0 の大型機能が積まれ、nerfstudio は事実上停滞しています。",
+          "next_step": "COLMAP 4.2 に上げる前に、出力ディレクトリが複数になる前提でスクリプトを直し、gsplat は main を pin して使う。",
+          "sources": [
+            {
+              "title": "colmap/colmap Releases",
+              "url": "https://github.com/colmap/colmap/releases",
+              "date": "2026-09-29"
+            },
+            {
+              "title": "COLMAP 4.2.1 Release",
+              "url": "https://github.com/colmap/colmap/releases/tag/4.2.1",
+              "date": "2026-09-29"
+            },
+            {
+              "title": "pycolmap（PyPI）",
+              "url": "https://pypi.org/project/pycolmap/",
+              "date": "2026-09-29"
+            },
+            {
+              "title": "nerfstudio-project/gsplat README（main）",
+              "url": "https://github.com/nerfstudio-project/gsplat",
+              "date": "2026-09-19"
+            }
+          ],
+          "body": "## COLMAP 4.2.0 / 4.2.1\n\nCOLMAP 4.2.0 は 9 月 1 日に出ました[1]。6 月の 4.1.0 で GLOMAP が `global_mapper` として統合されたのに続き、4.2 では **global mapper が切断された連結成分ごとに別モデルを再構成する**ようになりました（従来は最大成分のみ。破壊的変更です）。学習ベースの特徴抽出・マッチング **LoMa**（ONNX、LOMA_B / LOMA_B128、BF16 任意）、AMD GPU（ROCm / HIP）での dense stereo、ブラウザベースの 3D ビューア、pycolmap の hierarchical mapping バインディング拡充、ナノ秒タイムスタンプ、SIGINT での graceful shutdown が入っています。\n\n9 月 29 日の 4.2.1 は修正版で、Delaunay meshing が終了しない問題、LoMa の GPU メモリリーク（ONNX Runtime 1.30.0 へ更新）、global mapper の BA の 4.2.0 回帰、hash-map バックエンドの Boost から STD への変更が含まれます[2]。pycolmap 4.2.1 も同日 PyPI に出ており、4.3.0.dev0 のプレリリースも見えます[3]。9 月 7 日には AnyCalib のカメラ校正モデルを ONNX で静的エクスポートした models-anycalib-v1.0.0 も公開されました。\n\n## gsplat と nerfstudio\n\ngsplat は PyPI の最新が 1.5.3（2025 年 7 月）のままですが、main は 8 月 14 日に v1.6.0 へバージョンを上げ、sparse 3DGS ラスタライズ、マルチ GPU の dense 3DGS、SH 演算の分離と fused backward、3DGUT MCMC の A100 で約 30% 高速化、Gaussian ID ラスタライズ、LiDAR ラスタライズ、CUDA 13 対応（PyTorch 2.7 以上必須）を積んでいます。9 月 19 日のコミットでは 8×B200 の学習が 13.9 ms から 9.8 ms に短縮されました[4]。リリースされていないだけで、中身は大きく進んでいます。\n\n一方 nerfstudio は PyPI 1.1.5（2024 年 11 月）、main の最終コミットが 2025 年 7 月で、事実上停滞しています。トレーナーの選択肢は gsplat（main）、Rust / Burn / WebGPU の Brush 0.3.0、zip 入力と .spz 出力を備えた OpenSplat 1.2.2（9 月 16 日）あたりです。\n\n## 読者への影響\n\nCOLMAP 4.2 の「成分ごとにモデルを出す」挙動は、スクリプトで `0/` だけを拾っている既存パイプラインを静かに壊します。4.2 に上げるときは出力ディレクトリの数を確認してください。LoMa は SuperPoint + LightGlue を外部で回していた人には朗報で、COLMAP 単体でパイプラインが閉じます。gsplat は PyPI を待たず main を pin して使うのが 2026 年秋の実態です。"
+        }
+      ]
+    },
+    {
+      "id": "ai",
+      "lead": "Claude 5.5 世代が 3 週間で出揃い、Sonnet が Opus を一部で上回る価格逆転。ローカル LLM はエージェントに直結し、MCP はステートレス化、Agent Skills は財団へ。",
+      "articles": [
+        {
+          "headline": "Claude 5.5 世代が出揃う——Sonnet 5.5 が Opus を抜く価格逆転",
+          "topic": "フロンティアモデル比較",
+          "impact": "high",
+          "tags": [
+            "Claude",
+            "GPT-6",
+            "Gemini",
+            "DeepSeek",
+            "比較表"
+          ],
+          "lead": "Anthropic は 9 月 15 日から 10 月 7 日の 3 週間で Fable 5.1、Opus 5.5、Sonnet 5.5、Haiku 5.5 を投入しました。$2/$10 の Sonnet 5.5 が Terminal-Bench 4.0 で $4/$20 の Opus 5.5 を上回ったのが最大の変化です。OpenAI / Google は SDK 上の ID と日付のみ確認できました。",
+          "next_step": "既定を Sonnet 5.5 にし、難しいタスクだけ Opus 5.5 / Fable 5.1 へエスカレーションする構成に変える。",
+          "sources": [
+            {
+              "title": "Introducing Claude Mythos and Fable 5.1",
+              "url": "https://www.anthropic.com/news/claude-mythos-and-fable-5-1",
+              "date": "2026-09-15"
+            },
+            {
+              "title": "Introducing Claude Opus 5.5",
+              "url": "https://www.anthropic.com/news/claude-opus-5-5",
+              "date": "2026-09-22"
+            },
+            {
+              "title": "Introducing Claude Sonnet 5.5",
+              "url": "https://www.anthropic.com/news/claude-sonnet-5-5",
+              "date": "2026-09-28"
+            },
+            {
+              "title": "Introducing Claude Haiku 5.5",
+              "url": "https://www.anthropic.com/news/claude-haiku-5-5",
+              "date": "2026-10-07"
+            },
+            {
+              "title": "openai-python CHANGELOG（モデル ID 追加履歴）",
+              "url": "https://raw.githubusercontent.com/openai/openai-python/main/CHANGELOG.md",
+              "date": "2026-11-05"
+            },
+            {
+              "title": "vllm-project/vllm Releases（v0.31.0: DeepSeek-V4.1-Flash）",
+              "url": "https://github.com/vllm-project/vllm/releases",
+              "date": "2026-10-05"
+            },
+            {
+              "title": "MoonshotAI/Kimi-K3",
+              "url": "https://github.com/MoonshotAI/Kimi-K3",
+              "date": "2026-08-06"
+            },
+            {
+              "title": "zai-org/GLM-5（GLM-5.3）",
+              "url": "https://github.com/zai-org/GLM-5",
+              "date": "2026-10-15"
+            },
+            {
+              "title": "Claude Platform: Models overview",
+              "url": "https://platform.claude.com/docs/en/models/overview",
+              "date": "2026-11-09"
+            },
+            {
+              "title": "Claude Platform: Model deprecations",
+              "url": "https://platform.claude.com/docs/en/about-claude/model-deprecations",
+              "date": "2026-09-30"
+            }
+          ],
+          "body": "## 何が起きたか\n\n9 月 15 日の Claude Fable 5.1 / Mythos 5.1 を皮切りに、Anthropic は 9 月 22 日に Opus 5.5、9 月 28 日に Sonnet 5.5、10 月 7 日に Haiku 5.5 を出し、3 週間で現行ラインナップを総入れ替えしました[1][2][3]。Fable 5.1 と Mythos 5.1 は同じモデルで、Mythos は検証プログラム経由の米国組織のみに提供されます。OpenAI は公式サイトが本セッションから到達できないため、SDK の変更履歴で確認できた範囲で、9 月 3 日に gpt-6-astra、9 月 22 日に GPT-6 Sol / Luna、10 月 26 日に gpt-6.1-terra、11 月 5 日に GPT-6 Rosalind の各 ID が追加されています[5]。Google も同様に SDK 上で 9 月 2 日に Gemini 3.8 Flash、10 月 14 日に gemini-4-argon の識別子が現れています。\n\n## 比較表\n\n価格は 100 万トークンあたりの入力 / 出力（USD）。「未確認」は公式ページを直接確認できなかった項目です。\n\n| モデル | 発表 | コンテキスト | 入力 / 出力 | 得意分野・備考 |\n|---|---|---|---|---|\n| Claude Fable 5.1 | 2026-09-15 | 1M / 出力 128K | $10 / $50 | 最難関の長期エージェント。Terminal-Bench 4.0 55.8%、キャッシュ読み取り $0.25 |\n| Claude Opus 5.5 | 2026-09-22 | 1M / 128K | $4 / $20 | TB 4.0 66.4%、GDPval-AA 1846。Opus 5 比 20% 値下げ、fast mode $8/$40 |\n| Claude Sonnet 5.5 | 2026-09-28 | 1M / 128K | $2 / $10 | TB 4.0 70.6% で Opus 5.5 を上回る。30% 以上高速 |\n| Claude Haiku 5.5 | 2026-10-07 | 1M / 128K | $0.10 / $0.50（100K 超は $0.50 / $2.50） | サブエージェント・分類。Haiku 4.5 比で平均コスト約 75% 減 |\n| GPT-6 Astra | 2026-09-03（SDK） | 未確認 | 未確認 | Anthropic の比較表では TB 4.0 57.9%、AutomationBench 41.4% |\n| GPT-6.1 Terra | 2026-10-26（SDK） | 未確認 | 未確認 | OpenAI の最新フラッグシップ ID |\n| Gemini 3.8 Flash | 2026-09-02（SDK） | 未確認 | 未確認 | 高速ティア。gemini-4-argon の ID も出現 |\n| DeepSeek V4.1-Flash | 2026-09-10（報道） | 1M（報道） | 報道値 $0.15 / $0.60 | 552B MoE、MIT 重み。vLLM 0.31 が対応を明記 |\n| Kimi K3 | 2026-08（リポ更新 08-06） | 1,048,576 | 未確認 | 2.8T / 104B active のオープン重み、GPQA 93.5 |\n| GLM-5.3 / 5.3-Flash | リポ 2026-10-15 | 1M | 未確認 | 744B-A40B / 320B-A18B、Apache-2.0 |\n\n出典は各行の発表ページ[1][2][3][4][5][6][7][8]です。\n\n## 読み方\n\n**Sonnet 5.5 が Opus 5.5 を一部ベンチマークで上回り、価格は半分**という逆転が今季最大の変化です。Opus 5.5 は GDPval-AA や OSWorld でわずかに上回り、思考を切れない「常時 adaptive」になりました。Haiku 5.5 は初めてプロンプト長で価格が変わるモデルで、100K トークンを超えると 5 倍になります。API ではバージョン 2026-10-21 で `temperature` / `top_p` / `top_k` が削除され、Sonnet 4.5 は 11 月 30 日に退役します[4]。\n\n## 読者への影響\n\n既定を Sonnet 5.5 にし、難しいタスクだけ Opus 5.5 か Fable 5.1 にエスカレーションする構成が、コストと品質のバランスで最も素直です。Haiku 5.5 をサブエージェントに使うときは、コンテキストを 100K 以下に保つ設計が価格に直結します。"
+        },
+        {
+          "headline": "ollama launch で手元の Claude Code がローカル LLM に直結",
+          "topic": "ローカル LLM",
+          "impact": "mid",
+          "tags": [
+            "Ollama",
+            "llama.cpp",
+            "vLLM",
+            "SGLang",
+            "MLX"
+          ],
+          "lead": "Ollama 0.40 系は ollama launch で Claude Code や Codex の設定を書き換え、ローカルモデルで既存のエージェントを動かせるようにしました。Flint 40B MoE などコーディング向けモデルも追加。llama.cpp は MCP 接続と Anthropic 互換エンドポイントを備えています。",
+          "next_step": "Flint か Qwen3.8-27B を 64K コンテキストで立て、普段のタスクで Sonnet 5.5 との差分を 1 つ記録する。",
+          "sources": [
+            {
+              "title": "ollama/ollama Releases",
+              "url": "https://github.com/ollama/ollama/releases",
+              "date": "2026-11-03"
+            },
+            {
+              "title": "Ollama v0.40.8（Flint）",
+              "url": "https://github.com/ollama/ollama/releases/tag/v0.40.8",
+              "date": "2026-10-21"
+            },
+            {
+              "title": "Ollama docs: Claude Code integration",
+              "url": "https://raw.githubusercontent.com/ollama/ollama/main/docs/integrations/claude-code.mdx",
+              "date": "2026-11-09"
+            },
+            {
+              "title": "Ollama docs: Context length",
+              "url": "https://raw.githubusercontent.com/ollama/ollama/main/docs/context-length.mdx",
+              "date": "2026-11-09"
+            },
+            {
+              "title": "ggml-org/llama.cpp Releases",
+              "url": "https://github.com/ggml-org/llama.cpp/releases",
+              "date": "2026-11-08"
+            },
+            {
+              "title": "sgl-project/sglang Releases",
+              "url": "https://github.com/sgl-project/sglang/releases",
+              "date": "2026-11-02"
+            }
+          ],
+          "body": "## Ollama：`ollama launch` でエージェントに直結\n\nOllama は 10 月 16 日の 0.40.6 から 11 月 3 日の 0.40.15 まで 10 回リリースされました[1]。中心は **`ollama launch <統合名>`** です。Claude Code / Codex / OpenCode / Copilot CLI / VS Code などの設定を自動で書き、`ollama launch claude --model qwen3.5` のようにローカルモデルで既存のエージェントを動かせます。手動なら `ANTHROPIC_BASE_URL=http://localhost:11434` と `ANTHROPIC_AUTH_TOKEN=ollama` を設定するだけです[3]。\n\nモデル面では 0.40.8（10 月 21 日）で Recursive 社の **Flint**（40B MoE、アクティブ約 2.5B、262K コンテキスト、Apache 2.0）が入りました。Ollama のリリースノートは Terminal-Bench 2.1 で 54.9%、SWE-bench Verified で 74.2% と記しています[2]。0.40.10 で NVIDIA Nemotron 3.5 Bolt E4B、0.40.11 で TTS と OpenAI 互換の `/v1/audio/speech`、0.40.12 で Liquid AI の LFM3 ファミリー、0.40.15 で Xiaomi MiMo V2.6 9B が追加されました。\n\n注意点はコンテキスト長の既定です。VRAM 24 GiB 未満では 4K、24〜48 GiB で 32K、48 GiB 以上で 256K が既定で、公式ドキュメントはコーディングツールには 64K 以上を推奨しています[4]。\n\n## llama.cpp / vLLM / SGLang / MLX\n\nllama.cpp は 11 月 8 日だけで 10 ビルドが出る勢いで、`llama serve -hf <repo>` に内蔵 Web UI、複数モデルを切り替えるルーターモード、Anthropic Messages 互換エンドポイント、`--mcp-servers-config` による MCP サーバー接続が入っています。マルチモーダルは clip.h が mtmd に統合され、M5 Ultra では top-k が 20〜45% 速くなりました[5]。\n\nvLLM は 0.33.0（11 月 1 日）で PyTorch 2.14 と CUDA 13 を既定にし、Medusa を削除しました。SGLang 0.5.23（11 月 2 日）はオプトインの「Paged Experts」で GPU メモリを超える MoE モデルをコンシューマ GPU 1 枚で動かせるようにし、0.5.22 で Apple Silicon に対応しました。mlx-lm 0.32.0 は Hadamard 回転付き 2 ビット Qwen3.5、MLX 本体は Metal での 1 ビット量子化に踏み込んでいます。\n\n## 32 GB マシンでの現実解\n\nローカルで動かす候補は、密な Qwen3.8-27B（8 月 14 日公開）、MoE の Flint 40B（アクティブ 2.5B）、16 GB で動く gpt-oss-20b です。4 ビット量子化の 27B なら 15〜18 GB 程度（編集部の見積もり）で、64K コンテキストの余地が残ります。\n\n## 読者への影響\n\n「ローカル LLM は遊び」という段階は終わり、同じ Claude Code のハーネスでモデルだけ差し替えて比較できるようになりました。今月試すべきは、Flint か Qwen3.8-27B を 64K コンテキストで立てて、普段のタスクで Sonnet 5.5 との差分を 1 つ記録することです。"
+        },
+        {
+          "headline": "MCP はステートレスへ、Agent Skills は Linux Foundation 傘下に",
+          "topic": "エージェント基盤",
+          "impact": "high",
+          "tags": [
+            "MCP",
+            "Agent Skills",
+            "A2A"
+          ],
+          "lead": "MCP の 2026-07-28 改訂はセッションと initialize を廃止し、サーバー実装の前提を変えました。非推奨期間は 12 か月。10 月 22 日には Agent Skills が MCP と同じ財団に寄贈され、ベンダー中立の「ツール + 手順書」が標準になりつつあります。",
+          "next_step": "自前 MCP サーバーの SDK を TypeScript 2.4 / Python 2.3 に上げ、セッション ID 依存を洗い出す。",
+          "sources": [
+            {
+              "title": "MCP Specification 2026-07-28 changelog",
+              "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/docs/specification/2026-07-28/changelog.mdx",
+              "date": "2026-07-28"
+            },
+            {
+              "title": "Donating Agent Skills to the Agentic AI Foundation",
+              "url": "https://www.anthropic.com/news/donating-agent-skills-to-the-agentic-ai-foundation",
+              "date": "2026-10-22"
+            },
+            {
+              "title": "modelcontextprotocol/typescript-sdk Releases（2.4.0）",
+              "url": "https://github.com/modelcontextprotocol/typescript-sdk/releases",
+              "date": "2026-10-23"
+            },
+            {
+              "title": "modelcontextprotocol/python-sdk Releases（v2.3.0）",
+              "url": "https://github.com/modelcontextprotocol/python-sdk/releases",
+              "date": "2026-10-02"
+            },
+            {
+              "title": "a2aproject/A2A tags（v1.1.0-rc）",
+              "url": "https://github.com/a2aproject/A2A/tags",
+              "date": "2026-10-29"
+            }
+          ],
+          "body": "## MCP 2026-07-28 版：ステートレスへ\n\nMCP の仕様は 7 月 28 日の改訂で大きく形を変えました。プロトコルセッションと `Mcp-Session-Id` が廃止され、`initialize` ハンドシェイクも削除されてバージョンと capabilities は各リクエストの `_meta` で運ばれます。サーバーには `server/discover` が必須になり、GET / SSE によるサブスクリプションは `subscriptions/listen` に置き換わりました。Tasks は公式拡張へ、サーバー起点の sampling / roots / elicitation は Multi Round-Trip Requests に置き換わり、HTTP+SSE トランスポートと OAuth の Dynamic Client Registration（Client ID Metadata Documents へ）は非推奨になりました。非推奨期間は最低 12 か月です[1]。\n\nSDK は Python が 2.0.0（7 月 28 日）で対応し 10 月 2 日の 2.3.0 が最新、TypeScript は 10 月 23 日の 2.4.0 で「Skills over MCP」（SEP-2640）を実装し、`loadSkills` / `SkillsClient` で旧仕様と新仕様の両方に対応します[3][4]。MCP Registry は 11 月 6 日の 1.8.8 まで来ていますが、まだ \"production preview\" の表現です。\n\n## Agent Skills は Linux Foundation 傘下へ\n\n10 月 22 日、Anthropic は **Agent Skills** を MCP と同じ Agentic AI Foundation（Linux Foundation 配下。Anthropic、Block、OpenAI が共同設立）に寄贈しました。発表時点で 70 以上のエージェントプラットフォーム（ChatGPT、Cursor、GitHub Copilot、VS Code を含む）が対応し、公開スキルは 100 万、インストールは約 2 億 8,000 万回とされています。仕様は agentskills.io で、`SKILL.md` と任意の `scripts/` `references/` `assets/` による漸進的開示が骨格です[2]。\n\n周辺では A2A が 10 月 29 日に 1.1.0-rc、Google ADK 2.14.0（11 月 7 日）が A2A と評価モジュールを experimental から卒業させ、Mastra 1.81 がストレージ裏付きの MCP タスク、Claude Code 2.1.319 が MCP タスクのバックグラウンド実行に対応しました。\n\n## 読者への影響\n\n自前の MCP サーバーがあるなら、セッション ID に依存した実装は 12 か月以内に書き直しが必要です。TypeScript SDK 2.4 に上げれば新旧両対応になるので、まず SDK を上げ、ツール説明の見直しと `server/discover` の実装から始めましょう。スキルは「エージェント非依存の手順書」として、MCP ツールと別に整備する価値が出てきました。"
+        },
+        {
+          "headline": "コーディングエージェント週次更新戦、Anthropic は S-1 を提出",
+          "topic": "エージェント／企業動向",
+          "impact": "mid",
+          "tags": [
+            "Claude Code",
+            "Codex",
+            "Gemini CLI",
+            "Vercel AI SDK",
+            "Anthropic"
+          ],
+          "lead": "11 月第 1 週に主要 CLI がすべて更新され、モデルベンダーが自前 CLI を持つのが標準になりました。フレームワーク側は durable 実行と評価の内蔵が進み、Anthropic は 10 月 26 日に IPO に向けた S-1 を SEC に提出しています。",
+          "next_step": "Claude Code を既定にしつつ、Codex か Gemini CLI を 1 つ併用して同じリポで走らせ比べる。",
+          "sources": [
+            {
+              "title": "anthropics/claude-code Releases",
+              "url": "https://github.com/anthropics/claude-code/releases",
+              "date": "2026-11-06"
+            },
+            {
+              "title": "openai/codex Releases（0.167.0）",
+              "url": "https://github.com/openai/codex/releases",
+              "date": "2026-11-06"
+            },
+            {
+              "title": "Anthropic Newsroom",
+              "url": "https://www.anthropic.com/news",
+              "date": "2026-10-26"
+            },
+            {
+              "title": "vercel/ai Releases（ai@7.0.165）",
+              "url": "https://github.com/vercel/ai/releases",
+              "date": "2026-11-07"
+            },
+            {
+              "title": "google-gemini/gemini-cli Releases（v0.67.0）",
+              "url": "https://github.com/google-gemini/gemini-cli/releases",
+              "date": "2026-11-04"
+            }
+          ],
+          "body": "## 週次更新戦\n\nコーディングエージェントは 11 月第 1 週だけで主要 CLI がすべて更新されました。Claude Code は 10 月 22 日の 2.1.309 から 11 月 6 日の 2.1.319 まで 15 日で 9 リリースで、`permissions.denyInsteadOfPrompting`、`blockWritesOutsideWorkingDirectories`、`CLAUDE_CODE_SUBAGENT_EFFORT`、`ultrathink` が xhigh effort に対応し、`claude -p` は失敗時に exit 1 を返すようになりました[1]。OpenAI Codex CLI 0.167.0（11 月 6 日）は `codex agents` コマンドセンターを、Gemini CLI 0.67.0（11 月 4 日）は `models` コマンドを追加しています[2]。Moonshot（kimi-code）、Alibaba（qwen-code）、Z.ai、MiniMax、Mistral、xAI も自前の CLI を GitHub で活発に更新しており、「モデルベンダーが CLI を持つ」のが標準になりました。\n\n## フレームワークと評価\n\nVercel AI SDK は 6 月の 7.0.0（ESM のみ、Node 22 以上、安定テレメトリ）から 11 月 7 日の 7.0.165 まで細かく更新が続きます[4]。OpenAI Agents SDK（Python）は 0.24.0（10 月 15 日）で MCP アノテーションを公開しましたが 1.0 前で、0.24.0-alpha.7 には durable Sessions が入っています。Google ADK 2.14.0 は `adk eval --num_runs` で複数回実行の評価を、LangGraph 1.2.20（11 月 5 日）は strict resume を、Mastra 1.82.0（11 月 4 日）は再起動に耐える durable agents を追加しました。評価ツールは独立製品というより、各フレームワークの機能として内蔵される流れです。\n\n## 政策・企業ニュース\n\nAnthropic のニュースルームには 10 月 26 日「S-1 を SEC に提出」、10 月 12 日「蒸留攻撃への防御強化」、10 月 8 日「2026 年 Usage Policy 更新」、10 月 27 日「GSA との提携（政府向け 40% 割引）」が並びます[3]。蒸留対策として、新規 API アカウントは Claude の思考を保持したまま過去コンテキストを編集できなくなり、Sonnet 5.5 には推論抽出の分類器が入っています。OpenAI と Google 側のインシデントは本セッションの網羅範囲外です。\n\n## 読者への影響\n\nエージェントを選ぶ基準は「モデルの賢さ」から「権限制御・サンドボックス・durable 実行」に移りました。CLI は複数入れて同じリポで走らせ比べられる時代なので、Claude Code を既定にしつつ Codex か Gemini CLI を 1 つ併用しておくと、各社の設計思想の差が見えます。"
+        }
+      ]
+    },
+    {
+      "id": "devtools",
+      "lead": "TypeScript 7.1 Beta、コーディングエージェントの権限モデル、テスト基盤の世代交代。DX の 3 か月は「速さ」から「安全に任せる」へ重心が移りました。",
+      "articles": [
+        {
+          "headline": "TypeScript 7.1 Beta、安定 API で周辺ツールが 7 系に追随へ",
+          "topic": "TypeScript",
+          "impact": "high",
+          "tags": [
+            "TypeScript",
+            "tsgo"
+          ],
+          "lead": "Go ネイティブ TypeScript 7.0 の GA から 3 か月、7.1 Beta が 10 月 20 日に出ました。目玉は 7.0 で失われたプログラマティック API の復活で、lint やコード生成ツールの 7 系対応が進みます。安定版は 11 月末以降にずれる見込みです。",
+          "next_step": "まだ 6 系なら 7.0.2 に上げて型チェック時間を測り、7.1 は RC を待つ。",
+          "sources": [
+            {
+              "title": "microsoft/TypeScript Releases（v7.1-beta）",
+              "url": "https://github.com/microsoft/TypeScript/releases/tag/v7.1-beta",
+              "date": "2026-10-20"
+            },
+            {
+              "title": "TypeScript 7.1 Iteration Plan #63703",
+              "url": "https://github.com/microsoft/TypeScript/issues/63703",
+              "date": "2026-07-31"
+            },
+            {
+              "title": "microsoft/typescript-go Releases（typescript/v7.0.2）",
+              "url": "https://github.com/microsoft/typescript-go/releases",
+              "date": "2026-07-08"
+            },
+            {
+              "title": "npm registry: typescript",
+              "url": "https://registry.npmjs.org/typescript",
+              "date": "2026-11-08"
+            },
+            {
+              "title": "nodejs/node Releases（v26.13.0 LTS）",
+              "url": "https://github.com/nodejs/node/releases",
+              "date": "2026-10-28"
+            }
+          ],
+          "body": "## 何が起きたか\n\nGo で書き直された TypeScript 7.0 は 7 月 8 日に GA になり、npm の `typescript@7.0.2` が現在も `latest` です。コマンド名は `tsc` のまま、プレビュー期間の `@typescript/native-preview`（tsgo）は 7 月で更新が止まり、開発リポジトリ microsoft/typescript-go は 9 月 1 日にアーカイブされて本体リポジトリに統合されました[3][4]。\n\n10 月 20 日には **TypeScript 7.1 Beta** が出ました（npm `typescript@7.1.0-beta`、dist-tag `beta`）[1]。7.1 の Iteration Plan に並ぶ項目は、Content Mapper / Emit / Language Service の各 API の安定化、import attributes の `type` 対応、`es2026` の lib と target、source phase imports、`Promise.allKeyed` / `allSettledKeyed` の型、union 構築と narrowing の高速化、wasm と Android ARM64 ビルドの公開です[2]。7.0 で失われたプログラマティック API が戻ってくるのが最大のポイントで、typescript-eslint や Volar のような周辺ツールが 7 系に追随する前提条件になります。\n\n## スケジュール\n\n当初の計画は Beta 10 月 6 日 → RC 11 月 10 日 → 安定版 11 月 24 日でしたが、9 月 1 日に「API テストのため Beta を約 2 週間後ろ倒しし、RC と Final も追随する」とコメントがあり、Beta は実際に 2 週間遅れました。改訂後の RC / Final の日付は Issue に未記載で、11 月末から 12 月にずれ込む可能性があります[2]。\n\n## 周辺の動き\n\n- VS Code 同梱の TypeScript は vscode-typescript v1.0.2（11 月 6 日）で 7.0.2 です。\n- Node.js 26 が 10 月 28 日に LTS 入りし、型ストリッピングで `.ts` をそのまま実行できる環境が「既定の LTS」になりました[5]。\n- 6.0 系は JS 実装の最終版で、6.0 で非推奨になったオプションは 7.0 で削除済みです。\n\n## 読者への影響\n\n7.0 に上げていないプロジェクトは、7.1 の安定版を待つ理由はありません。`tsconfig` の非推奨オプションを外して `typescript@7.0.2` にするだけで型チェックが 1 桁速くなります。7.1 Beta は API 利用者（lint ルールやコード生成を書く人）向けで、アプリ開発者は RC を待てば十分です。"
+        },
+        {
+          "headline": "Claude Code は auto mode を標準化、VS Code はエージェントの母艦に",
+          "topic": "コーディングエージェント",
+          "impact": "high",
+          "tags": [
+            "Claude Code",
+            "VS Code",
+            "Copilot",
+            "Zed"
+          ],
+          "lead": "Claude Code は 2 か月で約 40 リリースを重ね、Opus / Sonnet / Haiku 5.5 の既定化と auto mode の標準化、hooks の onFailure: block を入れました。VS Code は Cloud sessions と Multi-harness sessions で複数エージェントの母艦になりつつあります。",
+          "next_step": "denyInsteadOfPrompting と hooks の onFailure: block を設定ファイルに書き、エージェントの権限を CI と同じ厳しさにする。",
+          "sources": [
+            {
+              "title": "Claude Code CHANGELOG.md",
+              "url": "https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md",
+              "date": "2026-11-06"
+            },
+            {
+              "title": "VS Code 1.144 release notes",
+              "url": "https://github.com/microsoft/vscode-docs/blob/main/release-notes/v1_144.md",
+              "date": "2026-10-28"
+            },
+            {
+              "title": "VS Code 1.145 release notes",
+              "url": "https://github.com/microsoft/vscode-docs/blob/main/release-notes/v1_145.md",
+              "date": "2026-11-04"
+            },
+            {
+              "title": "Zed v1.27.0",
+              "url": "https://github.com/zed-industries/zed/releases/tag/v1.27.0",
+              "date": "2026-11-04"
+            },
+            {
+              "title": "openai/codex Releases（0.167.0）",
+              "url": "https://github.com/openai/codex/releases",
+              "date": "2026-11-06"
+            }
+          ],
+          "body": "## Claude Code：9〜11 月で約 40 リリース\n\nClaude Code は 9 月 17 日の 2.1.275 から 11 月 6 日の 2.1.319 まで約 40 回リリースされました[1]。節目は 3 つあります。\n\n1. **既定モデルの世代交代**: 2.1.280（9 月 22 日）で Opus 5.5 が既定の Opus に、2.1.284（9 月 28 日）で Sonnet 5.5 が既定の Sonnet に、2.1.293（10 月 7 日）で Haiku 5.5 が既定の Haiku になりました。いずれも 1M コンテキストです。\n2. **auto mode の標準化**: 2.1.284 で対話セッションと VS Code 拡張では全プラン・全プロバイダで auto mode が既定になり、2.1.304 に `/auto-mode-setup`、2.1.319（11 月 6 日）ではサーバ側で検証できないツール呼び出しを拒否または確認する変更と、`permissions.denyInsteadOfPrompting` が入りました。\n3. **拡張の仕組み**: 2.1.287（10 月 1 日）の「Claude Mods」でプラグインが挙動をより深く変えられるようになり、2.1.295 で hooks に `onFailure: \"block\"`（フックの起動失敗やタイムアウト時に操作をブロック）が追加されました。2.1.277 からは CLAUDE.md がない場合に AGENTS.md を読みます。\n\n運用面では、2.1.299（10 月 14 日）で 200K トークン超の会話を約 54 分放置するとプロンプトキャッシュ失効前に自動 compaction する仕組みが入り、2.1.316 で Opus 4.8 の fast mode が非推奨（11 月 30 日削除）になりました[1]。\n\n## VS Code：エージェントの「母艦」化\n\nVS Code は 10 月に 1.141〜1.144、11 月 4 日に 1.145 と、ほぼ週次でマイナーが出ています。1.144（10 月 28 日）では GitHub のインフラ上で Copilot のタスクを実行して VS Code / GitHub.com / Mobile から再開できる **Cloud sessions**（プレビュー）、スケジュールやリポジトリイベントでエージェントを起動する Cloud automations、Agent Host Protocol v1.0 の公開、LLM が各ツール呼び出しのリスクを判定して低リスクを自動承認する Assisted permissions の GA が入りました[2]。1.145 では **Multi-harness sessions** として、Copilot のセッション内にネストして Claude や Codex を並走させられるようになっています[3]。\n\n競合では Zed 1.27.0（11 月 4 日）が Agent Panel のメモリ・CPU を削減する一方で、大規模リポジトリでハングしていたチェックポイント機能を削除しました[4]。OpenAI Codex CLI は 0.167.0（11 月 6 日）で `codex agents` コマンドセンターを追加しています[5]。\n\n## 読者への影響\n\n「どのエージェントを使うか」より「エージェントの権限をどう絞るか」が差別化軸になりました。Claude Code なら `denyInsteadOfPrompting` と hooks の `onFailure: \"block\"`、VS Code なら Assisted permissions を、自分の CI と同じ感覚で設定ファイルに書く時期です。"
+        },
+        {
+          "headline": "Vitest 5 と Playwright 1.65、テスト基盤は Node 22 以上が前提に",
+          "topic": "テスト",
+          "impact": "mid",
+          "tags": [
+            "Vitest",
+            "Playwright",
+            "Storybook"
+          ],
+          "lead": "Vitest 5 は Node 22 以上と Vite 6.4 以上を要求し、mock の自動クリアなど破壊的変更を入れました。Playwright 1.65 は Bun 上で動く --bun を追加し、Node 20 をテスト対象から外しています。CI の Node 20 ランナーは今が替え時です。",
+          "next_step": "CI の Node を 22 以上にそろえ、Vitest 5 へ上げるときは mock 自動クリアで落ちるテストに半日見込む。",
+          "sources": [
+            {
+              "title": "Vitest v5.0.0 リリースノート",
+              "url": "https://github.com/vitest-dev/vitest/releases/tag/v5.0.0",
+              "date": "2026-09-03"
+            },
+            {
+              "title": "Vitest v5.1.0 リリースノート",
+              "url": "https://github.com/vitest-dev/vitest/releases/tag/v5.1.0",
+              "date": "2026-11-02"
+            },
+            {
+              "title": "microsoft/playwright Releases（v1.65.0）",
+              "url": "https://github.com/microsoft/playwright/releases/tag/v1.65.0",
+              "date": "2026-11-05"
+            },
+            {
+              "title": "storybookjs/storybook Releases",
+              "url": "https://github.com/storybookjs/storybook/releases",
+              "date": "2026-11-05"
+            }
+          ],
+          "body": "## Vitest 5：Node 22 以上、mock は自動クリア\n\nVitest 5.0.0 は 9 月 3 日にリリースされました。要件は Node.js 22.12 以上（`^22.12 || ^24 || >=26`）と Vite 6.4 以上です[1]。破壊的変更が多めで、mock は各テスト前に自動で clear され、`sequential` オプションは廃止（`concurrent` に統一）、設定ファイルを親ディレクトリから探さなくなり、await されていない非同期アサーションは失敗扱い、`toHaveTextContent` は厳密一致になりました（緩い比較には `toMatchTextContent`）。レポートの既定出力先は `.vitest/` です。新機能としては `vi.when()`、`--repeats`、ネストした projects、`require(esm)` 対応、単一ファイルの HTML レポータ、Browser Mode の trace view が入っています。\n\n11 月 2 日の 5.1.0 では `--last-failed` と `--since-last-run`、`vi.setSystemTime()` の Temporal 対応、スナップショット失敗の対話的レビュー、失敗時のみ trace を残すモード（既定 on）が追加されました[2]。4 系は 4.1.12（10 月 15 日）で保守が続いており、Node 20 に残るならこちらです。\n\n## Playwright 1.64 / 1.65\n\nPlaywright は 10 月 7 日の 1.64.0 で `page.webmcp` による WebMCP 対応、WebP スクリーンショット、`--shuffle`、`locator.within()`、`page.getByRef()` を追加し、11 月 5 日の 1.65.0 では `--bun` で Bun 上でテストランナーを動かせるようになりました。`failures` レポータと `onlyFailures`、`PLAYWRIGHT_TRANSFORM_CACHE_DIR` も新顔です。破壊的変更として Node.js 20 がテスト対象から外れ（Docker イメージは Node 26）、cookie のマッチングが RFC 6265 準拠になり、非表示テキストが accessible name と aria snapshot から除外されました。同梱ブラウザは Chromium 158 / Firefox 159 / WebKit 27.2 です[3]。\n\nStorybook は 10.6.3（10 月 20 日）で Vitest 5 に対応し、11 月 3 日に 11.0.0-beta.0 が出ています[4]。\n\n## 読者への影響\n\n新規プロジェクトは Node 22 以上を前提に Vitest 5.1 + Playwright 1.65 で問題ありません。既存プロジェクトを 5 に上げるときは「mock の自動クリア」と「未 await のアサーション失敗」で落ちるテストが一定数出るので、半日は見ておきましょう。CI の Node 20 ランナーは、Playwright の次のリリースで本当に動かなくなる前に 22 以上へ。"
+        }
+      ]
+    },
+    {
+      "id": "security",
+      "lead": "Next.js と React に Critical RCE が 3 件、MCP SDK と Claude Code に High が連発、Node.js は 10 件の CVE。今月は「便利なサーバー機能」と「エージェントのツール側」が攻撃面でした。巻頭特集のサプライチェーン事件とあわせてお読みください。",
+      "articles": [
+        {
+          "headline": "Next.js / React に Critical RCE 3 連発、11 月 3 日は Moderate 7 件",
+          "topic": "フレームワーク脆弱性",
+          "impact": "high",
+          "tags": [
+            "Next.js",
+            "React",
+            "RSC",
+            "sharp"
+          ],
+          "lead": "9 月 22 日の next/og、10 月 14 日の画像最適化 API と React Server Components で、いずれも CVSS 9.5 の未認証 RCE が公開されました。11 月 3 日の定例リリースは use cache まわりの Moderate 7 件。self-hosted は 16.4.5 / 15.5.29 へ今週中に。",
+          "next_step": "Next.js の月例セキュリティリリースを Renovate の最優先キューに入れ、sharp と react-server-dom-* も一緒に追う。",
+          "sources": [
+            {
+              "title": "vercel/next.js Security Advisories",
+              "url": "https://github.com/vercel/next.js/security/advisories",
+              "date": "2026-11-03"
+            },
+            {
+              "title": "GHSA-f3mh-rxg3-f5g2: HttpOnly cookie exposure on Edge runtime routes",
+              "url": "https://github.com/vercel/next.js/security/advisories/GHSA-f3mh-rxg3-f5g2",
+              "date": "2026-11-03"
+            },
+            {
+              "title": "GHSA-2464-fhr4-w9xw: Unauthenticated RCE in Image Optimization API",
+              "url": "https://github.com/advisories/GHSA-2464-fhr4-w9xw",
+              "date": "2026-10-14"
+            },
+            {
+              "title": "GHSA-xqc2-xf4c-x3h3: Unauthenticated RCE in React Server Components",
+              "url": "https://github.com/facebook/react/security/advisories/GHSA-xqc2-xf4c-x3h3",
+              "date": "2026-10-14"
+            },
+            {
+              "title": "sharp GHSA-wq5f-xc86-pv6w（librsvg、CVE-2026-96889）",
+              "url": "https://github.com/lovell/sharp/security/advisories/GHSA-wq5f-xc86-pv6w",
+              "date": "2026-09-30"
+            }
+          ],
+          "body": "## 何が起きたか\n\n9 月 22 日から 11 月 3 日までの 6 週間に、Next.js と React で Critical の未認証 RCE が 3 件公開されました。\n\n- **9 月 22 日**: `next/og` の Node 版 ImageResponse 経由の RCE（GHSA-vcvr-r3jv-pc5j、CVSS 9.5）。上流は satori で、Next.js 16.3.6 で修正。\n- **10 月 14 日**: 画像最適化 API の SVG 経由 RCE（CVE-2026-96889、CVSS 9.5）。sharp が同梱する librsvg の use-after-free が原因で、glibc Linux かつ非 PIE の公式 Node バイナリで RCE 化します。Next.js 15.5.28 / 16.4.1、sharp 0.35.5 で修正[2][5]。\n- **同日**: React Server Components の未認証 RCE（GHSA-xqc2-xf4c-x3h3、CVSS 9.5）と Server Functions の DoS（High）。react-server-dom-webpack / -parcel / -turbopack の 19.0.9 / 19.1.10 / 19.2.9 / 19.3.1 で修正。CVE は未付与で、発動条件は「複数の typed array と攻撃者制御値を運ぶレスポンス」と極めて限定的と記載されています[4]。\n\n11 月 3 日の定例セキュリティリリースは Moderate 7 件（CVE-2026-119346〜119351、119790）で、修正版は 16.4.5 / 15.5.29 です[1]。内訳は、Edge runtime で内部ヘッダ `x-middleware-set-cookie` が公開レスポンスに漏れて HttpOnly cookie が JS から読める問題[2]、`dangerouslyAllowSVG: false` でも攻撃者の SVG が処理される問題、HTTP/1.1 リバースプロキシ配下でのレスポンス注入、`use cache` にバイナリ引数を渡したときのユーザー間キャッシュ漏えい、`cacheComponents: true` で `partialPrefetching` 未設定のときに 1 回の GET でフォールバックシェルが汚染される問題、ネストした `use cache` と `unstable_cache()` でロケールなど root param を跨ぐ漏えいです。\n\n## 今週やること\n\n1. `npm ls next sharp react-server-dom-webpack` で現行版を確認し、Next.js を 16.4.5 または 15.5.29、sharp を 0.35.5 以上に。\n2. RSC を素で使っているなら react-server-dom-* を各系列の修正版以上に。\n3. self-hosted で `cacheComponents: true` なら、当面 `partialPrefetching: true` を設定。\n4. Edge runtime のルートでセッション cookie を set していたなら、更新後にセッションを失効・再発行する価値あり。\n5. `dangerouslyAllowSVG` を使わない設計を維持し、`/_next/image` にはレート制限か WAF を。\n\n## 読者への影響\n\n共通項は「サーバーで画像やキャッシュを扱う便利機能が、そのまま攻撃面になっている」ことです。Vercel にデプロイしていれば基盤側で緩和される項目もありますが、self-hosted は自分で追うしかありません。Next.js の月例セキュリティリリース（事前告知あり）を Renovate の優先キューに入れておきましょう。"
+        },
+        {
+          "headline": "MCP SDK と Claude Code に High 連発——エージェントの穴は「ツール側」にあった",
+          "topic": "AI エージェント",
+          "impact": "high",
+          "tags": [
+            "MCP",
+            "Claude Code",
+            "Vite",
+            "TOCTOU"
+          ],
+          "lead": "MCP の TypeScript / Python SDK は OAuth 認可サーバーの強制とクライアント間メッセージ混線で High を公開し、Claude Code は 10 月に TOCTOU とプラグイン SHA ピン迂回など High 4 件を修正しました。SDK と CLI のバージョン確認が今週の仕事です。",
+          "next_step": "自作 MCP サーバーの SDK を上げ、HTTP 版はリクエストごとに McpServer を生成する設計に直す。",
+          "sources": [
+            {
+              "title": "modelcontextprotocol/typescript-sdk Security Advisories",
+              "url": "https://github.com/modelcontextprotocol/typescript-sdk/security/advisories",
+              "date": "2026-10-15"
+            },
+            {
+              "title": "GHSA-jm63-cq47-j5jp: cross-client message delivery（CVE-2026-111770）",
+              "url": "https://github.com/modelcontextprotocol/typescript-sdk/security/advisories/GHSA-jm63-cq47-j5jp",
+              "date": "2026-10-15"
+            },
+            {
+              "title": "MCP Python SDK GHSA-qx49-fqc8-xw99（CVE-2026-115563）",
+              "url": "https://github.com/modelcontextprotocol/python-sdk/security/advisories/GHSA-qx49-fqc8-xw99",
+              "date": "2026-09-28"
+            },
+            {
+              "title": "Claude Code GHSA-pq7j-f95f-qfcv: plugin SHA pin bypass（CVE-2026-86063）",
+              "url": "https://github.com/anthropics/claude-code/security/advisories/GHSA-pq7j-f95f-qfcv",
+              "date": "2026-10-09"
+            },
+            {
+              "title": "Claude Code GHSA-5xjx-9qx6-jcrv: Edit tool TOCTOU（CVE-2026-88968）",
+              "url": "https://github.com/anthropics/claude-code/security/advisories/GHSA-5xjx-9qx6-jcrv",
+              "date": "2026-10-26"
+            },
+            {
+              "title": "Vite GHSA-rq7h-c2jc-7f22（CVE-2026-112946）",
+              "url": "https://github.com/vitejs/vite/security/advisories/GHSA-rq7h-c2jc-7f22",
+              "date": "2026-10-06"
+            }
+          ],
+          "body": "## MCP SDK：OAuth と HTTP 共有の 2 系統\n\nMCP の公式 SDK には 9 月末から 10 月中旬にかけて High の脆弱性が続きました。TypeScript SDK では 9 月 30 日の CVE-2026-104850（CVSS 7.5）で、OAuth クライアントが MCP サーバーの指定する認可サーバーにリフレッシュトークンやクライアントシークレットを送ってしまう問題が公開され、`@modelcontextprotocol/sdk` 1.31.0 / `client` 2.2.0 で修正されました（`expectedIssuer` の設定が必要な場合あり）[1]。Python SDK も 9 月 28 日に同種の CVE-2026-115563 を公開し、`mcp` 1.30.0 / 2.2.0 で `issuer=` の明示が必須になっています[3]。\n\n10 月 15 日には、HTTP で 1 つのトランスポート / McpServer を複数クライアントで共有すると JSON-RPC の id 衝突で他クライアントに応答が配送される CVE-2026-111770（CVSS 7.7）が `@modelcontextprotocol/server` 2.3.0 で修正されました。設計としてはリクエストごと、またはセッションごとに McpServer を生成する形に変える必要があります[2]。同日、HTTP トランスポートにボディサイズとバッチ長の上限がなかった問題も修正され、4 MiB 超は 413、100 メッセージ超は 400 を返すようになりました。\n\n## Claude Code：TOCTOU と SHA ピン迂回\n\nClaude Code では 10 月に High が 4 件公開されました。10 月 5 日の CVE-2026-103435 は権限チェック後にパスを再解決するため symlink の差し替えでワークスペース外に書き込める TOCTOU（2.1.129 で修正）、10 月 9 日の CVE-2026-86063 はプラグインの commit SHA ピンを「SHA と同名のブランチ」で迂回できる問題（2.1.179 で修正）[4]、10 月 13 日の CVE-2026-88066 は Windows 版 Claude Desktop が `git.exe` を相対パスで spawn する問題（1.8089.0 で修正）、10 月 26 日の CVE-2026-88968 は macOS の Bash サンドボックス内プロセスが Edit ツールの検証後に親ディレクトリを symlink 化できる問題（2.1.251 で修正）です[5]。\n\n## Vite 開発サーバー\n\nVite は 10 月 6 日に `server.fs.allow` 外のファイルを返してしまう CVE-2026-112946（`--host` で公開時）を 8.3.3 / 7.3.7 / 6.4.4 で修正し、10 月 21 日には v6 のバックポート漏れで `.env` が `?raw` で読める CVE-2026-118662 を 6.4.5 で直しました[6]。\n\n## 今週やること\n\n1. `claude --version` が 2.1.251 以上か確認（自動更新なら適用済み）。Claude Desktop は Windows 1.8089.0 / macOS 1.15962.0 以上。\n2. 自作 MCP サーバーの SDK を TypeScript 1.31.0 / server 2.3.0、Python 1.30.0 / 2.2.0 以上に。HTTP 版はリクエストごとに McpServer を生成しているか確認。\n3. OAuth を使う MCP クライアントで `expectedIssuer` / `issuer=` を設定し、信頼できないサーバーに繋いだ履歴があればシークレットをローテーション。\n4. Vite を 8.3.3 / 7.3.7 / 6.4.5 以上に。LAN に `--host` で公開する習慣を見直す。\n5. プラグインとスキルの導入元を棚卸しし、「SHA ピンでも安全とは限らない」と認識する。"
+        },
+        {
+          "headline": "Node.js 10 月更新は Brotli RCE 含む 10 件、次回は 11 月 11 日",
+          "topic": "ランタイム／基盤",
+          "impact": "high",
+          "tags": [
+            "Node.js",
+            "OpenSSL",
+            "Docker",
+            "TLS"
+          ],
+          "lead": "Node.js は 10 月 21 日に 26 / 24 / 22 系で CVE 10 件（最高 High）を修正し、侵害された eMudhra 中間 CA を不信頼化しました。OpenSSL は 9 月末に 14 件、Docker Engine は insecure registry へのフォールバックを修正。次の Node セキュリティリリースは 11 月 11 日頃です。",
+          "next_step": "Dockerfile のベースイメージを 11 月 11 日の Node セキュリティリリース直後に上げる段取りを組む。",
+          "sources": [
+            {
+              "title": "Node.js Security Releases — October 21, 2026",
+              "url": "https://nodejs.org/en/blog/vulnerability/october-2026-security-releases",
+              "date": "2026-10-21"
+            },
+            {
+              "title": "Node.js v26.12.1 (Current) リリースノート",
+              "url": "https://nodejs.org/en/blog/release/v26.12.1",
+              "date": "2026-10-21"
+            },
+            {
+              "title": "Node.js Security Releases — November 11, 2026（事前告知）",
+              "url": "https://nodejs.org/en/blog/vulnerability/november-2026-security-releases",
+              "date": "2026-11-03"
+            },
+            {
+              "title": "OpenSSL 4.0.3 release",
+              "url": "https://github.com/openssl/openssl/releases/tag/openssl-4.0.3",
+              "date": "2026-09-29"
+            },
+            {
+              "title": "Docker Engine GHSA-7cfq-22r6-qp73（CVE-2026-92543）",
+              "url": "https://github.com/moby/moby/security/advisories/GHSA-7cfq-22r6-qp73",
+              "date": "2026-10-01"
+            }
+          ],
+          "body": "## Node.js：10 月 21 日に 10 件\n\nNode.js は 10 月 21 日に 26.12.1 / 24.22.1 / 22.23.4 をセキュリティリリースとして公開しました。最高深刻度は High で、計 10 件の CVE を含みます[1]。\n\n- **High**: Brotli デコーダの境界外書き込み（CVE-2026-111497、RCE の可能性）、`dns.resolve*()` の NUL バイト切り詰め（CVE-2026-105482。以前の修正が不完全）、全角数字の IP 表記による TLS ホスト名検証の迂回（CVE-2026-105483）、先頭ゼロ付き IPv4 による TLS 迂回（CVE-2026-106069）。\n- **Medium**: keep-alive で送信前のレスポンスを受理する問題、非正規 IPv4 ホスト名で DNS SAN が IP を認証する問題、`crypto.randomUUID()` / `randomInt()` のエントロピーキャッシュがスナップショットや SEA に保存されて値が重複する問題（CVE-2026-106074）。\n- **Low**: 26.x の `zlib.ZipFile`、Permission Model のワイルドカード過剰許可と `fs.realpathSync()` 迂回。\n\n依存更新として c-ares 1.34.9、undici 8.12.2、ルート証明書の NSS 3.131.1 への更新に加え、鍵が侵害された eMudhra の中間 CA の不信頼化と、ブロック対象の公開鍵を含むチェーンの拒否が入っています[2]。Node 20 以前は 4 月末で EOL のため未修正です。次回のセキュリティリリースは **11 月 11 日頃**と事前告知され、最高深刻度は High です[3]。\n\n## OpenSSL と Docker\n\nOpenSSL は 9 月 29 日に 4.0.3 / 3.6.5 / 3.5.9 / 3.4.8 を公開し、QUIC 系の DoS 多数、SM2 / EC のタイミング側チャネル、X.509 拡張キャッシュの use-after-free など 14 件の CVE（最高 High）を修正しました[4]。10 月 23 日の 4.1.0 は機能リリースで、Node 27 alpha が同梱しているのはこれです。\n\nDocker Engine は 10 月 1 日の CVE-2026-92543（CVSS 7.6）で、レジストリ名の名前解決結果にループバックが混ざると insecure 扱いになって証明書検証が無効化され HTTP にフォールバックする問題を 29.8.2 で修正しました[5]。\n\n## 今週やること\n\n1. `node -v` が 26.12.1 / 24.22.1 / 22.23.4 以上かを全環境で確認し、Dockerfile のベースイメージタグを 11 月 11 日の次回リリースに備えて確認。\n2. `openssl version` が 3.5.9 / 3.6.5 / 4.0.3 以上か。\n3. Docker Engine を 29.8.2 以上に（最新は 29.9.3）。\n4. TLS でホスト名を IP 文字列として扱う自前コードがあれば、正規化の有無を見直す。"
+        }
+      ]
+    },
+    {
+      "id": "releases",
+      "items": [
+        {
+          "name": "Node.js",
+          "version": "26.13.0 (LTS)",
+          "date": "2026-10-28",
+          "note": "26.x が LTS「Lithium」に。2029 年 4 月まで",
+          "url": "https://github.com/nodejs/node/releases/tag/v26.13.0"
+        },
+        {
+          "name": "Node.js",
+          "version": "27.0.0-alpha.0.0.0",
+          "date": "2026-10-29",
+          "note": "史上初のアルファ。V8 15.6、OpenSSL 4.1",
+          "url": "https://github.com/nodejs/Release/blob/main/schedule.json"
+        },
+        {
+          "name": "Node.js",
+          "version": "26.12.1 / 24.22.1 / 22.23.4",
+          "date": "2026-10-21",
+          "note": "セキュリティリリース。CVE 10 件、最高 High",
+          "url": "https://nodejs.org/en/blog/vulnerability/october-2026-security-releases"
+        },
+        {
+          "name": "Deno",
+          "version": "2.9.8",
+          "date": "2026-10-21",
+          "note": "バグ修正。チームは Cloudflare へ合流",
+          "url": "https://github.com/denoland/deno/releases/tag/v2.9.8"
+        },
+        {
+          "name": "Bun",
+          "version": "1.4.4",
+          "date": "2026-10-22",
+          "note": "1.4 系パッチ（1.4.0 は 8/20、Rust 実装）",
+          "url": "https://github.com/oven-sh/bun/releases/tag/bun-v1.4.4"
+        },
+        {
+          "name": "TypeScript",
+          "version": "7.1 Beta",
+          "date": "2026-10-20",
+          "note": "Go ネイティブ 7 系初のマイナー。安定版は 11/24 予定",
+          "url": "https://github.com/microsoft/TypeScript/releases/tag/v7.1-beta"
+        },
+        {
+          "name": "React",
+          "version": "19.3.1",
+          "date": "2026-10-14",
+          "note": "RSC の Critical RCE 修正を含む（19.2.9 / 19.1.10 も）",
+          "url": "https://github.com/facebook/react/releases/tag/v19.3.1"
+        },
+        {
+          "name": "Next.js",
+          "version": "16.4.0",
+          "date": "2026-10-06",
+          "note": "Partial Prefetching 安定化、Cache Components が既定",
+          "url": "https://github.com/vercel/next.js/releases/tag/v16.4.0"
+        },
+        {
+          "name": "Next.js",
+          "version": "16.4.5 / 15.5.29",
+          "date": "2026-11-03",
+          "note": "定例セキュリティリリース。Moderate 7 件",
+          "url": "https://github.com/vercel/next.js/releases/tag/v16.4.5"
+        },
+        {
+          "name": "SvelteKit",
+          "version": "3.0.0",
+          "date": "2026-10-01",
+          "note": "Vite 8 / Node 22.17 / TS 6 必須。sv migrate で移行",
+          "url": "https://github.com/sveltejs/kit/releases/tag/%40sveltejs%2Fkit%403.0.0"
+        },
+        {
+          "name": "TanStack Start",
+          "version": "1.169.0 (1.0 安定)",
+          "date": "2026-10-12",
+          "note": "1.0 安定宣言。React / Solid / Vue 対応、Vite 8 必須",
+          "url": "https://tanstack.com/blog/tanstack-start-1-0"
+        },
+        {
+          "name": "Remix",
+          "version": "3.0.0",
+          "date": "2026-10-01",
+          "note": "React 非依存の新フレームワークとして初の安定版",
+          "url": "https://github.com/remix-run/remix/releases/tag/remix%403.0.0"
+        },
+        {
+          "name": "Nuxt",
+          "version": "4.6.0",
+          "date": "2026-10-05",
+          "note": "nuxt/server、CLI v4、Nuxt 5 互換モード。4.6.4 (11/2) は 11 件の修正",
+          "url": "https://github.com/nuxt/nuxt/releases/tag/v4.6.0"
+        },
+        {
+          "name": "Astro",
+          "version": "7.4.0",
+          "date": "2026-10-15",
+          "note": "build --timings、実験的 parallelPrerender",
+          "url": "https://github.com/withastro/astro/releases/tag/astro%407.4.0"
+        },
+        {
+          "name": "Vite",
+          "version": "8.3.6",
+          "date": "2026-11-05",
+          "note": "パッチ。8.3.3 (10/6) は server.fs.allow 迂回の修正",
+          "url": "https://github.com/vitejs/vite/releases/tag/v8.3.6"
+        },
+        {
+          "name": "Rolldown",
+          "version": "1.3.0",
+          "date": "2026-11-05",
+          "note": "import attributes（実験）、エージェント向けビルドレポート",
+          "url": "https://github.com/rolldown/rolldown/releases"
+        },
+        {
+          "name": "Vitest",
+          "version": "5.1.0",
+          "date": "2026-11-02",
+          "note": "--last-failed、Temporal 対応、失敗時 trace view",
+          "url": "https://github.com/vitest-dev/vitest/releases/tag/v5.1.0"
+        },
+        {
+          "name": "Playwright",
+          "version": "1.65.0",
+          "date": "2026-11-05",
+          "note": "--bun、failures レポータ。Node 20 はテスト対象外に",
+          "url": "https://github.com/microsoft/playwright/releases/tag/v1.65.0"
+        },
+        {
+          "name": "pnpm",
+          "version": "12.18.0",
+          "date": "2026-11-05",
+          "note": "Rust 実装の 12 系。エージェントスキルの個別承認",
+          "url": "https://github.com/pnpm/pnpm/releases/tag/v12.18.0"
+        },
+        {
+          "name": "npm",
+          "version": "12.2.2",
+          "date": "2026-11-04",
+          "note": "パッチ。12 系は依存のスクリプトを既定でブロック",
+          "url": "https://github.com/npm/cli/releases/tag/v12.2.2"
+        },
+        {
+          "name": "Biome",
+          "version": "2.6.6",
+          "date": "2026-11-06",
+          "note": "2.6.0 は 10/21",
+          "url": "https://github.com/biomejs/biome/releases"
+        },
+        {
+          "name": "oxlint / oxfmt",
+          "version": "1.92.0 / 0.77.0",
+          "date": "2026-11-06",
+          "note": "型対応 lint の自動検出、oxfmt が Vue template 整形",
+          "url": "https://github.com/oxc-project/oxc/releases"
+        },
+        {
+          "name": "Go",
+          "version": "1.27.3 / 1.26.10",
+          "date": "2026-10-20",
+          "note": "ポイントリリース（1.27.0 は 8/19、ジェネリックメソッド）",
+          "url": "https://github.com/golang/go/releases/tag/go1.27.3"
+        },
+        {
+          "name": "Rust",
+          "version": "1.99.1",
+          "date": "2026-10-15",
+          "note": "1.99.0 (10/1) は C 可変長引数関数の定義を安定化",
+          "url": "https://github.com/rust-lang/rust/releases/tag/1.99.1"
+        },
+        {
+          "name": "Python",
+          "version": "3.15.2 / 3.14.10",
+          "date": "2026-10-26",
+          "note": "3.15.0 正式版は 10/9。lazy imports、frozendict",
+          "url": "https://github.com/python/cpython/releases/tag/v3.15.2"
+        },
+        {
+          "name": "Python",
+          "version": "3.16.0a1",
+          "date": "2026-10-13",
+          "note": "3.16 の最初のアルファ（最終版は 2027-10-05 予定）",
+          "url": "https://github.com/python/peps/blob/main/peps/pep-0826.rst"
+        },
+        {
+          "name": "uv",
+          "version": "0.13.7",
+          "date": "2026-11-03",
+          "note": "0.13.0 (10/9) で既定 Python が 3.15 に",
+          "url": "https://github.com/astral-sh/uv/releases"
+        },
+        {
+          "name": "PostgreSQL",
+          "version": "19 RC1",
+          "date": "2026-10-15",
+          "note": "GA は 11/19 予定。11/12 は PG14 の最終マイナー",
+          "url": "https://www.postgresql.org/about/news/postgresql-19-rc-1-released-3409/"
+        },
+        {
+          "name": "Redis / Valkey",
+          "version": "8.10.3 / 9.1.3",
+          "date": "2026-10-26",
+          "note": "クラスタバス PUBLISH のヒープオーバーフロー修正",
+          "url": "https://github.com/valkey-io/valkey/releases/tag/9.1.3"
+        },
+        {
+          "name": "Docker Engine",
+          "version": "29.9.3",
+          "date": "2026-11-03",
+          "note": "29.9.0 (10/8) は containerd store の lazy-pull",
+          "url": "https://github.com/moby/moby/releases/tag/v29.9.3"
+        },
+        {
+          "name": "Kubernetes",
+          "version": "1.37.2",
+          "date": "2026-10-28",
+          "note": "月例パッチ。1.34 は 10/27 で EOL、1.38 は 12/16",
+          "url": "https://github.com/kubernetes/kubernetes/releases/tag/v1.37.2"
+        },
+        {
+          "name": "Terraform",
+          "version": "1.17.1",
+          "date": "2026-10-28",
+          "note": "1.17.0 (10/21) で Terraform Policy が GA",
+          "url": "https://github.com/hashicorp/terraform/releases/tag/v1.17.1"
+        },
+        {
+          "name": "OpenTofu",
+          "version": "1.13.9",
+          "date": "2026-11-05",
+          "note": "1.13 系は 2027-08-01 までサポート",
+          "url": "https://github.com/opentofu/opentofu/releases/tag/v1.13.9"
+        },
+        {
+          "name": "OpenTelemetry JS",
+          "version": "3.0.0",
+          "date": "2026-10-20",
+          "note": "メジャー。Node 22.15 以上、Jaeger exporter 削除",
+          "url": "https://github.com/open-telemetry/opentelemetry-js/releases/tag/v3.0.0"
+        },
+        {
+          "name": "Linux kernel",
+          "version": "7.3",
+          "date": "2026-10-18",
+          "note": "7.4-rc2 は 11/9",
+          "url": "https://github.com/torvalds/linux/releases/tag/v7.3"
+        },
+        {
+          "name": "PHP",
+          "version": "8.5.12",
+          "date": "2026-10-21",
+          "note": "未認証 RCE 2 件（Critical）の修正。8.6.0 は RC5",
+          "url": "https://github.com/php/php-src/releases/tag/php-8.5.12"
+        },
+        {
+          "name": "Rails",
+          "version": "8.1.4.1",
+          "date": "2026-11-04",
+          "note": "セキュリティ 21 件（任意ファイル読み書き含む）",
+          "url": "https://github.com/rails/rails/releases/tag/v8.1.4.1"
+        },
+        {
+          "name": ".NET",
+          "version": "10.0.13",
+          "date": "2026-10-13",
+          "note": "CVE 44 件。.NET 11 GA は 11/10",
+          "url": "https://github.com/dotnet/core/blob/main/release-notes/10.0/10.0.13/10.0.13.md"
+        },
+        {
+          "name": "JDK",
+          "version": "27.0.1",
+          "date": "2026-10-20",
+          "note": "10 月 CPU",
+          "url": "https://github.com/openjdk/jdk27u/releases/tag/jdk-27.0.1-ga"
+        },
+        {
+          "name": "Swift",
+          "version": "6.4.2",
+          "date": "2026-10-30",
+          "note": "6.4.0 は 9/15",
+          "url": "https://github.com/swiftlang/swift/releases/tag/swift-6.4.2-RELEASE"
+        },
+        {
+          "name": "three.js",
+          "version": "r187",
+          "date": "2026-10-30",
+          "note": "r186 (9/24) で Gaussian Splat がコア入り",
+          "url": "https://github.com/mrdoob/three.js/releases/tag/r187"
+        },
+        {
+          "name": "PyTorch",
+          "version": "2.15.0",
+          "date": "2026-10-28",
+          "note": "NCCL バックエンド刷新、Apple Silicon FP8、CUDA 13.2 既定",
+          "url": "https://github.com/pytorch/pytorch/releases/tag/v2.15.0"
+        },
+        {
+          "name": "Ollama",
+          "version": "0.40.15",
+          "date": "2026-11-03",
+          "note": "MiMo V2.6、ollama launch の対象拡大",
+          "url": "https://github.com/ollama/ollama/releases/tag/v0.40.15"
+        },
+        {
+          "name": "vLLM",
+          "version": "0.33.0",
+          "date": "2026-11-01",
+          "note": "PyTorch 2.14、CUDA 13 既定",
+          "url": "https://github.com/vllm-project/vllm/releases/tag/v0.33.0"
+        },
+        {
+          "name": "Electron",
+          "version": "45.0.0",
+          "date": "2026-10-21",
+          "note": "Chromium 156、Node 24.22",
+          "url": "https://github.com/electron/electron/releases/tag/v45.0.0"
+        },
+        {
+          "name": "React Native",
+          "version": "0.88.0",
+          "date": "2026-10-15",
+          "note": "React 19.3 同期、命令型 EventTarget API",
+          "url": "https://github.com/facebook/react-native/releases/tag/v0.88.0"
+        },
+        {
+          "name": "Claude Code",
+          "version": "2.1.319",
+          "date": "2026-11-06",
+          "note": "auto mode のサーバ側検証、denyInsteadOfPrompting",
+          "url": "https://github.com/anthropics/claude-code/releases"
+        },
+        {
+          "name": "Claude Haiku 5.5",
+          "version": "claude-haiku-5-5",
+          "date": "2026-10-07",
+          "note": "最安 Claude。100K トークン超は段階価格",
+          "url": "https://www.anthropic.com/news/claude-haiku-5-5"
+        }
+      ],
+      "upcoming": [
+        {
+          "name": ".NET 11 GA",
+          "expected": "2026-11-10",
+          "note": ".NET 8 / 9 は同日サポート終了",
+          "url": "https://github.com/dotnet/core/blob/main/release-notes/11.0/README.md"
+        },
+        {
+          "name": "Node.js セキュリティリリース",
+          "expected": "2026-11-11",
+          "note": "26.x / 24.x / 22.x、最高 High と事前告知",
+          "url": "https://nodejs.org/en/blog/vulnerability/november-2026-security-releases"
+        },
+        {
+          "name": "Rust 1.100.0",
+          "expected": "2026-11-12",
+          "note": "6 週サイクル。beta.13 まで確認",
+          "url": "https://github.com/rust-lang/rust/releases"
+        },
+        {
+          "name": "PostgreSQL マイナーリリース",
+          "expected": "2026-11-12",
+          "note": "18.7 ほか。PostgreSQL 14 の最終リリース",
+          "url": "https://www.postgresql.org/developer/roadmap"
+        },
+        {
+          "name": "PostgreSQL 19.0",
+          "expected": "2026-11-19",
+          "note": "RC2 は 11/12。遅れる可能性あり",
+          "url": "https://www.postgresql.org/about/news/postgresql-19-rc-1-released-3409/"
+        },
+        {
+          "name": "TypeScript 7.1 RC / 安定版",
+          "expected": "2026-11-24",
+          "note": "当初計画 RC 11/10、安定 11/24。Beta が 2 週遅れたため後ろ倒しの可能性",
+          "url": "https://github.com/microsoft/TypeScript/issues/63703"
+        },
+        {
+          "name": "GitHub Actions ubuntu-latest = 26.04",
+          "expected": "2026-11-19",
+          "note": "10/19 から段階移行",
+          "url": "https://github.blog/changelog/2026-09-17-ubuntu-26-generally-available-and-latest-migration"
+        },
+        {
+          "name": "Claude Sonnet 4.5 退役",
+          "expected": "2026-11-30",
+          "note": "後継は claude-sonnet-5-5",
+          "url": "https://platform.claude.com/docs/en/about-claude/model-deprecations"
+        },
+        {
+          "name": "Cloudflare Observability 新価格",
+          "expected": "2026-12-01",
+          "note": "Workers Logs も GB 課金に",
+          "url": "https://developers.cloudflare.com/observability/pricing/"
+        },
+        {
+          "name": "Python 3.15.3 / 3.14.11",
+          "expected": "2026-12-01",
+          "note": "定例バグフィックス",
+          "url": "https://github.com/python/peps/blob/main/peps/pep-0790.rst"
+        },
+        {
+          "name": "SIGGRAPH Asia 2026",
+          "expected": "2026-12-01",
+          "note": "クアラルンプール、12/1〜4（検索結果ベース、要確認）",
+          "url": "https://asia.siggraph.org/2026/"
+        },
+        {
+          "name": "NeurIPS 2026",
+          "expected": "2026-12-06",
+          "note": "シドニー 12/6〜12（検索結果ベース、要確認）",
+          "url": "https://neurips.cc/"
+        },
+        {
+          "name": "Kubernetes 1.38.0",
+          "expected": "2026-12-16",
+          "note": "コードフリーズ 11/16、rc.0 12/3",
+          "url": "https://github.com/kubernetes/sig-release/blob/master/releases/release-1.38/README.md"
+        },
+        {
+          "name": "Ruby 4.1.0",
+          "expected": "2026-12-25",
+          "note": "例年のクリスマスリリース（公式日付は未発表）",
+          "url": "https://www.ruby-lang.org/en/news/2026/10/12/ruby-4-1-0-preview1-released/"
+        },
+        {
+          "name": "Go 1.28",
+          "expected": "2027-02",
+          "note": "フリーズ 11 月末、RC1 12 月中旬の見込み",
+          "url": "https://github.com/golang/wiki/blob/master/Go-Release-Cycle.md"
+        },
+        {
+          "name": "State of JS 2026 結果",
+          "expected": "2027-02",
+          "note": "アンケートは 11/11 締切",
+          "url": "https://github.com/Devographics/surveys/tree/main/state_of_js"
+        }
+      ]
+    },
+    {
+      "id": "try",
+      "items": [
+        {
+          "title": "Ollama + Flint で Claude Code をローカル LLM 駆動にする",
+          "time": "60〜120分",
+          "why": "32 GB クラスのマシンで、コーディング向けオープンモデルが普段のエージェントのハーネスの中でどこまで使えるかを、自分のタスクで確かめます。",
+          "steps": [
+            "Ollama を v0.40.15 以上に更新し、`ollama run flint` で Flint（40B MoE、アクティブ約 2.5B、262K コンテキスト、Apache 2.0）を取得して軽く会話する。メモリが厳しければ `qwen3.5` か gpt-oss-20b に替える。",
+            "`OLLAMA_CONTEXT_LENGTH=64000 ollama serve` でコンテキストを 64K に上げる（24〜48 GiB VRAM の既定は 32K、24 GiB 未満は 4K）。`ollama ps` の PROCESSOR 列が 100% GPU になっているか確認する。",
+            "小さなリポジトリで `ollama launch claude --model flint` を実行する。手動なら `ANTHROPIC_AUTH_TOKEN=ollama ANTHROPIC_BASE_URL=http://localhost:11434 claude --model flint` とし、`/status` でベース URL を確認する。",
+            "既存モジュールにテストを 1 本足す作業と、3 ファイルを読んで要約する作業を頼む。ツール呼び出しがどこで崩れるかをメモする（Ollama のドキュメントはホスト型 WebSearch と高度なツール制御は未対応と明記）。",
+            "余裕があれば llama.cpp の `llama serve -hf <GGUF>`（Anthropic 互換エンドポイント、`--mcp-servers-config`）を第 2 のバックエンドとして同じ手順を試す。"
+          ],
+          "done": "ローカルモデルで編集→検証のループが 64K コンテキストで 1 回完走し、Sonnet 5.5 と比べて最初に壊れた点をメモに残せたら完了。",
+          "sources": [
+            {
+              "title": "Ollama docs: Claude Code integration",
+              "url": "https://raw.githubusercontent.com/ollama/ollama/main/docs/integrations/claude-code.mdx",
+              "date": "2026-11-09"
+            },
+            {
+              "title": "Ollama v0.40.8（Flint）",
+              "url": "https://github.com/ollama/ollama/releases/tag/v0.40.8",
+              "date": "2026-10-21"
+            },
+            {
+              "title": "Ollama docs: Context length",
+              "url": "https://raw.githubusercontent.com/ollama/ollama/main/docs/context-length.mdx",
+              "date": "2026-11-09"
+            }
+          ]
+        },
+        {
+          "title": "three.js r187 のネイティブ GaussianSplat で手持ちの splat を WebGPU 表示し、Spark と比べる",
+          "time": "60〜90分",
+          "why": "three.js のコアに 3DGS が入ったので、外部ライブラリなしで自前シーンに splat を合成できます。WebGPU 前提の three.js ネイティブと WebGL2 互換の Spark の差を自分の端末で体感します。",
+          "steps": [
+            "`npm create vite@latest splat-demo` で雛形を作り、`npm i three@0.187.0` を入れる。",
+            "手持ちの 3DGS PLY を SPZ v4 に変換する。SuperSplat のエディタ（superspl.at/editor）で読み込んで SPZ 書き出し、または Niantic の Web ツール（nianticlabs.github.io/spz）を使う。",
+            "`import * as THREE from 'three/webgpu'`、`SPZLoader`（three/addons/loaders）、`GaussianSplat`（three/addons/objects）を import する。パスは examples/webgpu_gaussian_splat.html を踏襲する。",
+            "`const data = await new SPZLoader().loadAsync('scene.spz'); const splat = new GaussianSplat(data, { autoSort: false }); scene.add(splat);` とし、毎フレーム `splat.updateSort(renderer, camera)` を呼ぶ。WebGPURenderer を使う。",
+            "同じ .spz を Spark 2.4.0 の `SplatMesh({ url })` + `SparkRenderer` で表示し、FPS と初期ロード時間を記録する。余裕があれば `@sparkjsdev/radix` 0.0.1（three>=0.186）でも比較する。"
+          ],
+          "done": "自作 splat が WebGPU と WebGL2 の両経路で表示でき、端末ごとの可否（WebGPU 非対応ブラウザの挙動）と FPS 差を 1 枚の表にまとめられたら完了。",
+          "sources": [
+            {
+              "title": "three.js r186 Release",
+              "url": "https://github.com/mrdoob/three.js/releases/tag/r186",
+              "date": "2026-09-24"
+            },
+            {
+              "title": "three.js examples/webgpu_gaussian_splat.html",
+              "url": "https://github.com/mrdoob/three.js/blob/dev/examples/webgpu_gaussian_splat.html",
+              "date": "2026-08-19"
+            },
+            {
+              "title": "sparkjsdev/spark README",
+              "url": "https://github.com/sparkjsdev/spark",
+              "date": "2026-10-20"
+            },
+            {
+              "title": "nianticlabs/spz README",
+              "url": "https://github.com/nianticlabs/spz",
+              "date": "2026-05-05"
+            }
+          ]
+        },
+        {
+          "title": "pnpm 12 と actions.lock で自分のリポジトリのサプライチェーンを固める",
+          "time": "60分",
+          "why": "巻頭特集で見たとおり、provenance 付きの悪性版が現実になりました。公開直後のバージョンを待つ設定、install スクリプトのブロック、Actions の完全固定を自分の全リポジトリに入れます。",
+          "steps": [
+            "`pnpm -v` が 12.x（Rust 実装）か確認し、`pnpm-workspace.yaml` に `minimumReleaseAge: 1440` を明示する。即日上げたいパッケージ（例: next）は `minimumReleaseAgeExclude` に列挙する。",
+            "`pnpm install` して `allowBuilds` の承認プロンプトに出た依存を 1 つずつ確認し、本当にビルドが必要なものだけ許可する。npm のプロジェクトなら `npm install-scripts approve` で同じ棚卸しをする。",
+            "`gh extension install github/gh-actions-lock` → `gh actions-lock` で `.github/workflows/actions.lock` を生成し、全アクション（推移的依存含む）が commit SHA とリポジトリ ID で固定されたことを確認する。使えない場合は全アクションを 40 桁 SHA に書き換える。",
+            "自分が npm に公開しているパッケージがあれば、Trusted Publishing の設定を開き、紐付け先リポジトリ名が今も自分の所有かを確認し、未使用の設定を削除する。新規設定は 2 日以内に初回 publish しないと失効する。",
+            "`npm audit signatures` を CI に追加し、`git grep -n preinstall -- '**/package.json'` と `.vscode/tasks.json` `.claude/settings.json` の有無を全リポジトリで確認する。"
+          ],
+          "done": "全リポジトリで minimumReleaseAge と allowBuilds（または allowScripts）が明示され、Actions が actions.lock か SHA で固定され、CI に audit signatures が入っていれば完了。",
+          "sources": [
+            {
+              "title": "pnpm v11.0.0 リリースノート（minimumReleaseAge 既定化）",
+              "url": "https://github.com/pnpm/pnpm/releases/tag/v11.0.0",
+              "date": "2026-04-28"
+            },
+            {
+              "title": "GitHub Docs: Workflow dependency lockfiles",
+              "url": "https://raw.githubusercontent.com/github/docs/main/content/actions/concepts/security/workflow-dependency-lockfiles.md",
+              "date": "2026-11-09"
+            },
+            {
+              "title": "npm Docs: Trusted publishers",
+              "url": "https://raw.githubusercontent.com/npm/documentation/main/content/packages-and-modules/securing-your-code/trusted-publishers.mdx",
+              "date": "2026-09-03"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "glossary",
+      "items": [
+        {
+          "term": "minimumReleaseAge",
+          "desc": "パッケージマネージャーが「公開から N 分経っていないバージョンを解決しない」設定。pnpm 11 以降は既定 1440 分、Bun は `[install] minimumReleaseAge`、Yarn は `npmMinimalAgeGate`。公開直後の悪性版を踏む事故を減らす。"
+        },
+        {
+          "term": "Trusted Publishing",
+          "desc": "CI（GitHub Actions / GitLab / CircleCI）の OIDC トークンでレジストリに短命トークンを発行させ、長期 API トークンなしで publish する仕組み。npm では新規設定が 2 日以内に初回 publish しないと失効する。"
+        },
+        {
+          "term": "staged publishing",
+          "desc": "npm が公開前にステージ領域へ置き、別の承認を経て公開する二段階リリース（`npm stage publish`）。2026 年 9 月 3 日以降の複数パブリッシャー設定では既定。"
+        },
+        {
+          "term": "security holding package",
+          "desc": "npm がマルウェアを削除した後に同名で公開するプレースホルダ版（例: `tensorlake@0.0.1-security`）。この版名を見たら過去に汚染があったサイン。"
+        },
+        {
+          "term": "workflow dependency lockfile（actions.lock）",
+          "desc": "GitHub Actions の全依存アクション（推移的含む）を commit SHA とリポジトリ ID で固定する `.github/workflows/actions.lock`。`gh actions-lock` で生成し、SHA ピン留めの上位互換とされる。"
+        },
+        {
+          "term": "TOCTOU",
+          "desc": "Time-of-check to time-of-use。検査した時点と使用する時点の間に対象（パスや symlink）を差し替えられる競合。2026 年 10 月の Claude Code の High 2 件がこれ。"
+        },
+        {
+          "term": "Cache Components / Partial Prefetching",
+          "desc": "Next.js 16 系のキャッシュモデル。`use cache` でコンポーネント単位にキャッシュし、16.4 で安定化した Partial Prefetching が静的シェルの事前取得を制御する。11 月の脆弱性 7 件中 5 件がこの周辺。"
+        },
+        {
+          "term": "Lambda Web Functions",
+          "desc": "AWS Lambda の新形態。ポートを listen する通常の HTTP サーバーをイベントハンドラに書き換えずにデプロイできる。従来の関数は Lambda Event Functions と呼ばれる。"
+        },
+        {
+          "term": "Multi Round-Trip Requests（MRTR）",
+          "desc": "MCP 2026-07-28 版で、サーバー起点の sampling / roots / elicitation を置き換えた仕組み。ステートレス化に伴い、1 リクエストの中で複数往復を表現する。"
+        },
+        {
+          "term": "Agent Skills",
+          "desc": "`SKILL.md` と任意の scripts / references / assets でエージェントに手順を渡す仕様。2026 年 10 月に Anthropic が Agentic AI Foundation（Linux Foundation 配下）へ寄贈。"
+        },
+        {
+          "term": "SPZ v4",
+          "desc": "Niantic の 3DGS 圧縮フォーマットの第 4 版。gzip から ZSTD に変わり、属性ストリームを独立並列圧縮する。three.js、Spark、Babylon.js、Open3D が 2026 年秋に対応。"
+        },
+        {
+          "term": "KHR_gaussian_splatting",
+          "desc": "glTF に Gaussian Splat を格納する Khronos 拡張。「Complete, Ratified」ステータスで、kernel と colorSpace が必須、球面調和は 3 次まで。"
+        },
+        {
+          "term": "LoMa",
+          "desc": "COLMAP 4.2 に内蔵された学習ベースの特徴抽出・マッチング（ONNX、LOMA_B / LOMA_B128）。SuperPoint + LightGlue を外部で回す必要がなくなる。"
+        },
+        {
+          "term": "lazy imports（PEP 810）",
+          "desc": "Python 3.15 の `lazy import foo` 構文。モジュールスコープの import を初回アクセスまで遅延し、CLI やサーバーレス関数の起動を速くする。"
+        }
+      ]
+    }
+  ]
+}
