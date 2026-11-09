@@ -2,13 +2,17 @@
 // content.json のスキーマ検証。問題があれば一覧を出して exit 1。
 //   node scripts/validate.mjs issues/2026-11/content.json [--watchlist state/watchlist.json]
 import fs from 'node:fs';
+import path from 'node:path';
 import { SECTION_ORDER } from './build.mjs';
+import { sniffFigure, MAX_FIGURE_BYTES } from './fetch-figure.mjs';
 
 const REQUIRED_SECTIONS = ['feature', 'frontend', 'backend', 'infra', 'recon3d', 'ai', 'devtools', 'security', 'releases', 'try', 'glossary'];
 const MIN_ARTICLES = { feature: 1, frontend: 3, backend: 3, infra: 2, recon3d: 2, ai: 3, devtools: 2, security: 1 };
 const MAX_BODY_CHARS = 2600; // 1 ページに収まる目安（超えたら警告）
 const IMPACTS = new Set(['high', 'mid', 'low']);
 
+let ISSUE_DIR = '';
+let figureCount = 0;
 const errors = [];
 const warns = [];
 const err = (m) => errors.push(m);
@@ -35,6 +39,23 @@ function checkArticle(where, a, bodyLocalCites = true) {
   if (!a.impact) warn(`${where}: impact がありません`);
   if (!Array.isArray(a.tags) || !a.tags.length) warn(`${where}: tags が空です`);
   if (a.body && a.body.length > MAX_BODY_CHARS) warn(`${where}: body が ${a.body.length} 文字（目安 ${MAX_BODY_CHARS}）。ページ内スクロールになります`);
+  if (!Array.isArray(a.summary) || a.summary.length < 2 || a.summary.length > 4) err(`${where}: summary（3 行でいうと）は 2〜4 項目の配列が必須です`);
+  else a.summary.forEach((s, i) => { if (typeof s !== 'string' || !s.trim()) err(`${where}: summary[${i}] が空です`); else if (s.length > 90) warn(`${where}: summary[${i}] が ${s.length} 字。1 行（〜60 字）に収めてください`); });
+  if (a.figures !== undefined && !Array.isArray(a.figures)) err(`${where}: figures は配列`);
+  (Array.isArray(a.figures) ? a.figures : []).forEach((f, i) => {
+    const w = `${where} figures[${i}]`;
+    figureCount++;
+    if (!/^fig-\d{2}\.(png|jpe?g|gif|webp)$/.test(String(f.file || ''))) { err(`${w}: file は fig-NN.(png|jpg|gif|webp) 形式: ${f.file}`); return; }
+    const fp = path.join(ISSUE_DIR, 'figures', f.file);
+    if (!fs.existsSync(fp)) { err(`${w}: ${fp} がありません`); return; }
+    const buf = fs.readFileSync(fp);
+    if (buf.length > MAX_FIGURE_BYTES) err(`${w}: ${(buf.length / 1024).toFixed(0)} KB は上限 ${MAX_FIGURE_BYTES / 1024} KB 超え`);
+    if (!sniffFigure(buf)) err(`${w}: ${f.file} は PNG/JPEG/GIF/WebP ではありません`);
+    if (!f.caption) err(`${w}: caption は必須`);
+    if (f.source !== undefined && (!Number.isInteger(f.source) || f.source < 1 || f.source > (a.sources?.length ?? 0))) err(`${w}: source は sources の 1 始まり番号`);
+    if (f.source === undefined) warn(`${w}: source（出典番号）がありません`);
+  });
+  if (a.body && /\[fig:(\d+)\]/.test(a.body)) for (const m of a.body.matchAll(/\[fig:(\d+)\]/g)) { if (Number(m[1]) < 1 || Number(m[1]) > (a.figures?.length ?? 0)) err(`${where}: 本文の [fig:${m[1]}] に対応する figures がありません`); }
   checkSources(where, a.sources);
   if (bodyLocalCites && Array.isArray(a.sources)) {
     const n = a.sources.length;
@@ -51,6 +72,7 @@ function main() {
   const wlIdx = rest.indexOf('--watchlist');
   let content;
   try { content = JSON.parse(fs.readFileSync(file, 'utf8')); } catch (e) { console.error(`✖ JSON として読めません: ${e.message}`); process.exit(1); }
+  ISSUE_DIR = path.dirname(path.resolve(file));
 
   if (!/^\d{4}-\d{2}$/.test(content.issue || '')) err(`issue は YYYY-MM 形式: ${content.issue}`);
   if (!Number.isInteger(content.volume) || content.volume < 1) err(`volume は 1 以上の整数: ${content.volume}`);
@@ -112,11 +134,14 @@ function main() {
       if (!it.pick) { warn(`${w}: pick が未記入`); return; }
       if (!it.reason) err(`${w}: pick があるのに reason がありません`);
       if (!Array.isArray(it.sources) || !it.sources.length) err(`${w}: pick があるのに sources がありません`);
+      (it.sources ?? []).forEach((s, i) => { if (!isUrl(s.url)) err(`${w} sources[${i}]: url が http(s) URL ではありません: ${s.url}`); });
       if (!isDate(it.last_checked)) err(`${w}: last_checked は YYYY-MM-DD: ${it.last_checked}`);
       if (it.last_checked && content.published_at && it.last_checked < content.published_at.slice(0, 7)) warn(`${w}: last_checked (${it.last_checked}) が今号より古いままです`);
     });
     if (wl.updated !== content.published_at?.slice(0, 10) && wl.updated !== content.issue) warn(`watchlist.updated (${wl.updated}) を今号の日付に更新してください`);
   }
+  if (figureCount === 0) warn('図版（figures）が 1 枚もありません。各セクションに 1〜2 枚は出典から図を引用してください');
+  if (figureCount > 40) warn(`図版が ${figureCount} 枚。多すぎると HTML が重くなります（目安 40 枚以下）`);
   finish();
 }
 

@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+{{CSP}}
 <title>{{TITLE}}</title>
 <meta name="description" content="{{DESCRIPTION}}">
 <style>
@@ -104,12 +105,20 @@ sup.cite{font-size:.7em;line-height:0;vertical-align:super}
 sup.cite a{text-decoration:none;color:var(--accent);font-weight:700}
 .next-step{margin-top:18px;padding:12px 14px;background:var(--paper2);border-radius:8px;font-size:13.5px}
 .next-step b{color:var(--accent)}
+.summary{margin:0 0 18px;padding:12px 16px;border:1px solid var(--rule);border-left:4px solid var(--accent);border-radius:6px;background:var(--paper2)}
+.summary-t{font-size:11px;letter-spacing:.2em;color:var(--accent);font-weight:700;margin-bottom:4px}
+.summary ul{margin:0;padding-left:1.2em;font-size:14.5px;line-height:1.75}
+.summary li{margin:.15em 0}
+figure.fig{margin:16px 0 20px}
+figure.fig img{display:block;max-width:100%;max-height:52vh;margin:0 auto;border-radius:6px;background:#fff}
+figure.fig figcaption{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.6;text-align:center}
+figure.fig .figsrc{text-decoration:none;color:var(--accent);font-weight:700}
 
 /* 表紙 */
 .page.cover .body{padding:0;display:flex;flex-direction:column;background:
   linear-gradient(160deg,var(--paper) 0%,var(--paper) 55%,var(--paper2) 100%)}
-.cover .masthead{padding:42px 48px 0}
-.cover .masthead .brand{font-family:var(--font-head);font-size:64px;font-weight:700;letter-spacing:-.02em;line-height:1;margin:0}
+.cover .masthead{padding:42px 200px 0 48px}
+.cover .masthead .brand{font-family:var(--font-head);font-size:clamp(36px,4.6vw,64px);font-weight:700;letter-spacing:-.02em;line-height:1;margin:0}
 .cover .masthead .sub{font-size:12px;letter-spacing:.3em;color:var(--muted);margin:10px 0 0;text-transform:uppercase}
 .cover .issue-no{position:absolute;top:44px;right:48px;text-align:right;font-family:var(--font-head);line-height:1.2}
 .cover .issue-no b{display:block;font-size:30px}
@@ -218,6 +227,7 @@ sup.cite a{text-decoration:none;color:var(--accent);font-weight:700}
   .page h2{font-size:23px}
   .opener h2{font-size:30px}
   .cover .masthead{padding:30px 26px 0}
+  .cover .issue-no{position:static;text-align:left;margin:14px 26px 0}
   .cover .masthead .brand{font-size:46px}
   .cover .issue-no{top:30px;right:26px}
   .cover .headlines{padding:0 26px 40px}
@@ -245,6 +255,7 @@ sup.cite a{text-decoration:none;color:var(--accent);font-weight:700}
   a{color:#000}
   .sources a::after{content:""}
   pre{white-space:pre-wrap;word-break:break-all}
+  figure.fig img{max-height:120mm}
 }
 </style>
 </head>
@@ -362,8 +373,9 @@ sup.cite a{text-decoration:none;color:var(--accent);font-weight:700}
   }, { passive: true });
 
   // ハッシュ → ページ
-  function pageFromHash() {
-    const h = decodeURIComponent(location.hash.slice(1));
+  const initialHash = location.hash;
+  function pageFromHash(hash = location.hash) {
+    const h = decodeURIComponent(hash.slice(1));
     if (!h) return -1;
     let p = pages.findIndex(x => x.id === h || x.dataset.anchor === h);
     if (p < 0) { const el = document.getElementById(h); if (el) p = pages.findIndex(x => x.contains(el)); }
@@ -408,7 +420,7 @@ sup.cite a{text-decoration:none;color:var(--accent);font-weight:700}
   window.addEventListener('hashchange', () => { const p = pageFromHash(); if (p >= 0) goToPage(p); });
 
   layout();
-  const start = pageFromHash();
+  const start = pageFromHash(initialHash);
   if (start > 0) goToPage(start, 'instant');
   // scroll-behavior: smooth を初期配置の後に効かせる
   book.style.scrollBehavior = 'auto';

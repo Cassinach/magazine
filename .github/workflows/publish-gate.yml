@@ -1,0 +1,71 @@
+# routine が作った号ブランチの PR を、main 側の信頼済みコードで検証して main に取り込む。
+# pull_request_target なので、このワークフローと scripts/ は常に main のものが動く（PR 側のコードは実行しない）。
+# merge は環境 `publish`（deployment branch policy: main のみ）に置いた deploy key で push する。
+# → issue/** ブランチ上で動く他のワークフロー（routine が改変したものを含む）からは鍵に触れない。
+name: publish-gate
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+    branches: [main]
+permissions: {}
+concurrency:
+  group: publish-gate-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  publish-gate:
+    name: publish-gate
+    if: github.event.pull_request.head.repo.full_name == github.repository && startsWith(github.event.pull_request.head.ref, 'issue/')
+    runs-on: ubuntu-latest
+    environment: publish
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+      HEAD_REF: ${{ github.event.pull_request.head.ref }}
+      HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+    steps:
+      - name: Checkout main (trusted)
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Fetch PR head into a worktree
+        run: |
+          git fetch origin "+refs/pull/${PR_NUMBER}/head:refs/remotes/pr/head"
+          test "$(git rev-parse refs/remotes/pr/head)" = "$HEAD_SHA"
+          git worktree add --detach pr refs/remotes/pr/head
+
+      - name: Gate
+        run: node scripts/gate.mjs --base origin/main --head refs/remotes/pr/head --pr-dir pr --branch "$HEAD_REF" --report gate-report.md
+
+      - name: Merge into main (deploy key)
+        env:
+          DEPLOY_KEY: ${{ secrets.PUBLISH_DEPLOY_KEY }}
+        run: |
+          set -euo pipefail
+          umask 077
+          mkdir -p ~/.ssh
+          printf '%s\n' "$DEPLOY_KEY" > ~/.ssh/publish_key
+          ssh-keyscan -t ed25519 github.com >> ~/.ssh/known_hosts 2>/dev/null
+          export GIT_SSH_COMMAND="ssh -i ~/.ssh/publish_key -o IdentitiesOnly=yes"
+          git config user.name "publish-gate[bot]"
+          git config user.email "publish-gate@users.noreply.github.com"
+          git checkout -q main
+          git merge --no-ff -m "issue: ${HEAD_REF#issue/} 発刊 (#${PR_NUMBER})" refs/remotes/pr/head
+          git push "git@github.com:${GITHUB_REPOSITORY}.git" main
+          git push "git@github.com:${GITHUB_REPOSITORY}.git" --delete "$HEAD_REF" || true
+          rm -f ~/.ssh/publish_key
+          gh pr comment "$PR_NUMBER" --body-file gate-report.md || true
+
+      - name: Report failure
+        if: failure()
+        run: |
+          [ -f gate-report.md ] || printf '## publish-gate: ❌ 失敗\n\nレポートが生成される前に失敗しました。Actions のログを確認してください。\n' > gate-report.md
+          gh pr comment "$PR_NUMBER" --body-file gate-report.md || true
+          gh label create gate-failed --color B60205 --description "publish-gate が PR を却下" 2>/dev/null || true
+          gh issue create --title "publish-gate failed: ${HEAD_REF}" --body-file gate-report.md --label gate-failed || true

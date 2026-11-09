@@ -5,11 +5,17 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createHash } from 'node:crypto';
 import { renderMarkdown, escapeHtml as esc } from './md.mjs';
 import { diffWatchlist, TREND_LABEL } from './diff.mjs';
+import { sniffFigure, FIGURE_TYPES } from './fetch-figure.mjs';
 
-const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ISSUES_DIR = path.join(ROOT, 'issues');
+const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..'); // テンプレートは常にこのリポジトリのものを使う
+let ROOT = REPO;        // 原稿・出力の基準ディレクトリ（--root で差し替え可。gate が PR のツリーを指定する）
+let ISSUES_DIR = path.join(ROOT, 'issues');
+
+// href に入れてよい URL だけ通す（http/https 以外は空にする）
+export const safeUrl = (u) => (/^https?:\/\/[^\s"'<>]+$/i.test(String(u ?? '')) ? String(u) : '');
 
 export const SECTION_ORDER = ['feature', 'frontend', 'backend', 'infra', 'recon3d', 'ai', 'devtools', 'security', 'releases', 'try', 'glossary'];
 export const SECTION_TITLES = {
@@ -29,6 +35,7 @@ function parseArgs(argv) {
     else if (v === '--watchlist') a.watchlist = argv[++i];
     else if (v === '--prev-watchlist') a.prevWatchlist = argv[++i];
     else if (v === '--no-index') a.noIndex = true;
+    else if (v === '--root') a.root = argv[++i];
     else if (/^\d{4}-\d{2}$/.test(v)) a.issue = v;
     else throw new Error(`不明な引数: ${v}`);
   }
@@ -43,7 +50,7 @@ function listIssues() {
 }
 
 // ---------- ページ生成 ----------
-export function buildHtml(content, { template, watchlist, prevWatchlist, buildTime = new Date() }) {
+export function buildHtml(content, { template, watchlist, prevWatchlist, issueDir }) {
   const pages = []; // { id, sec, secTitle, anchor, cls, render(ctx) }
   const sources = []; // 全出典（URL で重複排除）
   const srcIndex = new Map();
@@ -64,11 +71,27 @@ export function buildHtml(content, { template, watchlist, prevWatchlist, buildTi
 
   const srcList = (list, globals) =>
     `<div class="sources"><ol start="${globals[0]}">` +
-    list.map((s, i) => `<li value="${globals[i]}"><a href="${esc(s.url)}">${esc(s.title || s.url)}</a>${s.date ? `<span class="d">${esc(s.date)}</span>` : ''}</li>`).join('') +
+    list.map((s, i) => `<li value="${globals[i]}">${safeUrl(s.url) ? `<a href="${esc(safeUrl(s.url))}">${esc(s.title || s.url)}</a>` : esc(s.title || '')}${s.date ? `<span class="d">${esc(s.date)}</span>` : ''}</li>`).join('') +
     '</ol></div>';
 
   const folio = (n) => `<div class="folio">${n}</div>`;
   const thumb = (sec, label) => `<div class="thumb" data-sec="${sec}"><span>${esc(label)}</span></div>`;
+
+  // 図版: issues/<号>/figures/fig-NN.(png|jpg|gif|webp) を data URI で埋め込む（単一ファイルを保つ）
+  const figureHtml = (f, globalsOf) => {
+    if (!issueDir || !f || !/^fig-\d{2}\.(png|jpe?g|gif|webp)$/.test(String(f.file || ''))) return '';
+    const file = path.join(issueDir, 'figures', f.file);
+    if (!fs.existsSync(file)) return '';
+    const buf = fs.readFileSync(file);
+    const ext = sniffFigure(buf);
+    if (!ext) return '';
+    const srcNo = f.source && globalsOf ? globalsOf(Number(f.source)) : null;
+    return `<figure class="fig"><img src="data:${FIGURE_TYPES[ext].mime};base64,${buf.toString('base64')}" alt="${esc(f.alt || f.caption || '')}">` +
+      `<figcaption>${esc(f.caption || '')}${srcNo ? ` <a class="figsrc" href="#src-${srcNo}" data-goto="__colophon__">[${srcNo}]</a>` : ''}</figcaption></figure>`;
+  };
+  const summaryHtml = (list) => (Array.isArray(list) && list.length)
+    ? `<div class="summary"><div class="summary-t">3 行でいうと</div><ul>${list.map((t) => `<li>${renderMarkdown(String(t)).replace(/^<p>|<\/p>$/g, '')}</li>`).join('')}</ul></div>`
+    : '';
 
   // --- 表紙 ---
   page({
@@ -116,7 +139,7 @@ export function buildHtml(content, { template, watchlist, prevWatchlist, buildTi
             <table class="dash"><thead><tr><th>層</th><th>いま採用するなら</th><th>対抗</th><th>理由</th><th>変化</th></tr></thead><tbody>
             ${chunk.map((r) => {
               const t = TREND_LABEL[r.trend];
-              const srcs = (r.sources ?? []).map((s) => `<a href="${esc(s.url)}" title="${esc(s.title || '')}">[↗]</a>`).join('');
+              const srcs = (r.sources ?? []).filter((s) => safeUrl(s.url)).map((s) => `<a href="${esc(safeUrl(s.url))}" title="${esc(s.title || '')}">[↗]</a>`).join('');
               return `<tr>
                 <td><div class="layer">${esc(r.layer)}</div>${esc(r.topic)}</td>
                 <td><span class="pick">${esc(r.pick)}</span>${r.version ? `<span class="ver">${esc(r.version)}</span>` : ''}</td>
@@ -166,10 +189,10 @@ export function buildHtml(content, { template, watchlist, prevWatchlist, buildTi
             <p class="kicker">${esc(secTitle)}</p>
             <h2>今月の主要リリース</h2>
             <div class="tbl"><table class="rel"><thead><tr><th>プロダクト</th><th>バージョン</th><th>日付</th><th>ひとこと</th></tr></thead><tbody>
-            ${items.map((r) => `<tr><td>${r.url ? `<a href="${esc(r.url)}">${esc(r.name)}</a>` : esc(r.name)}</td><td class="v">${esc(r.version)}</td><td class="d">${esc(r.date || '')}</td><td>${esc(r.note || '')}</td></tr>`).join('')}
+            ${items.map((r) => `<tr><td>${safeUrl(r.url) ? `<a href="${esc(safeUrl(r.url))}">${esc(r.name)}</a>` : esc(r.name)}</td><td class="v">${esc(r.version)}</td><td class="d">${esc(r.date || '')}</td><td>${esc(r.note || '')}</td></tr>`).join('')}
             </tbody></table></div>
             ${up.length ? `<h3>来月以降の予定</h3><div class="tbl"><table class="rel"><thead><tr><th>プロダクト</th><th>予定</th><th>見どころ</th></tr></thead><tbody>
-            ${up.map((r) => `<tr><td>${r.url ? `<a href="${esc(r.url)}">${esc(r.name)}</a>` : esc(r.name)}</td><td class="d">${esc(r.expected || '')}</td><td>${esc(r.note || '')}</td></tr>`).join('')}
+            ${up.map((r) => `<tr><td>${safeUrl(r.url) ? `<a href="${esc(safeUrl(r.url))}">${esc(r.name)}</a>` : esc(r.name)}</td><td class="d">${esc(r.expected || '')}</td><td>${esc(r.note || '')}</td></tr>`).join('')}
             </tbody></table></div>` : ''}
           </div>${folio(ctx.n)}`,
       });
@@ -223,6 +246,19 @@ export function buildHtml(content, { template, watchlist, prevWatchlist, buildTi
     (sec.articles ?? []).forEach((a, k) => {
       const globals = (a.sources ?? []).map(addSource);
       const cite = (n) => (n >= 1 && n <= globals.length) ? `<sup class="cite"><a href="#src-${globals[n - 1]}" data-goto="__colophon__" title="${esc(a.sources[n - 1].title || '')}">[${globals[n - 1]}]</a></sup>` : null;
+      const globalsOf = (n) => (n >= 1 && n <= globals.length) ? globals[n - 1] : null;
+      // 図版: 本文中の [fig:N] 段落の位置に置く。置かれなかった 1 枚目は本文の前、残りは本文の後ろ
+      const figs = Array.isArray(a.figures) ? a.figures : [];
+      const used = new Set();
+      const bodyHtml = renderMarkdown(a.body, { cite }).replace(/<p>\[fig:(\d+)\]<\/p>/g, (m, n) => {
+        const i = Number(n) - 1;
+        if (!figs[i]) return '';
+        used.add(i);
+        return figureHtml(figs[i], globalsOf);
+      });
+      const unused = figs.map((f, i) => (used.has(i) ? null : f)).filter(Boolean);
+      const figsBefore = unused.length ? figureHtml(unused[0], globalsOf) : '';
+      const figsAfter = unused.slice(1).map((f) => figureHtml(f, globalsOf)).join('');
       const ap = page({
         sec: id, secTitle, anchor: `a-${id}-${k + 1}`, cls: 'article', tocLabel: a.headline,
         render: (ctx) => `
@@ -235,7 +271,10 @@ export function buildHtml(content, { template, watchlist, prevWatchlist, buildTi
               ${(a.tags ?? []).map((t) => `<span class="tag">${esc(t)}</span>`).join('')}
             </div>
             ${a.lead ? `<p class="lead">${esc(a.lead)}</p>` : ''}
-            ${renderMarkdown(a.body, { cite })}
+            ${summaryHtml(a.summary)}
+            ${figsBefore}
+            ${bodyHtml}
+            ${figsAfter}
             ${a.next_step ? `<div class="next-step"><b>自分の次のプロジェクトでは：</b>${esc(a.next_step)}</div>` : ''}
             ${globals.length ? srcList(a.sources, globals) : ''}
           </div>${folio(ctx.n)}`,
@@ -264,10 +303,9 @@ export function buildHtml(content, { template, watchlist, prevWatchlist, buildTi
           <p class="meta">${esc(title)} ${esc(dateJa)} ${esc(volNo)}<br>
           発行日：${esc(content.published_at || '')}<br>
           編集・執筆：Claude（${esc(content.model || 'unknown model')}）— Web 調査にもとづく自動生成<br>
-          生成時刻：${buildTime.toISOString().replace('T', ' ').slice(0, 16)} UTC<br>
           出典数：${sources.length}　ページ数：${ctx.total}</p>
           <h3>出典一覧</h3>` : `<p class="kicker">Colophon</p><h2>出典一覧 <small style="font-size:.5em;color:var(--muted)">(${ci + 1}/${srcChunks.length})</small></h2>`}
-          <ol start="${start}">${chunk.map((s, i) => `<li id="src-${start + i}"><a href="${esc(s.url)}">${esc(s.title || s.url)}</a>${s.date ? ` <span class="d">(${esc(s.date)})</span>` : ''}<br><small style="opacity:.7">${esc(s.url)}</small></li>`).join('')}</ol>
+          <ol start="${start}">${chunk.map((s, i) => `<li id="src-${start + i}">${safeUrl(s.url) ? `<a href="${esc(safeUrl(s.url))}">${esc(s.title || s.url)}</a>` : esc(s.title || '')}${s.date ? ` <span class="d">(${esc(s.date)})</span>` : ''}<br><small style="opacity:.7">${esc(safeUrl(s.url))}</small></li>`).join('')}</ol>
         </div>${folio(ctx.n)}`,
     });
     colophonPages.push(p);
@@ -292,11 +330,23 @@ export function buildHtml(content, { template, watchlist, prevWatchlist, buildTi
   }).join('\n');
 
   const description = (content.headlines ?? []).map((h) => h.text).join(' / ');
-  return template
+  const html = template
     .replace('{{TITLE}}', esc(`${title} ${dateJa}`))
     .replace('{{DESCRIPTION}}', esc(description))
     .replace('{{PAGES}}', pagesHtml)
     .replace('{{TOC}}', tocHtml);
+  return withCsp(html);
+}
+
+// テンプレート内の唯一のインライン <script> の SHA-256 を CSP に固定する。
+// これ以外の script は（万一混入しても）ブラウザが実行しない。
+export function withCsp(html) {
+  const scripts = [...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)];
+  if (scripts.length !== 1) throw new Error(`テンプレートの <script> は 1 つのはずが ${scripts.length} 個あります`);
+  const hash = createHash('sha256').update(scripts[0][1], 'utf8').digest('base64');
+  const csp = `default-src 'none'; script-src 'sha256-${hash}'; style-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'`;
+  if (!html.includes('{{CSP}}')) throw new Error('テンプレートに {{CSP}} プレースホルダがありません');
+  return html.replace('{{CSP}}', `<meta http-equiv="Content-Security-Policy" content="${csp}">`);
 }
 
 // ---------- index.html ----------
@@ -334,7 +384,8 @@ footer{color:var(--muted);font-size:12px;margin-top:40px}
 // ---------- main ----------
 function main() {
   const args = parseArgs(process.argv.slice(2));
-  const template = fs.readFileSync(path.join(ROOT, 'template', 'magazine.html'), 'utf8');
+  if (args.root) { ROOT = path.resolve(args.root); ISSUES_DIR = path.join(ROOT, 'issues'); }
+  const template = fs.readFileSync(path.join(REPO, 'template', 'magazine.html'), 'utf8');
   let contentPath, outPath, watchlistPath, prevWatchlistPath;
   if (args.content) {
     contentPath = args.content;
@@ -357,7 +408,7 @@ function main() {
   const content = readJson(contentPath);
   const watchlist = watchlistPath ? readJson(watchlistPath) : null;
   const prevWatchlist = prevWatchlistPath ? readJson(prevWatchlistPath) : null;
-  const html = buildHtml(content, { template, watchlist, prevWatchlist });
+  const html = buildHtml(content, { template, watchlist, prevWatchlist, issueDir: path.dirname(path.resolve(contentPath)) });
   fs.mkdirSync(path.dirname(outPath), { recursive: true });
   fs.writeFileSync(outPath, html);
   const pagesN = (html.match(/<section class="page /g) || []).length;

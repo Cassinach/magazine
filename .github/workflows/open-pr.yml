@@ -1,0 +1,28 @@
+# 保険: routine が issue/** ブランチを push したのに PR を作れなかった場合に PR を作る。
+# このワークフローは push されたブランチ側のファイルが動くので、権限は最小（PR 作成のみ）。
+# 検証と merge は publish-gate.yml（main 側）が行う。
+name: open-pr
+on:
+  push:
+    branches: ['issue/**']
+permissions:
+  contents: read
+  pull-requests: write
+jobs:
+  open-pr:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Create PR if missing
+        run: |
+          BR="${GITHUB_REF_NAME}"
+          ISSUE="${BR#issue/}"
+          n=$(gh pr list --repo "$GITHUB_REPOSITORY" --head "$BR" --base main --state open --json number --jq 'length')
+          if [ "$n" = "0" ]; then
+            gh pr create --repo "$GITHUB_REPOSITORY" --base main --head "$BR" \
+              --title "issue: ${ISSUE} 発刊" \
+              --body "routine の push を検知して保険ワークフローが作成した PR です。publish-gate が検証して main に取り込みます。"
+          else
+            echo "PR already exists for $BR"
+          fi
