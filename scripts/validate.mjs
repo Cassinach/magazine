@@ -8,7 +8,8 @@ import { sniffFigure, MAX_FIGURE_BYTES } from './fetch-figure.mjs';
 
 const REQUIRED_SECTIONS = ['feature', 'frontend', 'backend', 'infra', 'recon3d', 'ai', 'devtools', 'security', 'releases', 'try', 'glossary'];
 const MIN_ARTICLES = { feature: 1, frontend: 3, backend: 3, infra: 2, recon3d: 2, ai: 3, devtools: 2, security: 1 };
-const MAX_BODY_CHARS = 2600; // 1 ページに収まる目安（超えたら警告）
+const MAX_BODY_CHARS = 1100; // 見開きに収まる目安（超えたら警告。はみ出した分は自動縮小→スクロール）
+const HARD_MAX_BODY_CHARS = 1800;
 const IMPACTS = new Set(['high', 'mid', 'low']);
 
 let ISSUE_DIR = '';
@@ -38,7 +39,8 @@ function checkArticle(where, a, bodyLocalCites = true) {
   if (a.impact && !IMPACTS.has(a.impact)) err(`${where}: impact は high|mid|low のいずれか: ${a.impact}`);
   if (!a.impact) warn(`${where}: impact がありません`);
   if (!Array.isArray(a.tags) || !a.tags.length) warn(`${where}: tags が空です`);
-  if (a.body && a.body.length > MAX_BODY_CHARS) warn(`${where}: body が ${a.body.length} 文字（目安 ${MAX_BODY_CHARS}）。ページ内スクロールになります`);
+  if (a.body && a.body.length > HARD_MAX_BODY_CHARS) err(`${where}: body が ${a.body.length} 文字（上限 ${HARD_MAX_BODY_CHARS}）。記事を分けるか削ってください`);
+  else if (a.body && a.body.length > MAX_BODY_CHARS) warn(`${where}: body が ${a.body.length} 文字（目安 ${MAX_BODY_CHARS}）。文字が縮む／スクロールになります`);
   if (!Array.isArray(a.summary) || a.summary.length < 2 || a.summary.length > 4) err(`${where}: summary（3 行でいうと）は 2〜4 項目の配列が必須です`);
   else a.summary.forEach((s, i) => { if (typeof s !== 'string' || !s.trim()) err(`${where}: summary[${i}] が空です`); else if (s.length > 90) warn(`${where}: summary[${i}] が ${s.length} 字。1 行（〜60 字）に収めてください`); });
   if (a.figures !== undefined && !Array.isArray(a.figures)) err(`${where}: figures は配列`);

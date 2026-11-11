@@ -2,7 +2,7 @@
 
 自分専用の月刊テック雑誌。毎月1日 06:00 JST に Claude のクラウド routine が Web を調査して発刊します。
 
-- **読む**: https://cassinach.github.io/magazine/ （バックナンバー一覧）。各号は単一 HTML で、**右から左へ**めくります（`←` 次ページ、`t` 目次、`p` 印刷 → PDF 保存）。
+- **読む**: https://cassinach.github.io/magazine/ （バックナンバー一覧）。各号は単一 HTML の見開き誌面です（`→` 次の見開き、フリック／横スクロール／下のバーで移動、`t` 目次、`p` 印刷 → PDF 保存）。
 - 編集方針・スキーマ: [`CLAUDE.md`](CLAUDE.md)
 - 発刊手順書（routine が従う）: [`prompts/routine.md`](prompts/routine.md)
 

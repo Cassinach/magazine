@@ -2,6 +2,7 @@
 // content.json → 単一 HTML の雑誌を生成し、index.html を更新する
 //   node scripts/build.mjs 2026-11
 //   node scripts/build.mjs --content path/to/content.json --out out.html [--watchlist w.json] [--prev-watchlist p.json] [--no-index]
+//   node scripts/build.mjs 2026-11 --root <dir>   # 原稿・出力の基準ディレクトリを差し替え（gate が PR のツリーを指定する）
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -11,7 +12,7 @@ import { diffWatchlist, TREND_LABEL } from './diff.mjs';
 import { sniffFigure, FIGURE_TYPES } from './fetch-figure.mjs';
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..'); // テンプレートは常にこのリポジトリのものを使う
-let ROOT = REPO;        // 原稿・出力の基準ディレクトリ（--root で差し替え可。gate が PR のツリーを指定する）
+let ROOT = REPO;        // 原稿・出力の基準ディレクトリ
 let ISSUES_DIR = path.join(ROOT, 'issues');
 
 // href に入れてよい URL だけ通す（http/https 以外は空にする）
@@ -50,9 +51,11 @@ function listIssues() {
 }
 
 // ---------- ページ生成 ----------
+// ページは data-group / data-side を持つ。同じ group の 2 ページが 1 見開き、side=solo は右ページ単独（扉・表紙）。
+// 1 記事 = 見開き（左: 見出し・リード・3 行でいうと・図、右: 本文・出典）。
 export function buildHtml(content, { template, watchlist, prevWatchlist, issueDir }) {
-  const pages = []; // { id, sec, secTitle, anchor, cls, render(ctx) }
-  const sources = []; // 全出典（URL で重複排除）
+  const pages = [];
+  const sources = [];
   const srcIndex = new Map();
   const addSource = (s) => {
     const key = (s.url || '').trim();
@@ -61,6 +64,8 @@ export function buildHtml(content, { template, watchlist, prevWatchlist, issueDi
     srcIndex.set(key, sources.length);
     return sources.length;
   };
+  let groupSeq = 0;
+  const newGroup = () => `g${++groupSeq}`;
   const page = (p) => { pages.push(p); return p; };
   const secMap = new Map((content.sections ?? []).map((s) => [s.id, s]));
   const title = content.title || 'magazine';
@@ -73,9 +78,9 @@ export function buildHtml(content, { template, watchlist, prevWatchlist, issueDi
     `<div class="sources"><ol start="${globals[0]}">` +
     list.map((s, i) => `<li value="${globals[i]}">${safeUrl(s.url) ? `<a href="${esc(safeUrl(s.url))}">${esc(s.title || s.url)}</a>` : esc(s.title || '')}${s.date ? `<span class="d">${esc(s.date)}</span>` : ''}</li>`).join('') +
     '</ol></div>';
-
   const folio = (n) => `<div class="folio">${n}</div>`;
-  const thumb = (sec, label) => `<div class="thumb" data-sec="${sec}"><span>${esc(label)}</span></div>`;
+  const thumb = (sec) => `<div class="thumb" data-sec="${sec}"></div>`;
+  const pageHead = (kicker, h2) => `<p class="kicker">${kicker}</p><h2>${h2}</h2>`;
 
   // 図版: issues/<号>/figures/fig-NN.(png|jpg|gif|webp) を data URI で埋め込む（単一ファイルを保つ）
   const figureHtml = (f, globalsOf) => {
@@ -93,9 +98,9 @@ export function buildHtml(content, { template, watchlist, prevWatchlist, issueDi
     ? `<div class="summary"><div class="summary-t">3 行でいうと</div><ul>${list.map((t) => `<li>${renderMarkdown(String(t)).replace(/^<p>|<\/p>$/g, '')}</li>`).join('')}</ul></div>`
     : '';
 
-  // --- 表紙 ---
+  // --- 表紙（単独） ---
   page({
-    sec: 'cover', secTitle: '', anchor: 'cover', cls: 'cover',
+    sec: 'cover', secTitle: '', anchor: 'cover', cls: 'cover', side: 'solo', group: newGroup(),
     render: () => `
       <div class="body">
         <div class="masthead"><h1 class="brand">${esc(title)}</h1><p class="sub">Personal Tech Monthly</p></div>
@@ -103,37 +108,37 @@ export function buildHtml(content, { template, watchlist, prevWatchlist, issueDi
         <div class="headlines">
           ${(content.headlines ?? []).map((h) => `<div class="h"><small>${esc(h.kicker || '')}</small>${esc(h.text)}</div>`).join('')}
         </div>
-        <div class="foot"><span>右から左へお読みください</span><span>${esc(content.published_at || '')}</span></div>
+        <div class="foot"><span>Claude が毎月 Web を調べて編集</span><span>${esc(content.published_at || '')}</span></div>
       </div>`,
   });
 
-  // --- 目次（中身は後で） ---
-  const tocPage = page({ sec: 'toc', secTitle: '目次', anchor: 'toc', cls: 'tocpage', render: null });
-
-  // --- 巻頭言 ---
+  // --- 巻頭言 + 目次（見開き。巻頭言が無ければ目次単独） ---
+  const tocGroup = newGroup();
   if (content.editorial) {
     page({
-      sec: 'toc', secTitle: '巻頭言', anchor: 'editorial', cls: 'editorial',
-      render: (ctx) => `<div class="body"><p class="kicker">Editorial</p><h2>巻頭言</h2>${renderMarkdown(content.editorial)}</div>${folio(ctx.n)}`,
+      sec: 'toc', secTitle: '巻頭言', anchor: 'editorial', cls: 'editorial', group: tocGroup,
+      render: (ctx) => `<div class="body">${pageHead('Editorial', '巻頭言')}${renderMarkdown(content.editorial)}</div>${folio(ctx.n)}`,
     });
   }
+  const tocPage = page({ sec: 'toc', secTitle: '目次', anchor: 'toc', cls: 'tocpage scrollable', group: tocGroup, side: content.editorial ? undefined : 'solo', render: null });
 
-  // --- 定点観測ボード ---
+  // --- 定点観測ボード（スクロール可、2 ページで見開き） ---
   if (watchlist) {
     const rows = diffWatchlist(prevWatchlist, watchlist).filter((r) => r.pick);
     const dashSec = secMap.get('dashboard') || {};
     const chunks = [];
     for (let i = 0; i < rows.length; i += 16) chunks.push(rows.slice(i, i + 16));
     if (!chunks.length) chunks.push([]);
+    let g = newGroup();
     chunks.forEach((chunk, ci) => {
+      if (ci > 0 && ci % 2 === 0) g = newGroup();
       page({
-        sec: 'dashboard', secTitle: SECTION_TITLES.dashboard, anchor: ci === 0 ? 'sec-dashboard' : `sec-dashboard-${ci + 1}`, cls: 'dashboard',
+        sec: 'dashboard', secTitle: SECTION_TITLES.dashboard, anchor: ci === 0 ? 'sec-dashboard' : `sec-dashboard-${ci + 1}`, cls: 'dashboard scrollable', group: g,
         tocEntry: ci === 0 ? { kind: 'section', no: '00', title: SECTION_TITLES.dashboard } : null,
         render: (ctx) => `
-          ${thumb('dashboard', SECTION_TITLES.dashboard)}
+          ${thumb('dashboard')}
           <div class="body">
-            <p class="kicker">Watchlist</p>
-            <h2>${esc(SECTION_TITLES.dashboard)}${chunks.length > 1 ? ` <small style="font-size:.5em;color:var(--muted)">(${ci + 1}/${chunks.length})</small>` : ''}</h2>
+            ${pageHead('Watchlist', `${esc(SECTION_TITLES.dashboard)}${chunks.length > 1 ? ` <small style="font-size:.5em;color:var(--muted)">(${ci + 1}/${chunks.length})</small>` : ''}`)}
             ${ci === 0 && dashSec.lead ? `<p class="lead">${esc(dashSec.lead)}</p>` : ''}
             ${ci === 0 ? `<p class="legend">${Object.entries(TREND_LABEL).map(([k, v]) => `<span class="trend-${k}">${v.mark} ${v.label}</span>`).join('')}<span>前号（${esc(prevWatchlist?.updated || '—')}）との比較</span></p>` : ''}
             <table class="dash"><thead><tr><th>層</th><th>いま採用するなら</th><th>対抗</th><th>理由</th><th>変化</th></tr></thead><tbody>
@@ -164,11 +169,11 @@ export function buildHtml(content, { template, watchlist, prevWatchlist, issueDi
     const no = String(secNo).padStart(2, '0');
     const secTitle = sec.title || SECTION_TITLES[id];
     const articlePages = [];
-    const opener = page({
-      sec: id, secTitle, anchor: `sec-${id}`, cls: 'opener',
+    page({
+      sec: id, secTitle, anchor: `sec-${id}`, cls: 'opener', side: 'solo', group: newGroup(),
       tocEntry: { kind: 'section', no, title: secTitle, articles: articlePages },
       render: (ctx) => `
-        ${thumb(id, secTitle)}
+        ${thumb(id)}
         <div class="body">
           <div class="big">${no}</div>
           <p class="kicker">Section ${no}</p>
@@ -181,35 +186,46 @@ export function buildHtml(content, { template, watchlist, prevWatchlist, issueDi
     if (id === 'releases') {
       const items = sec.items ?? [];
       const up = sec.upcoming ?? [];
+      const g = newGroup();
       const ap = page({
-        sec: id, secTitle, anchor: `a-${id}-1`, cls: 'releases', tocLabel: '今月の主要リリース',
+        sec: id, secTitle, anchor: `a-${id}-1`, cls: 'releases scrollable', tocLabel: '今月の主要リリース', group: g, side: up.length ? undefined : 'solo',
         render: (ctx) => `
-          ${thumb(id, secTitle)}
+          ${thumb(id)}
           <div class="body">
-            <p class="kicker">${esc(secTitle)}</p>
-            <h2>今月の主要リリース</h2>
+            ${pageHead(esc(secTitle), '今月の主要リリース')}
             <div class="tbl"><table class="rel"><thead><tr><th>プロダクト</th><th>バージョン</th><th>日付</th><th>ひとこと</th></tr></thead><tbody>
             ${items.map((r) => `<tr><td>${safeUrl(r.url) ? `<a href="${esc(safeUrl(r.url))}">${esc(r.name)}</a>` : esc(r.name)}</td><td class="v">${esc(r.version)}</td><td class="d">${esc(r.date || '')}</td><td>${esc(r.note || '')}</td></tr>`).join('')}
             </tbody></table></div>
-            ${up.length ? `<h3>来月以降の予定</h3><div class="tbl"><table class="rel"><thead><tr><th>プロダクト</th><th>予定</th><th>見どころ</th></tr></thead><tbody>
-            ${up.map((r) => `<tr><td>${safeUrl(r.url) ? `<a href="${esc(safeUrl(r.url))}">${esc(r.name)}</a>` : esc(r.name)}</td><td class="d">${esc(r.expected || '')}</td><td>${esc(r.note || '')}</td></tr>`).join('')}
-            </tbody></table></div>` : ''}
           </div>${folio(ctx.n)}`,
       });
       articlePages.push(ap);
+      if (up.length) {
+        page({
+          sec: id, secTitle, anchor: `a-${id}-2`, cls: 'releases scrollable', group: g,
+          render: (ctx) => `
+            ${thumb(id)}
+            <div class="body">
+              ${pageHead(esc(secTitle), '来月以降の予定')}
+              <div class="tbl"><table class="rel"><thead><tr><th>プロダクト</th><th>予定</th><th>見どころ</th></tr></thead><tbody>
+              ${up.map((r) => `<tr><td>${safeUrl(r.url) ? `<a href="${esc(safeUrl(r.url))}">${esc(r.name)}</a>` : esc(r.name)}</td><td class="d">${esc(r.expected || '')}</td><td>${esc(r.note || '')}</td></tr>`).join('')}
+              </tbody></table></div>
+            </div>${folio(ctx.n)}`,
+        });
+      }
       continue;
     }
 
     if (id === 'try') {
+      let g = newGroup();
       (sec.items ?? []).forEach((it, k) => {
+        if (k > 0 && k % 2 === 0) g = newGroup();
         const globals = (it.sources ?? []).map(addSource);
         const ap = page({
-          sec: id, secTitle, anchor: `a-${id}-${k + 1}`, cls: 'try', tocLabel: it.title,
+          sec: id, secTitle, anchor: `a-${id}-${k + 1}`, cls: 'try', tocLabel: it.title, group: g,
           render: (ctx) => `
-            ${thumb(id, secTitle)}
+            ${thumb(id)}
             <div class="body">
-              <p class="kicker">Try #${k + 1}</p>
-              <h2>${esc(it.title)}</h2>
+              ${pageHead(`Try #${k + 1}`, esc(it.title))}
               ${it.time ? `<span class="time">所要 ${esc(it.time)}</span>` : ''}
               ${it.why ? `<p class="lead">${esc(it.why)}</p>` : ''}
               <ol class="steps">${(it.steps ?? []).map((s) => `<li>${renderMarkdown(s).replace(/^<p>|<\/p>$/g, '')}</li>`).join('')}</ol>
@@ -225,16 +241,17 @@ export function buildHtml(content, { template, watchlist, prevWatchlist, issueDi
     if (id === 'glossary') {
       const items = sec.items ?? [];
       const chunks = [];
-      for (let i = 0; i < items.length; i += 14) chunks.push(items.slice(i, i + 14));
+      for (let i = 0; i < items.length; i += 10) chunks.push(items.slice(i, i + 10));
+      let g = newGroup();
       chunks.forEach((chunk, ci) => {
+        if (ci > 0 && ci % 2 === 0) g = newGroup();
         const ap = page({
-          sec: id, secTitle, anchor: `a-${id}-${ci + 1}`, cls: 'glossary', tocLabel: `${chunk[0].term} 〜 ${chunk[chunk.length - 1].term}`,
+          sec: id, secTitle, anchor: `a-${id}-${ci + 1}`, cls: 'glossary', tocLabel: `${chunk[0].term} 〜 ${chunk[chunk.length - 1].term}`, group: g,
           render: (ctx) => `
-            ${thumb(id, secTitle)}
+            ${thumb(id)}
             <div class="body">
-              <p class="kicker">Glossary</p>
-              <h2>${esc(secTitle)}${chunks.length > 1 ? ` <small style="font-size:.5em;color:var(--muted)">(${ci + 1}/${chunks.length})</small>` : ''}</h2>
-              <div class="gloss"><dl>${chunk.map((g) => `<dt>${esc(g.term)}</dt><dd>${renderMarkdown(g.desc).replace(/^<p>|<\/p>$/g, '')}</dd>`).join('')}</dl></div>
+              ${pageHead('Glossary', `${esc(secTitle)}${chunks.length > 1 ? ` <small style="font-size:.5em;color:var(--muted)">(${ci + 1}/${chunks.length})</small>` : ''}`)}
+              <div class="gloss"><dl>${chunk.map((gi) => `<dt>${esc(gi.term)}</dt><dd>${renderMarkdown(gi.desc).replace(/^<p>|<\/p>$/g, '')}</dd>`).join('')}</dl></div>
             </div>${folio(ctx.n)}`,
         });
         articlePages.push(ap);
@@ -242,12 +259,11 @@ export function buildHtml(content, { template, watchlist, prevWatchlist, issueDi
       continue;
     }
 
-    // 通常の記事セクション
+    // 通常の記事: 見開き 2 ページ
     (sec.articles ?? []).forEach((a, k) => {
       const globals = (a.sources ?? []).map(addSource);
       const cite = (n) => (n >= 1 && n <= globals.length) ? `<sup class="cite"><a href="#src-${globals[n - 1]}" data-goto="__colophon__" title="${esc(a.sources[n - 1].title || '')}">[${globals[n - 1]}]</a></sup>` : null;
       const globalsOf = (n) => (n >= 1 && n <= globals.length) ? globals[n - 1] : null;
-      // 図版: 本文中の [fig:N] 段落の位置に置く。置かれなかった 1 枚目は本文の前、残りは本文の後ろ
       const figs = Array.isArray(a.figures) ? a.figures : [];
       const used = new Set();
       const bodyHtml = renderMarkdown(a.body, { cite }).replace(/<p>\[fig:(\d+)\]<\/p>/g, (m, n) => {
@@ -256,55 +272,61 @@ export function buildHtml(content, { template, watchlist, prevWatchlist, issueDi
         used.add(i);
         return figureHtml(figs[i], globalsOf);
       });
-      const unused = figs.map((f, i) => (used.has(i) ? null : f)).filter(Boolean);
-      const figsBefore = unused.length ? figureHtml(unused[0], globalsOf) : '';
-      const figsAfter = unused.slice(1).map((f) => figureHtml(f, globalsOf)).join('');
-      const ap = page({
-        sec: id, secTitle, anchor: `a-${id}-${k + 1}`, cls: 'article', tocLabel: a.headline,
+      const headFigs = figs.filter((f, i) => !used.has(i)).map((f) => figureHtml(f, globalsOf)).join('');
+      const g = newGroup();
+      const headPage = page({
+        sec: id, secTitle, anchor: `a-${id}-${k + 1}`, cls: 'article art-head', tocLabel: a.headline, group: g,
         render: (ctx) => `
-          ${thumb(id, secTitle)}
+          ${thumb(id)}
           <div class="body">
             <p class="kicker">${esc(secTitle)}${a.topic ? ` / ${esc(a.topic)}` : ''}</p>
-            <h2>${esc(a.headline)}</h2>
+            <h2 class="headline">${esc(a.headline)}</h2>
             <div class="article-meta">
               ${a.impact ? `<span class="impact impact-${esc(a.impact)}">${IMPACT_LABEL[a.impact] || esc(a.impact)}</span>` : ''}
               ${(a.tags ?? []).map((t) => `<span class="tag">${esc(t)}</span>`).join('')}
             </div>
             ${a.lead ? `<p class="lead">${esc(a.lead)}</p>` : ''}
             ${summaryHtml(a.summary)}
-            ${figsBefore}
+            ${headFigs ? `<div class="fig-stack">${headFigs}</div>` : ''}
+          </div>${folio(ctx.n)}`,
+      });
+      page({
+        sec: id, secTitle, anchor: `a-${id}-${k + 1}-b`, cls: 'article art-body', group: g,
+        render: (ctx) => `
+          ${thumb(id)}
+          <div class="body">
             ${bodyHtml}
-            ${figsAfter}
             ${a.next_step ? `<div class="next-step"><b>自分の次のプロジェクトでは：</b>${esc(a.next_step)}</div>` : ''}
             ${globals.length ? srcList(a.sources, globals) : ''}
           </div>${folio(ctx.n)}`,
       });
-      articlePages.push(ap);
+      articlePages.push(headPage);
     });
   }
 
-  // --- 奥付・出典 ---
+  // --- 奥付・出典（スクロール可、2 ページで見開き） ---
   const colophonPages = [];
   const srcChunks = [];
   for (let i = 0; i < sources.length; i += 28) srcChunks.push(sources.slice(i, i + 28));
   if (!srcChunks.length) srcChunks.push([]);
+  let cg = newGroup();
   srcChunks.forEach((chunk, ci) => {
+    if (ci > 0 && ci % 2 === 0) cg = newGroup();
     const start = ci * 28 + 1;
     const p = page({
-      sec: 'colophon', secTitle: SECTION_TITLES.colophon, anchor: ci === 0 ? 'colophon' : `colophon-${ci + 1}`, cls: 'colophon',
+      sec: 'colophon', secTitle: SECTION_TITLES.colophon, anchor: ci === 0 ? 'colophon' : `colophon-${ci + 1}`, cls: 'colophon scrollable', group: cg,
       tocEntry: ci === 0 ? { kind: 'section', no: '—', title: SECTION_TITLES.colophon } : null,
       render: (ctx) => `
-        ${thumb('colophon', SECTION_TITLES.colophon)}
+        ${thumb('colophon')}
         <div class="body">
           ${ci === 0 ? `
-          <p class="kicker">Colophon</p>
-          <h2>奥付</h2>
+          ${pageHead('Colophon', '奥付')}
           ${content.incomplete ? `<div class="incomplete">この号は不完全号です：${esc(content.incomplete_note || '一部セクションの調査・ビルドが完了しませんでした。')}</div>` : ''}
           <p class="meta">${esc(title)} ${esc(dateJa)} ${esc(volNo)}<br>
           発行日：${esc(content.published_at || '')}<br>
           編集・執筆：Claude（${esc(content.model || 'unknown model')}）— Web 調査にもとづく自動生成<br>
           出典数：${sources.length}　ページ数：${ctx.total}</p>
-          <h3>出典一覧</h3>` : `<p class="kicker">Colophon</p><h2>出典一覧 <small style="font-size:.5em;color:var(--muted)">(${ci + 1}/${srcChunks.length})</small></h2>`}
+          <h3>出典一覧</h3>` : pageHead('Colophon', `出典一覧 <small style="font-size:.5em;color:var(--muted)">(${ci + 1}/${srcChunks.length})</small>`)}
           <ol start="${start}">${chunk.map((s, i) => `<li id="src-${start + i}">${safeUrl(s.url) ? `<a href="${esc(safeUrl(s.url))}">${esc(s.title || s.url)}</a>` : esc(s.title || '')}${s.date ? ` <span class="d">(${esc(s.date)})</span>` : ''}<br><small style="opacity:.7">${esc(safeUrl(s.url))}</small></li>`).join('')}</ol>
         </div>${folio(ctx.n)}`,
     });
@@ -319,14 +341,14 @@ export function buildHtml(content, { template, watchlist, prevWatchlist, issueDi
   const tocHtml = `<ul class="toc-list">${tocEntries.map((e) => `
     <li><div class="sec" data-goto="${e.page.id}"><span class="no">${esc(e.no)}</span><span>${esc(e.title)}</span><span class="pg">${e.page.n}</span></div>
     ${e.articles?.length ? `<ul class="arts">${e.articles.map((ap) => `<li data-goto="${ap.id}"><span>${esc(ap.tocLabel)}</span><span class="pg">${ap.n}</span></li>`).join('')}</ul>` : ''}</li>`).join('')}</ul>`;
-  tocPage.render = (ctx) => `<div class="body"><p class="kicker">Contents</p><h2>目次</h2>${tocHtml}</div>${folio(ctx.n)}`;
+  tocPage.render = (ctx) => `<div class="body">${pageHead('Contents', '目次')}${tocHtml}</div>${folio(ctx.n)}`;
 
   // --- 出力 ---
   const total = pages.length;
   const colophonId = colophonPages[0].id;
   const pagesHtml = pages.map((p) => {
     const inner = p.render({ n: p.n, total }).replace(/data-goto="__colophon__"/g, `data-goto="${colophonId}"`);
-    return `<section class="page ${p.cls}" id="${p.id}" data-sec="${p.sec}" data-sec-title="${esc(p.secTitle)}"${p.anchor ? ` data-anchor="${esc(p.anchor)}"` : ''}>${inner}</section>`;
+    return `<section class="page ${p.cls}" id="${p.id}" data-sec="${p.sec}" data-sec-title="${esc(p.secTitle)}" data-group="${p.group}"${p.side ? ` data-side="${p.side}"` : ''}${p.anchor ? ` data-anchor="${esc(p.anchor)}"` : ''}>${inner}</section>`;
   }).join('\n');
 
   const description = (content.headlines ?? []).map((h) => h.text).join(' / ');
@@ -339,7 +361,6 @@ export function buildHtml(content, { template, watchlist, prevWatchlist, issueDi
 }
 
 // テンプレート内の唯一のインライン <script> の SHA-256 を CSP に固定する。
-// これ以外の script は（万一混入しても）ブラウザが実行しない。
 export function withCsp(html) {
   const scripts = [...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)];
   if (scripts.length !== 1) throw new Error(`テンプレートの <script> は 1 つのはずが ${scripts.length} 個あります`);
@@ -377,7 +398,7 @@ footer{color:var(--muted);font-size:12px;margin-top:40px}
 </style></head><body><main>
 <h1>magazine</h1><p class="sub">Personal Tech Monthly — Back Issues</p>
 <ul class="issues">${rows || '<li>まだ号がありません。</li>'}</ul>
-<footer>毎月1日 06:00 JST に自動発刊。右から左へめくる単一 HTML。ブラウザの印刷から PDF 保存できます。</footer>
+<footer>毎月1日 06:00 JST に自動発刊。見開きでめくる単一 HTML。ブラウザの印刷から PDF 保存できます。</footer>
 </main></body></html>`;
 }
 
@@ -397,7 +418,6 @@ function main() {
     const dir = path.join(ISSUES_DIR, args.issue);
     contentPath = path.join(dir, 'content.json');
     outPath = path.join(ISSUES_DIR, `${args.issue}.html`);
-    // watchlist のスナップショットをこの号に保存し、前号のスナップショットと比較する
     const live = path.join(ROOT, 'state', 'watchlist.json');
     const snap = path.join(dir, 'watchlist.json');
     if (fs.existsSync(live)) fs.copyFileSync(live, snap);

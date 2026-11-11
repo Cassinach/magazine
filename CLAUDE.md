@@ -11,7 +11,7 @@ GitHub Actions の `publish-gate` が機械的に検証して `main` に取り�
 | パス | 役割 |
 |---|---|
 | `prompts/routine.md` | 発刊手順書（守ること → 調査 → 執筆 → 検証 → PR） |
-| `template/magazine.html` | 誌面テンプレート（右→左めくり、単一 HTML、CSP・印刷 CSS 内蔵） |
+| `template/magazine.html` | 誌面テンプレート（左→右の見開き、フリック／ホイール／シークバーで移動、単一 HTML、CSP・印刷 CSS 内蔵） |
 | `template/sample/` | テンプレート検証用のサンプル号データ（図版サンプル含む） |
 | `scripts/validate.mjs` | `content.json` / `watchlist.json` / 図版のスキーマ検証 |
 | `scripts/build.mjs` | `content.json` → `issues/YYYY-MM.html`（図版は data URI で埋め込み）、`index.html` 再生成 |
@@ -49,7 +49,7 @@ node scripts/gate.mjs --base main --head issue/2026-12 --pr-dir <PR の worktree
 2. **出典のない記述は書かない。** 記事・watchlist の pick には必ず URL と日付つきの出典を付ける。validate が弾きます。
 3. **一次情報を優先する。** 公式ブログ、GitHub Releases、arXiv、公式ドキュメント。まとめ記事や SNS は補助。
 4. **要点を先に、図で見せる。** 各記事に `summary`（3 行でいうと）と、出典から引用した図版を付ける。比較は表にする。
-5. **分量はページに収める。** 1 記事 = 1 ページ。本文は 500〜1200 字（最大 1800 字）。長くなるなら記事を分ける。
+5. **分量は見開きに収める。** 1 記事 = 見開き（左: 見出し・まとめ・図、右: 本文）。本文は 500〜1000 字（1800 字で validate エラー）。長くなるなら記事を分ける。
 6. **文体はです・ます調。** 技術用語・固有名詞は原語のまま。無駄な煽りは書かない。
 7. **変化を書く。** 「先月と比べて何が変わったか」を意識する。watchlist の pick を変えたときは理由を明記する。
 8. **誌面の見た目はテンプレートに任せる。** `content.json` に HTML を書かない。本文は Markdown の小サブセットのみ。
@@ -83,7 +83,7 @@ node scripts/gate.mjs --base main --head issue/2026-12 --pr-dir <PR の worktree
   "tags": ["Next.js"],
   "lead": "結論を 1 文で（60〜100 字）",
   "summary": ["要点 1（60 字以内）", "要点 2", "要点 3"],          // 2〜4 項目、必須
-  "body": "Markdown 本文（500〜1200 字）。出典参照は [1] [2]。図を置く位置に [fig:1] だけの段落",
+  "body": "Markdown 本文（500〜1000 字）。出典参照は [1] [2]。図を置く位置に [fig:1] だけの段落",
   "figures": [ { "file": "fig-01.png", "caption": "図が示すことを 1 文で", "source": 1, "alt": "任意" } ],
   "next_step": "自分の次のプロジェクトでどう効くか（1 文、任意）",
   "sources": [ SOURCE, ... ] }
