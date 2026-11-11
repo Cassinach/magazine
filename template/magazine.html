@@ -73,7 +73,8 @@ p,li,figcaption,.lead,td{text-wrap:pretty}
 /* ページ内レイアウト */
 .page .body{flex:1;min-height:0;min-width:0;overflow:hidden;padding:30px 40px 28px;scrollbar-width:thin}
 .page.scrollable .body,.page.overflow .body{overflow-y:auto;overscroll-behavior:contain}
-.page.overflow::after{content:"↓ 続きはスクロール";position:absolute;bottom:10px;left:50%;transform:translateX(-50%);font-size:10px;color:var(--muted);letter-spacing:.1em;background:var(--paper);padding:0 8px;border-radius:999px;border:1px solid var(--rule);pointer-events:none}
+.page .more{display:none;position:absolute;bottom:10px;left:50%;transform:translateX(-50%);font-size:10px;color:var(--muted);letter-spacing:.1em;background:var(--paper);padding:0 8px;border-radius:999px;border:1px solid var(--rule);pointer-events:none;z-index:2;white-space:nowrap}
+.page.overflow .more{display:block}
 .spread.two .page:first-child .body{padding-right:52px}
 .spread.two .page:last-child .body{padding-left:52px}
 .page .folio{position:absolute;bottom:12px;font-size:11px;color:var(--muted);letter-spacing:.08em;font-family:var(--font-head)}
@@ -203,7 +204,7 @@ figure.fig .figsrc{text-decoration:none;color:var(--accent);font-weight:700}
 #hud{position:fixed;left:0;right:0;bottom:0;height:var(--hud-h);display:flex;align-items:center;gap:10px;padding:0 14px;
   font-size:12px;color:var(--muted);user-select:none;letter-spacing:.04em}
 #hud .btn{background:none;border:1px solid var(--rule);color:var(--ink2);border-radius:6px;height:28px;min-width:28px;padding:0 10px;
-  font:inherit;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+  font:inherit;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px;text-decoration:none}
 #hud .btn:hover{border-color:var(--accent);color:var(--accent)}
 #hud .pos{font-variant-numeric:tabular-nums;color:var(--ink2);min-width:7.5em}
 #hud .sec{font-weight:700;color:var(--accent)}
@@ -231,6 +232,12 @@ figure.fig .figsrc{text-decoration:none;color:var(--accent);font-weight:700}
 #toc .inner h2{font-family:var(--font-head);margin:0 0 18px;font-size:22px}
 #toc .toc-list{columns:2;column-gap:40px}
 #toc .close{float:right;background:none;border:1px solid var(--rule);border-radius:6px;padding:4px 10px;cursor:pointer;color:var(--ink2);font:inherit}
+figure.fig img{cursor:zoom-in}
+#lb{position:fixed;inset:0;background:rgba(10,8,5,.92);z-index:30;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:24px;cursor:zoom-out;touch-action:pinch-zoom}
+#lb.open{display:flex}
+#lb img{max-width:min(96vw,1600px);max-height:calc(100vh - 90px);object-fit:contain;background:#fff;border-radius:6px;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+#lb .cap{color:#e8e2d6;font-size:13px;max-width:900px;text-align:center;line-height:1.6}
+#lb .x{position:absolute;top:14px;right:18px;color:#e8e2d6;font-size:26px;line-height:1;background:none;border:0;cursor:pointer}
 #help{position:fixed;inset:auto 14px var(--hud-h) auto;background:var(--paper);border:1px solid var(--rule);border-radius:8px;padding:12px 16px;font-size:12px;line-height:1.9;display:none;z-index:21;box-shadow:var(--shadow)}
 #help.open{display:block}
 
@@ -258,7 +265,7 @@ figure.fig .figsrc{text-decoration:none;color:var(--accent);font-weight:700}
   #track{display:block;transform:none!important;transition:none}
   .spread{display:contents}
   .page{height:auto;overflow:visible;box-shadow:none;break-before:page;border-radius:0;display:block;font-size:11pt}
-  .page.blank,#hud,.zone,#toc,#help,.page .thumb,.page.overflow::after{display:none!important}
+  .page.blank,#hud,.zone,#toc,#help,#lb,.page .thumb,.page .more{display:none!important}
   .page .body{overflow:visible;padding:0}
   .page .folio{position:static;display:block;text-align:right;margin-top:10mm}
   .page.cover .body{min-height:240mm;display:flex}
@@ -288,6 +295,7 @@ figure.fig .figsrc{text-decoration:none;color:var(--accent);font-weight:700}
   <span class="sec" id="cursec"></span>
   <span class="sp"></span>
   <span class="hint"><kbd>→</kbd> 次 <kbd>←</kbd> 前 <kbd>t</kbd> 目次 <kbd>p</kbd> 印刷　フリック・横スクロール・上のバーでも移動</span>
+  <a class="btn" id="b-home" href="../index.html" title="号の一覧へ">一覧</a>
   <button class="btn" id="b-toc" title="目次 (t)">目次</button>
   <button class="btn" id="b-help" title="操作 (?)">?</button>
 </div>
@@ -297,6 +305,8 @@ figure.fig .figsrc{text-decoration:none;color:var(--accent);font-weight:700}
   <h2>目次</h2>
   {{TOC}}
 </div></div>
+
+<div id="lb"><button class="x" id="lb-x" title="閉じる (Esc)">×</button><img id="lb-img" alt=""><div class="cap" id="lb-cap"></div></div>
 
 <div id="help">
   <b>操作</b><br>
@@ -345,6 +355,10 @@ figure.fig .figsrc{text-decoration:none;color:var(--accent);font-weight:700}
     goToPage(Math.max(0, keep), 'instant');
   }
 
+  const markOverflow = (page, on) => {
+    page.classList.toggle('overflow', on);
+    if (on && !page.querySelector('.more')) { const d = document.createElement('div'); d.className = 'more'; d.textContent = '↓ 続きはスクロール'; page.appendChild(d); }
+  };
   // はみ出すページは文字と図を段階的に縮める。それでも入らなければスクロール可にする。
   function fit(page) {
     if (page.classList.contains('blank') || page.classList.contains('scrollable')) return;
@@ -361,7 +375,7 @@ figure.fig .figsrc{text-decoration:none;color:var(--accent);font-weight:700}
       page.style.setProperty('--fs', fs + 'px');
       page.style.setProperty('--figh', String(figh));
     }
-    if (over()) page.classList.add('overflow');
+    markOverflow(page, over());
   }
   // 記事見開き: 左ページ（見出し・まとめ・図）の空きに、右ページ本文の先頭ブロックを順に流し込む（読み順は左→右のまま）
   function balance(head, body) {
@@ -388,6 +402,34 @@ figure.fig .figsrc{text-decoration:none;color:var(--accent);font-weight:700}
         el.remove();
         continue;
       }
+      if (el.tagName === 'P') {
+        flow.appendChild(el);
+        if (headFits()) continue;
+        bb.insertBefore(el, bb.firstChild);
+        // 丸ごとは入らないので、文の切れ目（。！？）で分けて入るところまで左へ
+        const tokens = [];
+        for (const node of Array.from(el.childNodes)) {
+          if (node.nodeType === 3) {
+            const parts = node.textContent.split(/(?<=[。！？])/);
+            for (const s of parts) if (s) tokens.push(document.createTextNode(s));
+          } else tokens.push(node);
+        }
+        if (tokens.length < 2) break;
+        const clone = el.cloneNode(false); clone.classList.add('cont');
+        flow.appendChild(clone);
+        el.textContent = '';
+        let i = 0;
+        for (; i < tokens.length; i++) {
+          clone.appendChild(tokens[i]);
+          if (!headFits()) { clone.removeChild(tokens[i]); break; }
+        }
+        // 残りを右ページの段落に戻す（最後に句点で終わるトークンまでで切る）
+        while (i > 0 && !/[。！？]$/.test(clone.lastChild?.textContent || '') && clone.lastChild) { tokens.splice(i - 1, 0, clone.removeChild(clone.lastChild)); i--; if (clone.lastChild && clone.lastChild.nodeType === 3) break; }
+        for (let j = i; j < tokens.length; j++) el.appendChild(tokens[j]);
+        if (!clone.childNodes.length) clone.remove();
+        if (!el.childNodes.length) el.remove();
+        break;
+      }
       flow.appendChild(el);
       if (!headFits()) { bb.insertBefore(el, bb.firstChild); break; }
     }
@@ -407,8 +449,8 @@ figure.fig .figsrc{text-decoration:none;color:var(--accent);font-weight:700}
       for (const pg of [head, body]) { pg.style.setProperty('--fs', fs + 'px'); pg.style.setProperty('--figh', String(figh)); }
       balance(head, body);
     }
-    if (over()) body.classList.add('overflow');
-    if (head.querySelector('.body').scrollHeight > head.querySelector('.body').clientHeight + 1) head.classList.add('overflow');
+    markOverflow(body, over());
+    markOverflow(head, head.querySelector('.body').scrollHeight > head.querySelector('.body').clientHeight + 1);
   }
   function fitAll() {
     for (let i = 0; i < pages.length; i++) {
@@ -462,7 +504,8 @@ figure.fig .figsrc{text-decoration:none;color:var(--accent);font-weight:700}
   document.addEventListener('keydown', e => {
     if (e.metaKey || e.ctrlKey || e.altKey) return;
     const tocOpen = $('toc').classList.contains('open');
-    if (e.key === 'Escape') { $('toc').classList.remove('open'); $('help').classList.remove('open'); return; }
+    if (e.key === 'Escape') { $('toc').classList.remove('open'); $('help').classList.remove('open'); closeLb(); return; }
+    if (lb.classList.contains('open')) return;
     if (e.key === 't' || e.key === 'T') { $('toc').classList.toggle('open'); e.preventDefault(); return; }
     if (e.key === '?') { $('help').classList.toggle('open'); return; }
     if (e.key === 'p' || e.key === 'P') { window.print(); return; }
@@ -484,7 +527,7 @@ figure.fig .figsrc{text-decoration:none;color:var(--accent);font-weight:700}
   // フリック（ドラッグ追従）。縦スクロールはページ内に任せる。
   let drag = null;
   book.addEventListener('pointerdown', e => {
-    if (e.button !== 0 || e.target.closest('a, button')) return;
+    if (e.button !== 0 || e.target.closest('a, button, #lb')) return;
     drag = { x: e.clientX, y: e.clientY, t: performance.now(), on: false, id: e.pointerId };
   });
   book.addEventListener('pointermove', e => {
@@ -534,6 +577,15 @@ figure.fig .figsrc{text-decoration:none;color:var(--accent);font-weight:700}
   const endSeek = () => { seeking = false; seek.classList.remove('active'); };
   seek.addEventListener('pointerup', endSeek);
   seek.addEventListener('pointercancel', endSeek);
+
+  // 画像の拡大表示
+  const lb = $('lb');
+  const openLb = (img) => { $('lb-img').src = img.src; $('lb-img').alt = img.alt; $('lb-cap').textContent = img.closest('figure')?.querySelector('figcaption')?.textContent || ''; lb.classList.add('open'); };
+  const closeLb = () => { lb.classList.remove('open'); $('lb-img').removeAttribute('src'); };
+  document.addEventListener('click', e => { const img = e.target.closest('figure.fig img'); if (img) { e.preventDefault(); openLb(img); } }, true);
+  lb.addEventListener('click', closeLb);
+  $('lb-x').addEventListener('click', closeLb);
+  lb.addEventListener('wheel', e => e.stopPropagation(), { passive: true });
 
   // 目次・扉のリンク（data-goto="ページid"）
   document.addEventListener('click', e => {
