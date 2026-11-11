@@ -52,6 +52,22 @@ h1,h2,h3,h4,figcaption,.lead,.summary li,.cover .h,.toc-list .sec,.opener .list 
 h1,h2,.cover .h,.opener h2{text-wrap:balance}
 p,li,figcaption,.lead,td{text-wrap:pretty}
 
+/* ===== 読み込み画面: セクションの色線が左から灯り、終わると左から上へ消えていく ===== */
+#loader{position:fixed;inset:0;z-index:40;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;transition:opacity .45s ease}
+#loader.out{opacity:0;pointer-events:none}
+#loader .bars{display:flex;gap:14px;height:38vh;align-items:flex-end}
+#loader .bars i{display:block;width:7px;height:100%;border-radius:3px;background:var(--accent);opacity:0;transform-origin:50% 100%;
+  animation:bar-in .5s cubic-bezier(.2,.7,.2,1) forwards;animation-delay:calc(var(--i) * 70ms)}
+#loader .word{font-family:var(--font-head);font-size:13px;letter-spacing:.42em;color:var(--muted);opacity:0;animation:bar-in .6s ease forwards;animation-delay:calc(var(--n) * 70ms + 200ms)}
+@keyframes bar-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+#loader.done .bars i{animation:bar-out .42s cubic-bezier(.6,0,.8,.2) forwards;animation-delay:calc(var(--i) * 60ms)}
+#loader.done .word{animation:word-out .3s ease forwards;animation-delay:calc(var(--n) * 60ms)}
+@keyframes bar-out{from{opacity:1;transform:scaleY(1)}to{opacity:1;transform:scaleY(0)}}
+@keyframes word-out{to{opacity:0}}
+@media (prefers-reduced-motion: reduce){#loader .bars i,#loader .word{animation-duration:.01s;animation-delay:0s}#loader{transition:none}}
+#track{visibility:hidden}
+#track.ready{visibility:visible}
+
 /* ===== 本（JS 駆動のスライダー） ===== */
 #book{position:fixed;inset:0 0 var(--hud-h) 0;overflow:hidden;touch-action:pan-y pinch-zoom;user-select:text;cursor:default}
 #track{display:flex;height:100%;will-change:transform;transition:transform .42s cubic-bezier(.22,.7,.25,1)}
@@ -265,7 +281,8 @@ figure.fig img{cursor:zoom-in}
   #track{display:block;transform:none!important;transition:none}
   .spread{display:contents}
   .page{height:auto;overflow:visible;box-shadow:none;break-before:page;border-radius:0;display:block;font-size:11pt}
-  .page.blank,#hud,.zone,#toc,#help,#lb,.page .thumb,.page .more{display:none!important}
+  .page.blank,#hud,.zone,#toc,#help,#lb,#loader,.page .thumb,.page .more{display:none!important}
+  #track{visibility:visible}
   .page .body{overflow:visible;padding:0}
   .page .folio{position:static;display:block;text-align:right;margin-top:10mm}
   .page.cover .body{min-height:240mm;display:flex}
@@ -280,6 +297,7 @@ figure.fig img{cursor:zoom-in}
 </style>
 </head>
 <body>
+<div id="loader"><div class="bars">{{LOADER}}</div><div class="word" style="--n:{{LOADER_N}}">magazine</div></div>
 <div id="book"><div id="track">
 {{PAGES}}
 </div></div>
@@ -600,11 +618,24 @@ figure.fig img{cursor:zoom-in}
   window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { if (isTwo() !== two) layout(); else { W = book.clientWidth; fitAll(); goTo(cur, 'instant'); } }, 120); });
   window.addEventListener('hashchange', () => { const p = pageFromHash(); if (p >= 0) goToPage(p); });
 
+  const t0 = performance.now();
   layout();
   const start = pageFromHash(initialHash);
   if (start > 0) goToPage(start, 'instant');
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { fitAll(); goTo(cur, 'instant'); });
-  window.addEventListener('load', () => { fitAll(); goTo(cur, 'instant'); });
+  const fontsReady = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
+  const loaded = new Promise(res => { if (document.readyState === 'complete') res(); else window.addEventListener('load', res, { once: true }); });
+  Promise.all([fontsReady, loaded]).then(() => {
+    fitAll(); goTo(cur, 'instant');
+    track.classList.add('ready');
+    const loader = $('loader');
+    const bars = loader.querySelectorAll('.bars i').length;
+    const minShow = bars * 70 + 650; // 色線が全部灯るまでは待つ
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    setTimeout(() => {
+      loader.classList.add('done');
+      setTimeout(() => { loader.classList.add('out'); setTimeout(() => loader.remove(), 500); }, reduce ? 0 : bars * 60 + 420);
+    }, reduce ? 0 : Math.max(0, minShow - (performance.now() - t0)));
+  });
 })();
 </script>
 </body>

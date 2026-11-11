@@ -352,9 +352,14 @@ export function buildHtml(content, { template, watchlist, prevWatchlist, issueDi
   }).join('\n');
 
   const description = (content.headlines ?? []).map((h) => h.text).join(' / ');
+  // 読み込み画面の色線: 登場順のセクション（表紙と目次は除く）
+  const loaderSecs = [...new Set(pages.map((p) => p.sec))].filter((s) => s !== 'cover' && s !== 'toc');
+  const loaderHtml = loaderSecs.map((s, i) => `<i data-sec="${s}" style="--i:${i}"></i>`).join('');
   const html = template
     .replace('{{TITLE}}', esc(`${title} ${dateJa}`))
     .replace('{{DESCRIPTION}}', esc(description))
+    .replace('{{LOADER_N}}', String(loaderSecs.length))
+    .replace('{{LOADER}}', loaderHtml)
     .replace('{{PAGES}}', pagesHtml)
     .replace('{{TOC}}', tocHtml);
   return withCsp(html);
