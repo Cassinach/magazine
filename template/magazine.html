@@ -42,9 +42,9 @@ body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-siz
   -webkit-font-smoothing:antialiased;overscroll-behavior:none;font-feature-settings:"palt" 1;overflow:hidden}
 a{color:var(--accent)}
 code,pre{font-family:var(--font-mono);font-size:.88em}
-code{background:var(--code-bg);padding:.1em .4em;border-radius:4px;word-break:break-all}
+code{background:var(--code-bg);padding:.1em .4em;border-radius:4px;white-space:nowrap;word-break:normal;display:inline-block;max-width:100%;overflow:hidden;text-overflow:ellipsis;vertical-align:baseline;line-height:1.5}
 pre{background:var(--code-bg);padding:10px 12px;border-radius:8px;overflow:auto;line-height:1.5;position:relative;margin:0 0 1em}
-pre code{background:none;padding:0;word-break:normal}
+pre code{background:none;padding:0;display:inline;white-space:pre;max-width:none;overflow:visible;line-height:inherit}
 pre[data-lang]::before{content:attr(data-lang);position:absolute;top:6px;right:10px;font-size:10px;color:var(--muted);letter-spacing:.05em}
 
 /* 日本語の改行を自然に（対応ブラウザでは文節で折り返す） */
