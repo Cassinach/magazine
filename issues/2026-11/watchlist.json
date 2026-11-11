@@ -1,99 +1,884 @@
 {
-  "updated": "2026-11-09",
+  "updated": "2026-11-11",
   "note": "定点観測ボードの元データ。routine が毎号更新する。pick を変えるときは reason と sources を必ず書き換えること。",
   "items": [
-    { "id": "fe-meta", "layer": "Frontend", "topic": "メタフレームワーク", "pick": "Next.js", "version": "16.4.5", "alternatives": ["TanStack Start 1.169", "SvelteKit 3.1", "Astro 7.4", "Nuxt 4.6"],
-      "reason": "エコシステムと React 19.3 対応の速さは依然最大。ただし 10〜11 月の use cache 系脆弱性のため 16.4.5 以上に固定。Vite ネイティブで RSC 不要なら TanStack Start 1.0 が対抗。", "last_checked": "2026-11-09",
-      "sources": [ { "title": "Release v16.4.5 · vercel/next.js", "url": "https://github.com/vercel/next.js/releases/tag/v16.4.5", "date": "2026-11-03" }, { "title": "TanStack Start 1.0 is Stable", "url": "https://tanstack.com/blog/tanstack-start-1-0", "date": "2026-10-13" } ] },
-    { "id": "fe-pm", "layer": "Frontend", "topic": "パッケージマネージャー", "pick": "pnpm", "version": "12.18.0", "alternatives": ["npm 12.2", "Bun 1.4", "Yarn 4.18", "vlt 1.6"],
-      "reason": "Rust 製 12 系が latest になり、pnpm 11 のロックファイルと安全既定（minimumReleaseAge 1 日、install スクリプト遮断）をそのまま継承。npm 12 はスクリプト遮断は追いついたが release age の既定はない。", "last_checked": "2026-11-09",
-      "sources": [ { "title": "Release v12.0.0 · pnpm/pnpm", "url": "https://github.com/pnpm/pnpm/releases/tag/v12.0.0", "date": "2026-08-26" }, { "title": "Release v11.0.0 · pnpm/pnpm", "url": "https://github.com/pnpm/pnpm/releases/tag/v11.0.0", "date": "2026-04-28" } ] },
-    { "id": "fe-build", "layer": "Frontend", "topic": "ビルド／バンドラ", "pick": "Vite", "version": "8.3.6", "alternatives": ["Turbopack（Next.js 同梱）", "Rspack 2.3", "esbuild 0.28", "Rolldown 1.3 直接"],
-      "reason": "SvelteKit 3、TanStack Start 1.0、Astro 7、Vitest 5 がすべて Vite 8 を要求し、Rolldown は 1.0 で安定。Rolldown 1.3 を overrides で強制しないよう公式が注意している。", "last_checked": "2026-11-09",
-      "sources": [ { "title": "Announcing Vite 8", "url": "https://vite.dev/blog/announcing-vite8", "date": "2026-03-12" }, { "title": "rolldown/rolldown Releases（v1.3.0）", "url": "https://github.com/rolldown/rolldown/releases", "date": "2026-11-05" } ] },
-    { "id": "fe-lint", "layer": "Frontend", "topic": "Lint／Format", "pick": "Biome", "version": "2.6.6", "alternatives": ["oxlint 1.92 + oxfmt 0.77", "ESLint 10.14 + Prettier 3.9"],
-      "reason": "lint と format が 1 バイナリで安定しており HTML / Svelte / Astro も対応。oxlint/oxfmt は最速だが oxfmt が 0.x で週次に破壊的変更が入る。", "last_checked": "2026-11-09",
-      "sources": [ { "title": "biomejs/biome Releases", "url": "https://github.com/biomejs/biome/releases", "date": "2026-11-06" }, { "title": "oxc-project/oxc Releases", "url": "https://github.com/oxc-project/oxc/releases", "date": "2026-11-06" } ] },
-    { "id": "fe-state", "layer": "Frontend", "topic": "状態管理／データ取得", "pick": "TanStack Query + Zustand", "version": "5.107 / 5.1.0", "alternatives": ["Jotai 3.0", "TanStack DB 1.0 RC", "SWR 2.5"],
-      "reason": "Query はフレームワーク横断のサーバー状態層として既定のまま。Zustand 5.1 は破壊的変更なしで persist の非同期 rehydrate を追加、Jotai 3 は破壊的メジャー。TanStack DB は RC 段階。", "last_checked": "2026-11-09",
-      "sources": [ { "title": "Release v5.1.0 · pmndrs/zustand", "url": "https://github.com/pmndrs/zustand/releases/tag/v5.1.0", "date": "2026-11-06" }, { "title": "TanStack DB 1.0 RC1", "url": "https://tanstack.com/blog/tanstack-db-1.0-rc1-going-all-in-on-oracles", "date": "2026-10-29" } ] },
-    { "id": "fe-ui", "layer": "Frontend", "topic": "UI コンポーネント／CSS", "pick": "Tailwind CSS + shadcn", "version": "4.3.5 / 4.23.0", "alternatives": ["Base UI 1.9", "Radix UI", "MUI 9.5"],
-      "reason": "Tailwind 4.3 系はパッチのみの安定期。shadcn は Zod 4 と MCP SDK v2 に移行し、エージェントから組み込みやすいコンポーネント配布として最も整っている。", "last_checked": "2026-11-09",
-      "sources": [ { "title": "tailwindlabs/tailwindcss Releases", "url": "https://github.com/tailwindlabs/tailwindcss/releases", "date": "2026-11-06" }, { "title": "shadcn-ui/ui Releases（shadcn@4.23.0）", "url": "https://github.com/shadcn-ui/ui/releases", "date": "2026-10-27" } ] },
-    { "id": "fe-validate", "layer": "Frontend", "topic": "スキーマ／バリデーション", "pick": "Zod", "version": "4.6.7", "alternatives": ["Valibot 1.5", "ArkType 2.2", "Effect Schema（Effect 4.1）"],
-      "reason": "z.compile() / z.validate() で速度差がほぼ消え、shadcn や TanStack 周辺が Zod 4 に収斂。バンドルサイズ最優先なら Valibot、型レベル性能なら ArkType。", "last_checked": "2026-11-09",
-      "sources": [ { "title": "Release v4.5.0 · colinhacks/zod", "url": "https://github.com/colinhacks/zod/releases/tag/v4.5.0", "date": "2026-08-28" }, { "title": "Release effect@4.0.0", "url": "https://github.com/Effect-TS/effect/releases/tag/effect%404.0.0", "date": "2026-10-01" } ] },
-    { "id": "be-lang", "layer": "Backend", "topic": "言語（新規サービス）", "pick": "TypeScript", "version": "7.0.2", "alternatives": ["Go 1.27", "Python 3.15", "Rust 1.99"],
-      "reason": "フロントと型を共有でき、Go 製コンパイラの GA で型チェックのコストが消えた。Go 1.27 のジェネリックメソッドと Python 3.15 の lazy imports が対抗。", "last_checked": "2026-11-09",
-      "sources": [ { "title": "microsoft/TypeScript Releases", "url": "https://github.com/microsoft/TypeScript/releases", "date": "2026-10-20" }, { "title": "golang/go tags", "url": "https://github.com/golang/go/tags", "date": "2026-10-20" } ] },
-    { "id": "be-runtime", "layer": "Backend", "topic": "JS/TS ランタイム", "pick": "Node.js", "version": "26.13.0 LTS", "alternatives": ["Bun 1.4", "Deno 2.9（保守期間入り）", "Cloudflare Workers / workerd"],
-      "reason": "26 が LTS 入りして 2029 年 4 月までサポート。Deno は Cloudflare 合流で約 1 年の保守期間、Bun 1.4 は Rust 書き換え直後で、最もリスクの低い既定は Node。", "last_checked": "2026-11-09",
-      "sources": [ { "title": "Node.js 26.13.0 (LTS)", "url": "https://nodejs.org/en/blog/release/v26.13.0", "date": "2026-10-28" }, { "title": "Deno is joining Cloudflare", "url": "https://deno.com/blog/cloudflare", "date": "2026-10-09" } ] },
-    { "id": "be-fw", "layer": "Backend", "topic": "Web フレームワーク", "pick": "Hono", "version": "4.13.17", "alternatives": ["NestJS 12.4", "Fastify 5.12", "FastAPI 0.162"],
-      "reason": "Node / Bun / Workers / Deno で同じコードが動き、ランタイム再編のヘッジになる。4.13.16 のセキュリティ修正以上に固定し、5.0 RC は変更履歴が出るまで待つ。", "last_checked": "2026-11-09",
-      "sources": [ { "title": "honojs/hono Releases", "url": "https://github.com/honojs/hono/releases", "date": "2026-11-07" }, { "title": "nestjs/nest Releases", "url": "https://github.com/nestjs/nest/releases", "date": "2026-11-06" } ] },
-    { "id": "be-orm", "layer": "Backend", "topic": "ORM／クエリビルダ", "pick": "Drizzle ORM", "version": "0.45.4（1.0 rc.5）", "alternatives": ["Prisma 7.10（8 rc.23）", "Kysely 0.29", "TypeORM 1.1"],
-      "reason": "Drizzle 1.0 も Prisma 8 も RC のまま。Drizzle は安定版から 1.0 への移行差分が小さく（RQBv2 はオプトアウト可）、エッジ対応ドライバも最多。", "last_checked": "2026-11-09",
-      "sources": [ { "title": "drizzle-team/drizzle-orm Releases", "url": "https://github.com/drizzle-team/drizzle-orm/releases", "date": "2026-10-21" }, { "title": "prisma/prisma Releases", "url": "https://github.com/prisma/prisma/releases", "date": "2026-11-06" } ] },
-    { "id": "be-pm-py", "layer": "Backend", "topic": "Python パッケージ管理", "pick": "uv", "version": "0.13.7", "alternatives": ["pip 26.3", "Poetry", "PDM"],
-      "reason": "0.13 で Python 3.15 が既定になり uv audit も追加。pip 26.3 の pylock.toml 対応で標準側も追いついたが、1 ツールで完結するのは uv のみ。", "last_checked": "2026-11-09",
-      "sources": [ { "title": "astral-sh/uv Releases", "url": "https://github.com/astral-sh/uv/releases", "date": "2026-11-03" }, { "title": "pypa/pip tags", "url": "https://github.com/pypa/pip/tags", "date": "2026-11-02" } ] },
-    { "id": "be-api", "layer": "Backend", "topic": "API スタイル／型共有", "pick": "Hono RPC（同一リポ）/ tRPC", "version": "4.13.17 / 11.25.2", "alternatives": ["oRPC", "OpenAPI（FastAPI / NestJS）", "GraphQL"],
-      "reason": "同一リポのフルスタックなら Hono RPC で追加レイヤーなし、TanStack Query 連携や subscription が要るなら tRPC 11（週次更新中、v12 は未定）。", "last_checked": "2026-11-09",
-      "sources": [ { "title": "trpc/trpc Releases", "url": "https://github.com/trpc/trpc/releases", "date": "2026-11-08" }, { "title": "honojs/hono Releases", "url": "https://github.com/honojs/hono/releases", "date": "2026-11-07" } ] },
-    { "id": "be-auth", "layer": "Backend", "topic": "認証", "pick": "Better Auth", "version": "1.7.18", "alternatives": ["Auth.js 4.24（保守のみ）", "Clerk", "WorkOS AuthKit"],
-      "reason": "Vercel 傘下で開発が続く唯一の OSS TS 認証ライブラリ。11 月 3 日に 12 件のアドバイザリを修正するなど週次更新が前提。Auth.js は事実上メンテナンスモード。", "last_checked": "2026-11-09",
-      "sources": [ { "title": "better-auth/better-auth Releases", "url": "https://github.com/better-auth/better-auth/releases", "date": "2026-11-05" }, { "title": "nextauthjs/next-auth Releases", "url": "https://github.com/nextauthjs/next-auth/releases", "date": "2026-07-20" } ] },
-    { "id": "in-host", "layer": "Infra", "topic": "ホスティング（Web アプリ）", "pick": "Cloudflare Workers（+Containers）", "version": "wrangler 4.158", "alternatives": ["Vercel（Fluid compute）", "AWS Lambda Web Functions", "Fly.io"],
-      "reason": "1 アカウントでエッジ・コンテナ・KV/D1/R2・Workflows・Observability が揃い、月 $5 の床で完結する。Next.js 中心なら Vercel。12 月 1 日の Observability 課金変更に注意。", "last_checked": "2026-11-09",
-      "sources": [ { "title": "Containers and Sandboxes are now generally available", "url": "https://developers.cloudflare.com/changelog/2026-04-13-containers-sandbox-ga", "date": "2026-04-13" }, { "title": "Everything we launched during Birthday Week 2026", "url": "https://blog.cloudflare.com/birthday-week-2026-wrap-up/", "date": "2026-10-02" } ] },
-    { "id": "in-db", "layer": "Infra", "topic": "マネージド DB", "pick": "Supabase（Postgres）", "version": "2026-10 時点", "alternatives": ["Neon / Lakebase Postgres", "PlanetScale Postgres（Neki）", "Cloudflare D1", "Turso"],
-      "reason": "Postgres・認証・ストレージ・Realtime が無料枠に揃い、Turso 買収で「大きな Postgres」と「小さな SQLite 多数」の両方を 1 社で持つ。", "last_checked": "2026-11-09",
-      "sources": [ { "title": "supabase/supabase Releases（Developer Update Aug 2026）", "url": "https://github.com/supabase/supabase/releases", "date": "2026-08-07" }, { "title": "Supabase Raises $150M, Buys Turso（Verdict）", "url": "https://www.verdict.co.uk/supabase-150m-funding-turso-acquisition/", "date": "2026-10-02" } ] },
-    { "id": "in-iac", "layer": "Infra", "topic": "IaC", "pick": "OpenTofu", "version": "1.13.9", "alternatives": ["Terraform 1.17（Policy GA）", "Pulumi 3.274", "SST 4.17"],
-      "reason": "MPL ライセンスで HCL 互換、Windows ARM64 と lint 実験が入り 2027-08 までサポート。Terraform 1.17 の Policy GA は個人開発ではほぼ不要。", "last_checked": "2026-11-09",
-      "sources": [ { "title": "opentofu/opentofu Releases", "url": "https://github.com/opentofu/opentofu/releases", "date": "2026-11-05" }, { "title": "hashicorp/terraform v1.17.0", "url": "https://github.com/hashicorp/terraform/releases/tag/v1.17.0", "date": "2026-10-21" } ] },
-    { "id": "in-ci", "layer": "Infra", "topic": "CI／CD", "pick": "GitHub Actions", "version": "runner 2.338.2", "alternatives": ["GitLab CI 19.5", "セルフホステッドランナー", "Workers Builds / Vercel Git 連携"],
-      "reason": "公開リポは無料、arm64 ランナー GA。今月の作業は ubuntu-latest の 26.04 移行（11 月 19 日まで）で壊れたら 24.04 に固定すること。", "last_checked": "2026-11-09",
-      "sources": [ { "title": "Ubuntu 26 generally available and latest migration", "url": "https://github.blog/changelog/2026-09-17-ubuntu-26-generally-available-and-latest-migration", "date": "2026-09-17" }, { "title": "actions/runner Releases", "url": "https://github.com/actions/runner/releases", "date": "2026-10-26" } ] },
-    { "id": "in-obs", "layer": "Infra", "topic": "オブザーバビリティ", "pick": "OpenTelemetry JS + Sentry", "version": "3.1.0 / 11.11.0", "alternatives": ["Cloudflare Observability（12 月から GB 課金）", "Grafana Cloud", "Datadog"],
-      "reason": "OTel JS 3.0 は破壊的メジャーだったので新規は 3 系から始めて移行をなくす。Sentry の無料枠と OTel ネイティブのスパンで、一人分のエラー＋トレースは足りる。", "last_checked": "2026-11-09",
-      "sources": [ { "title": "opentelemetry-js v3.0.0", "url": "https://github.com/open-telemetry/opentelemetry-js/releases/tag/v3.0.0", "date": "2026-10-20" }, { "title": "getsentry/sentry-javascript Releases", "url": "https://github.com/getsentry/sentry-javascript/releases", "date": "2026-11-05" } ] },
-    { "id": "in-container", "layer": "Infra", "topic": "コンテナ／オーケストレーション", "pick": "Docker Engine + Compose", "version": "29.9.3 / 5.7.0", "alternatives": ["Podman 6.1", "Kubernetes 1.37（マネージド）", "Cloudflare Containers"],
-      "reason": "一人開発では Compose v5 と Engine 29 の containerd store + lazy-pull で運用上の利点はほぼ得られ、k8s はホスティング先ではなく学習対象。", "last_checked": "2026-11-09",
-      "sources": [ { "title": "moby/moby Releases", "url": "https://github.com/moby/moby/releases", "date": "2026-11-03" }, { "title": "docker/compose Releases", "url": "https://github.com/docker/compose/releases", "date": "2026-11-02" } ] },
-    { "id": "3d-recon", "layer": "3D", "topic": "画像→3D 再構成（実用）", "pick": "COLMAP（global_mapper）+ MapAnything", "version": "4.2.1 / 1.1", "alternatives": ["VGGT-Ω（商用は申請制）", "Depth Anything 3（Giant は NC）", "AMB3R-SLAM（長尺向け）"],
-      "reason": "4.2 系で学習ベースマッチング LoMa と多成分 global SfM が入り精度と速度のバランスが最も安定。feed-forward 系は NC ライセンスが多い中、MapAnything は Apache 版重みがあり他モデルも同一 API で差し替え可能。", "last_checked": "2026-11-09",
-      "sources": [ { "title": "colmap/colmap Releases", "url": "https://github.com/colmap/colmap/releases", "date": "2026-09-29" }, { "title": "MapAnything CHANGELOG", "url": "https://github.com/facebookresearch/map-anything/blob/main/CHANGELOG.md", "date": "2026-01-18" } ] },
-    { "id": "3d-repr", "layer": "3D", "topic": "表現（Splat／Mesh／NeRF）", "pick": "3D Gaussian Splatting（交換形式 SPZ v4）", "version": "SPZ lib 3.0.0", "alternatives": ["メッシュ（生成系は TRELLIS.2）", "NeRF（nerfstudio は停滞）"],
-      "reason": "Khronos 拡張の批准と three.js / Babylon / Open3D のネイティブ実装が 2026 年秋に揃い、配布と表示の互換性が事実上決着。NeRF 系ツールは更新停止。", "last_checked": "2026-11-09",
-      "sources": [ { "title": "nianticlabs/spz", "url": "https://github.com/nianticlabs/spz", "date": "2026-05-05" }, { "title": "KHR_gaussian_splatting", "url": "https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Khronos/KHR_gaussian_splatting", "date": "2026-11-09" } ] },
-    { "id": "3d-viewer", "layer": "3D", "topic": "ブラウザ表示", "pick": "Spark", "version": "2.4.0", "alternatives": ["three.js ネイティブ GaussianSplat（r187）", "Spark Radix 0.0.1（WebGPU）", "SuperSplat 3.7", "Babylon.js 9.33"],
-      "reason": "WebGL2 で動き paged LoD・SPZ v4 に対応する MIT ライブラリで、互換性では現時点で最も安全。WebGPU 前提にできるなら three.js ネイティブか Radix へ移行余地。", "last_checked": "2026-11-09",
-      "sources": [ { "title": "Spark CHANGELOG", "url": "https://github.com/sparkjsdev/spark/blob/main/CHANGELOG.md", "date": "2026-10-19" }, { "title": "three.js r186 Release", "url": "https://github.com/mrdoob/three.js/releases/tag/r186", "date": "2026-09-24" } ] },
-    { "id": "ai-frontier", "layer": "AI", "topic": "フロンティアモデル（総合）", "pick": "Claude Opus 5.5", "version": "claude-opus-5-5（2026-09-22）", "alternatives": ["Claude Fable 5.1", "Claude Sonnet 5.5", "GPT-6.1 Terra（仕様未確認）"],
-      "reason": "検証できた範囲でエージェント的コーディングと知的作業のスコア（Terminal-Bench 4.0 66.4%、GDPval-AA 1846）が最も高く、Opus 5 比 20% 安い。コスト重視なら Sonnet 5.5 が一部ベンチで上回る。", "last_checked": "2026-11-09",
-      "sources": [ { "title": "Introducing Claude Opus 5.5", "url": "https://www.anthropic.com/news/claude-opus-5-5", "date": "2026-09-22" }, { "title": "Claude Platform: Models overview", "url": "https://platform.claude.com/docs/en/models/overview", "date": "2026-11-09" } ] },
-    { "id": "ai-coding", "layer": "AI", "topic": "コーディングエージェント", "pick": "Claude Code", "version": "2.1.319", "alternatives": ["OpenAI Codex CLI 0.167", "Gemini CLI 0.67", "GitHub Copilot CLI 1.0.107", "Cursor"],
-      "reason": "権限・サンドボックスの強化（denyInsteadOfPrompting、hooks onFailure: block）と MCP タスクのバックグラウンド化が最速で進み、Ollama 経由でローカルモデルでも動く。", "last_checked": "2026-11-09",
-      "sources": [ { "title": "anthropics/claude-code Releases", "url": "https://github.com/anthropics/claude-code/releases", "date": "2026-11-06" }, { "title": "openai/codex Releases", "url": "https://github.com/openai/codex/releases", "date": "2026-11-06" } ] },
-    { "id": "ai-local", "layer": "AI", "topic": "ローカル LLM（モデル）", "pick": "Qwen3.8-27B", "version": "2026-08-14 公開", "alternatives": ["Flint 40B MoE（A2.5B）", "gpt-oss-20b", "Qwen3.8-Flash-Next"],
-      "reason": "32 GB マシンで 4 ビット量子化の密 27B なら 64K 以上のコンテキストの余地が残り、Qwen-Max 級で最新のオープン公開。ライセンスはモデルカードで要確認。コーディング特化なら Flint。", "last_checked": "2026-11-09",
-      "sources": [ { "title": "QwenLM/Qwen3.8 README", "url": "https://raw.githubusercontent.com/QwenLM/Qwen3.8/main/README.md", "date": "2026-08-14" }, { "title": "Ollama v0.40.8（Flint）", "url": "https://github.com/ollama/ollama/releases/tag/v0.40.8", "date": "2026-10-21" } ] },
-    { "id": "ai-local-rt", "layer": "AI", "topic": "ローカル LLM（ランタイム）", "pick": "Ollama", "version": "0.40.15", "alternatives": ["llama.cpp b12211", "mlx-lm 0.32", "vLLM 0.33", "LM Studio"],
-      "reason": "ollama launch で Claude Code / Codex / OpenCode に直結し、新モデルを数日で取り込み、TTS と OpenAI / Anthropic 互換エンドポイントを備える。", "last_checked": "2026-11-09",
-      "sources": [ { "title": "ollama/ollama Releases", "url": "https://github.com/ollama/ollama/releases", "date": "2026-11-03" }, { "title": "ggml-org/llama.cpp Releases", "url": "https://github.com/ggml-org/llama.cpp/releases", "date": "2026-11-08" } ] },
-    { "id": "ai-agent-fw", "layer": "AI", "topic": "エージェント／MCP 基盤", "pick": "MCP（2026-07-28 版）+ Agent Skills", "version": "TS SDK 2.4.0 / Py SDK 2.3.0", "alternatives": ["Vercel AI SDK 7", "OpenAI Agents SDK 0.24", "Google ADK 2.14", "LangGraph 1.2"],
-      "reason": "ステートレス化した MCP と、同じ財団に移った Agent Skills が、上記フレームワークすべてが対象にするベンダー中立の土台になった。", "last_checked": "2026-11-09",
-      "sources": [ { "title": "MCP 2026-07-28 changelog", "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/docs/specification/2026-07-28/changelog.mdx", "date": "2026-07-28" }, { "title": "Donating Agent Skills to the Agentic AI Foundation", "url": "https://www.anthropic.com/news/donating-agent-skills-to-the-agentic-ai-foundation", "date": "2026-10-22" } ] },
-    { "id": "dx-editor", "layer": "DX", "topic": "エディタ", "pick": "VS Code", "version": "1.145", "alternatives": ["Zed 1.27", "Cursor（版未確認）", "JetBrains 2026.3"],
-      "reason": "週次リリースで Copilot ハーネス既定化、Claude / Codex の同居（multi-harness）、Cloud sessions が入り、どのエージェントを使うにせよ母艦として選択肢が最も広い。", "last_checked": "2026-11-09",
-      "sources": [ { "title": "VS Code 1.145 release notes", "url": "https://github.com/microsoft/vscode-docs/blob/main/release-notes/v1_145.md", "date": "2026-11-04" }, { "title": "Zed v1.27.0", "url": "https://github.com/zed-industries/zed/releases/tag/v1.27.0", "date": "2026-11-04" } ] },
-    { "id": "dx-test", "layer": "DX", "topic": "テスト（unit／e2e）", "pick": "Vitest + Playwright", "version": "5.1.0 / 1.65.0", "alternatives": ["Jest 30.5", "bun test", "Vitest Browser Mode"],
-      "reason": "Node 22 以上を前提にできる新規なら、mock 自動クリアと --last-failed、Browser Mode の trace view を持つ Vitest 5 と、月次で機能が増える Playwright が事実上の標準。", "last_checked": "2026-11-09",
-      "sources": [ { "title": "Vitest v5.1.0", "url": "https://github.com/vitest-dev/vitest/releases/tag/v5.1.0", "date": "2026-11-02" }, { "title": "microsoft/playwright Releases", "url": "https://github.com/microsoft/playwright/releases", "date": "2026-11-05" } ] },
-    { "id": "dx-mono", "layer": "DX", "topic": "monorepo", "pick": "pnpm workspaces + Turborepo", "version": "12.18.0 / 2.11.10", "alternatives": ["Nx 24.0", "moon 2.6", "Bun workspaces"],
-      "reason": "個人開発では Nx の機能量より、pnpm 12（devEngines による Node 固定）と turbo 2.11（turbo setup でツール provision、Cargo / uv 対応）の軽さが効く。", "last_checked": "2026-11-09",
-      "sources": [ { "title": "Release v12.0.0 · pnpm/pnpm", "url": "https://github.com/pnpm/pnpm/releases/tag/v12.0.0", "date": "2026-08-26" }, { "title": "Turborepo v2.11.0", "url": "https://github.com/vercel/turborepo/releases/tag/v2.11.0", "date": "2026-09-18" } ] }
+    {
+      "id": "fe-meta",
+      "layer": "Frontend",
+      "topic": "メタフレームワーク",
+      "pick": "Next.js",
+      "version": "16.4.6",
+      "alternatives": [
+        "TanStack Start 1.169.5",
+        "SvelteKit 3.2.0",
+        "Astro 7.4.10",
+        "Nuxt 4.6.4"
+      ],
+      "reason": "エコシステムと React 19.3 対応の速さは依然最大。11 月は 16.4.6 のバックポートのみで新脆弱性なし。use cache 系脆弱性のため 16.4.5 以上に固定。Vite ネイティブで RSC 不要なら TanStack Start 1.0（Rsbuild 対応も開始）が対抗。",
+      "last_checked": "2026-11-11",
+      "sources": [
+        {
+          "title": "Next.js 最新版の確認（16.4.6）",
+          "url": "https://github.com/vercel/next.js/releases/tag/v16.4.6",
+          "date": "2026-11-09"
+        },
+        {
+          "title": "Release v16.4.5 · vercel/next.js",
+          "url": "https://github.com/vercel/next.js/releases/tag/v16.4.5",
+          "date": "2026-11-03"
+        },
+        {
+          "title": "TanStack Start 1.0 is Stable",
+          "url": "https://tanstack.com/blog/tanstack-start-1-0",
+          "date": "2026-10-13"
+        }
+      ]
+    },
+    {
+      "id": "fe-pm",
+      "layer": "Frontend",
+      "topic": "パッケージマネージャー",
+      "pick": "pnpm",
+      "version": "12.19.0",
+      "alternatives": [
+        "npm 12.2.2",
+        "Bun 1.4.4",
+        "Yarn 4.18",
+        "vlt 1.6"
+      ],
+      "reason": "Rust 製 12 系が latest。minimumReleaseAge 1 日・install スクリプト遮断・スキル個別承認の安全既定に加え、12.19 で pnpm fund と実験的 lockfile v13。npm 12 は release age の既定がない。",
+      "last_checked": "2026-11-11",
+      "sources": [
+        {
+          "title": "pnpm/pnpm Releases（v12.19.0）",
+          "url": "https://github.com/pnpm/pnpm/releases",
+          "date": "2026-11-10"
+        },
+        {
+          "title": "Release v11.0.0 · pnpm/pnpm",
+          "url": "https://github.com/pnpm/pnpm/releases/tag/v11.0.0",
+          "date": "2026-04-28"
+        }
+      ]
+    },
+    {
+      "id": "fe-build",
+      "layer": "Frontend",
+      "topic": "ビルド／バンドラ",
+      "pick": "Vite",
+      "version": "8.3.7",
+      "alternatives": [
+        "Turbopack（Next.js 同梱）",
+        "Rolldown 1.3.1 直接",
+        "Rspack（TanStack Start が Rsbuild 対応）"
+      ],
+      "reason": "SvelteKit 3、TanStack Start 1.0、Astro 7、Vitest 5 がすべて Vite 8 を要求。VoidZero の Cloudflare 合流後も MIT・中立を明記し、11 月 9 日に Vite Ecosystem Fund 初回配分で資金面も安定。Rolldown 1.3 は Vite 側が未対応なので overrides で強制しない。",
+      "last_checked": "2026-11-11",
+      "sources": [
+        {
+          "title": "vitejs/vite Releases（v8.3.7）",
+          "url": "https://github.com/vitejs/vite/releases/tag/v8.3.7",
+          "date": "2026-11-09"
+        },
+        {
+          "title": "Launching the Vite Ecosystem Fund",
+          "url": "https://blog.cloudflare.com/launching-vite-ecosystem-fund/",
+          "date": "2026-11-09"
+        }
+      ]
+    },
+    {
+      "id": "fe-lint",
+      "layer": "Frontend",
+      "topic": "Lint／Format",
+      "pick": "Biome",
+      "version": "2.6.6",
+      "alternatives": [
+        "oxlint 1.93 + oxfmt 0.78",
+        "ESLint 10.14 + Prettier 3.9（Vite Ecosystem Fund 受給）"
+      ],
+      "reason": "lint と format が 1 バイナリで安定しており HTML / Svelte / Astro も対応。oxlint/oxfmt は最速だが oxfmt が 0.x で週次に破壊的変更が入る。",
+      "last_checked": "2026-11-11",
+      "sources": [
+        {
+          "title": "biomejs/biome Releases",
+          "url": "https://github.com/biomejs/biome/releases",
+          "date": "2026-11-06"
+        },
+        {
+          "title": "oxc-project/oxc Releases",
+          "url": "https://github.com/oxc-project/oxc/releases",
+          "date": "2026-11-06"
+        }
+      ]
+    },
+    {
+      "id": "fe-state",
+      "layer": "Frontend",
+      "topic": "状態管理／データ取得",
+      "pick": "TanStack Query + Zustand",
+      "version": "5.107.1 / 5.1.0",
+      "alternatives": [
+        "Jotai 3.0",
+        "TanStack DB 1.0 rc.1.4",
+        "SWR 2.5"
+      ],
+      "reason": "Query はフレームワーク横断のサーバー状態層として既定のまま。Zustand 5.1 は破壊的変更なしで persist の非同期 rehydrate を追加、Jotai 3 は破壊的メジャー。TanStack DB は RC 段階。",
+      "last_checked": "2026-11-11",
+      "sources": [
+        {
+          "title": "TanStack Query + Zustand 最新版の確認（5.107.1 / 5.1.0）",
+          "url": "https://github.com/TanStack/query/releases",
+          "date": "2026-11-06"
+        },
+        {
+          "title": "Release v5.1.0 · pmndrs/zustand",
+          "url": "https://github.com/pmndrs/zustand/releases/tag/v5.1.0",
+          "date": "2026-11-06"
+        },
+        {
+          "title": "TanStack DB 1.0 RC1",
+          "url": "https://tanstack.com/blog/tanstack-db-1.0-rc1-going-all-in-on-oracles",
+          "date": "2026-10-29"
+        }
+      ]
+    },
+    {
+      "id": "fe-ui",
+      "layer": "Frontend",
+      "topic": "UI コンポーネント／CSS",
+      "pick": "Tailwind CSS + shadcn",
+      "version": "4.3.5 / 4.23.0",
+      "alternatives": [
+        "Base UI 1.9",
+        "Radix UI",
+        "MUI 9.5"
+      ],
+      "reason": "Tailwind 4.3 系はパッチのみの安定期。shadcn は Zod 4 と MCP SDK v2 に移行し、エージェントから組み込みやすいコンポーネント配布として最も整っている。",
+      "last_checked": "2026-11-11",
+      "sources": [
+        {
+          "title": "Tailwind CSS + shadcn 最新版の確認（4.3.5 / 4.23.0）",
+          "url": "https://github.com/tailwindlabs/tailwindcss/releases/tag/v4.3.5",
+          "date": "2026-11-06"
+        },
+        {
+          "title": "tailwindlabs/tailwindcss Releases",
+          "url": "https://github.com/tailwindlabs/tailwindcss/releases",
+          "date": "2026-11-06"
+        },
+        {
+          "title": "shadcn-ui/ui Releases（shadcn@4.23.0）",
+          "url": "https://github.com/shadcn-ui/ui/releases",
+          "date": "2026-10-27"
+        }
+      ]
+    },
+    {
+      "id": "fe-validate",
+      "layer": "Frontend",
+      "topic": "スキーマ／バリデーション",
+      "pick": "Zod",
+      "version": "4.6.7",
+      "alternatives": [
+        "Valibot 1.5",
+        "ArkType 2.2",
+        "Effect Schema（Effect 4.x）"
+      ],
+      "reason": "z.compile() / z.validate() で速度差がほぼ消え、shadcn や TanStack 周辺が Zod 4 に収斂。バンドルサイズ最優先なら Valibot、型レベル性能なら ArkType。",
+      "last_checked": "2026-11-11",
+      "sources": [
+        {
+          "title": "Zod 最新版の確認（4.6.7）",
+          "url": "https://github.com/colinhacks/zod/releases/tag/v4.6.7",
+          "date": "2026-10-12"
+        },
+        {
+          "title": "Release v4.5.0 · colinhacks/zod",
+          "url": "https://github.com/colinhacks/zod/releases/tag/v4.5.0",
+          "date": "2026-08-28"
+        },
+        {
+          "title": "Release effect@4.0.0",
+          "url": "https://github.com/Effect-TS/effect/releases/tag/effect%404.0.0",
+          "date": "2026-10-01"
+        }
+      ]
+    },
+    {
+      "id": "be-lang",
+      "layer": "Backend",
+      "topic": "言語（新規サービス）",
+      "pick": "TypeScript",
+      "version": "7.0.2（7.1 Beta）",
+      "alternatives": [
+        "Go 1.27",
+        "Python 3.15",
+        "Rust 1.99"
+      ],
+      "reason": "フロントと型を共有でき、Go 製コンパイラの GA で型チェックのコストが消えた。7.1 RC は予定の 11 月 10 日を過ぎても未公開。Go 1.27.4（11/10 のセキュリティ修正）と Python 3.15 の lazy imports が対抗。",
+      "last_checked": "2026-11-11",
+      "sources": [
+        {
+          "title": "microsoft/TypeScript Releases",
+          "url": "https://github.com/microsoft/TypeScript/releases",
+          "date": "2026-10-20"
+        },
+        {
+          "title": "golang/go tags",
+          "url": "https://github.com/golang/go/tags",
+          "date": "2026-10-20"
+        }
+      ]
+    },
+    {
+      "id": "be-runtime",
+      "layer": "Backend",
+      "topic": "JS/TS ランタイム",
+      "pick": "Node.js",
+      "version": "26.13.0 LTS",
+      "alternatives": [
+        "Bun 1.4",
+        "Deno 2.9（保守期間入り）",
+        "Cloudflare Workers / workerd"
+      ],
+      "reason": "26 が LTS 入りして 2029 年 4 月までサポート。Deno は Cloudflare 合流で 1 年の保守後に開発終了、Bun 1.4 は Rust 書き換え直後で、最もリスクの低い既定は Node。11 月 11 日予定のセキュリティリリース（最高 High）が出たらすぐ更新。",
+      "last_checked": "2026-11-11",
+      "sources": [
+        {
+          "title": "Node.js 26.13.0 (LTS)",
+          "url": "https://nodejs.org/en/blog/release/v26.13.0",
+          "date": "2026-10-28"
+        },
+        {
+          "title": "Deno is joining Cloudflare",
+          "url": "https://deno.com/blog/cloudflare",
+          "date": "2026-10-09"
+        }
+      ]
+    },
+    {
+      "id": "be-fw",
+      "layer": "Backend",
+      "topic": "Web フレームワーク",
+      "pick": "Hono",
+      "version": "4.13.17",
+      "alternatives": [
+        "NestJS 12.4",
+        "Fastify 5.12",
+        "FastAPI 0.162"
+      ],
+      "reason": "Node / Bun / Workers / Deno で同じコードが動き、ランタイム再編のヘッジになる。4.13.16 のセキュリティ修正以上に固定し、5.0 RC は変更履歴が出るまで待つ。",
+      "last_checked": "2026-11-11",
+      "sources": [
+        {
+          "title": "honojs/hono Releases",
+          "url": "https://github.com/honojs/hono/releases",
+          "date": "2026-11-07"
+        },
+        {
+          "title": "nestjs/nest Releases",
+          "url": "https://github.com/nestjs/nest/releases",
+          "date": "2026-11-06"
+        }
+      ]
+    },
+    {
+      "id": "be-orm",
+      "layer": "Backend",
+      "topic": "ORM／クエリビルダ",
+      "pick": "Drizzle ORM",
+      "version": "0.45.4（1.0 rc.5）",
+      "alternatives": [
+        "Prisma 7.10（8 rc.23）",
+        "Kysely 0.29",
+        "TypeORM 1.1"
+      ],
+      "reason": "Drizzle 1.0 も Prisma 8 も RC のまま。Drizzle は安定版から 1.0 への移行差分が小さく（RQBv2 はオプトアウト可）、エッジ対応ドライバも最多。",
+      "last_checked": "2026-11-11",
+      "sources": [
+        {
+          "title": "drizzle-team/drizzle-orm Releases",
+          "url": "https://github.com/drizzle-team/drizzle-orm/releases",
+          "date": "2026-10-21"
+        },
+        {
+          "title": "prisma/prisma Releases",
+          "url": "https://github.com/prisma/prisma/releases",
+          "date": "2026-11-06"
+        }
+      ]
+    },
+    {
+      "id": "be-pm-py",
+      "layer": "Backend",
+      "topic": "Python パッケージ管理",
+      "pick": "uv",
+      "version": "0.13.7",
+      "alternatives": [
+        "pip 26.3",
+        "Poetry",
+        "PDM"
+      ],
+      "reason": "0.13 で Python 3.15 が既定になり uv audit も追加。pip 26.3 の pylock.toml 対応で標準側も追いついたが、1 ツールで完結するのは uv のみ。",
+      "last_checked": "2026-11-11",
+      "sources": [
+        {
+          "title": "astral-sh/uv Releases",
+          "url": "https://github.com/astral-sh/uv/releases",
+          "date": "2026-11-03"
+        },
+        {
+          "title": "pypa/pip tags",
+          "url": "https://github.com/pypa/pip/tags",
+          "date": "2026-11-02"
+        }
+      ]
+    },
+    {
+      "id": "be-api",
+      "layer": "Backend",
+      "topic": "API スタイル／型共有",
+      "pick": "Hono RPC（同一リポ）/ tRPC",
+      "version": "4.13.17 / 11.28.0",
+      "alternatives": [
+        "oRPC",
+        "OpenAPI（FastAPI / NestJS）",
+        "GraphQL"
+      ],
+      "reason": "同一リポのフルスタックなら Hono RPC で追加レイヤーなし、TanStack Query 連携や subscription が要るなら tRPC 11（11.28 で streamedQuery 対応、v12 は未定）。",
+      "last_checked": "2026-11-11",
+      "sources": [
+        {
+          "title": "trpc/trpc Releases",
+          "url": "https://github.com/trpc/trpc/releases",
+          "date": "2026-11-08"
+        },
+        {
+          "title": "honojs/hono Releases",
+          "url": "https://github.com/honojs/hono/releases",
+          "date": "2026-11-07"
+        }
+      ]
+    },
+    {
+      "id": "be-auth",
+      "layer": "Backend",
+      "topic": "認証",
+      "pick": "Better Auth",
+      "version": "1.7.20（1.8.0-beta.7）",
+      "alternatives": [
+        "Auth.js 4.24（保守のみ）",
+        "Clerk",
+        "WorkOS AuthKit"
+      ],
+      "reason": "Vercel 傘下で開発が続く唯一の OSS TS 認証ライブラリ。11 月は 10 日間で 6 パッチと週次以上の更新が前提。Auth.js は事実上メンテナンスモード。",
+      "last_checked": "2026-11-11",
+      "sources": [
+        {
+          "title": "better-auth/better-auth Releases",
+          "url": "https://github.com/better-auth/better-auth/releases",
+          "date": "2026-11-05"
+        },
+        {
+          "title": "nextauthjs/next-auth Releases",
+          "url": "https://github.com/nextauthjs/next-auth/releases",
+          "date": "2026-07-20"
+        }
+      ]
+    },
+    {
+      "id": "in-host",
+      "layer": "Infra",
+      "topic": "ホスティング（Web アプリ）",
+      "pick": "Cloudflare Workers（+Containers）",
+      "version": "wrangler 4.160",
+      "alternatives": [
+        "Vercel（Fluid compute）",
+        "AWS Lambda Web Functions",
+        "Fly.io"
+      ],
+      "reason": "1 アカウントでエッジ・コンテナ・KV/D1/R2・Workflows・Observability が揃い、月 $5 の床で完結する。Vite と Deno のチームが合流し、ツールチェーンの投資先としても本命。Next.js 中心なら Vercel。12 月 1 日の Observability 課金変更に注意。",
+      "last_checked": "2026-11-11",
+      "sources": [
+        {
+          "title": "Cloudflare Workers（+Containers） 最新版の確認（wrangler 4.160.0）",
+          "url": "https://github.com/cloudflare/workers-sdk/releases",
+          "date": "2026-11-10"
+        },
+        {
+          "title": "Containers and Sandboxes are now generally available",
+          "url": "https://developers.cloudflare.com/changelog/2026-04-13-containers-sandbox-ga",
+          "date": "2026-04-13"
+        },
+        {
+          "title": "Everything we launched during Birthday Week 2026",
+          "url": "https://blog.cloudflare.com/birthday-week-2026-wrap-up/",
+          "date": "2026-10-02"
+        }
+      ]
+    },
+    {
+      "id": "in-db",
+      "layer": "Infra",
+      "topic": "マネージド DB",
+      "pick": "Supabase（Postgres）",
+      "version": "2026-11 時点（OrioleDB 公開ベータ）",
+      "alternatives": [
+        "Neon / Lakebase Postgres",
+        "PlanetScale Postgres（Neki）",
+        "Cloudflare D1",
+        "Turso"
+      ],
+      "reason": "Postgres・認証・ストレージ・Realtime が無料枠に揃い、Turso 買収で「大きな Postgres」と「小さな SQLite 多数」の両方を 1 社で持つ。10 月末に OrioleDB 公開ベータと Multigres（シャーディング）を発表。",
+      "last_checked": "2026-11-11",
+      "sources": [
+        {
+          "title": "Introducing DBArena（Supabase Blog）",
+          "url": "https://supabase.com/blog/introducing-dbarena",
+          "date": "2026-10-30"
+        },
+        {
+          "title": "Supabase Raises $150M, Buys Turso（Verdict）",
+          "url": "https://www.verdict.co.uk/supabase-150m-funding-turso-acquisition/",
+          "date": "2026-10-02"
+        }
+      ]
+    },
+    {
+      "id": "in-iac",
+      "layer": "Infra",
+      "topic": "IaC",
+      "pick": "OpenTofu",
+      "version": "1.13.9",
+      "alternatives": [
+        "Terraform 1.17（Policy GA）",
+        "Pulumi 3.274",
+        "SST 4.17"
+      ],
+      "reason": "MPL ライセンスで HCL 互換、Windows ARM64 と lint 実験が入り 2027-08 までサポート。Terraform 1.17 の Policy GA は個人開発ではほぼ不要。",
+      "last_checked": "2026-11-11",
+      "sources": [
+        {
+          "title": "opentofu/opentofu Releases",
+          "url": "https://github.com/opentofu/opentofu/releases",
+          "date": "2026-11-05"
+        },
+        {
+          "title": "hashicorp/terraform v1.17.0",
+          "url": "https://github.com/hashicorp/terraform/releases/tag/v1.17.0",
+          "date": "2026-10-21"
+        }
+      ]
+    },
+    {
+      "id": "in-ci",
+      "layer": "Infra",
+      "topic": "CI／CD",
+      "pick": "GitHub Actions",
+      "version": "runner 2.338.2 / actions.lock GA",
+      "alternatives": [
+        "GitLab CI 19.5",
+        "セルフホステッドランナー",
+        "Workers Builds / Vercel Git 連携"
+      ],
+      "reason": "公開リポは無料、arm64 ランナー GA、10 月 28 日に workflow lockfile（actions.lock）が GA。ubuntu-latest の 26.04 移行は 11 月 19 日完了予定で、壊れたら 24.04 に固定すること。",
+      "last_checked": "2026-11-11",
+      "sources": [
+        {
+          "title": "GitHub Actions workflow lockfiles are generally available",
+          "url": "https://github.blog/changelog/2026-10-28-github-actions-workflow-lockfiles-are-generally-available",
+          "date": "2026-10-28"
+        },
+        {
+          "title": "Ubuntu 26 generally available and latest migration",
+          "url": "https://github.blog/changelog/2026-09-17-ubuntu-26-generally-available-and-latest-migration",
+          "date": "2026-09-17"
+        }
+      ]
+    },
+    {
+      "id": "in-obs",
+      "layer": "Infra",
+      "topic": "オブザーバビリティ",
+      "pick": "OpenTelemetry JS + Sentry",
+      "version": "3.1.1 / 11.12.0",
+      "alternatives": [
+        "Cloudflare Observability（12 月から GB 課金）",
+        "Grafana Cloud",
+        "Datadog"
+      ],
+      "reason": "OTel JS 3.0 は破壊的メジャーだったので新規は 3 系から始めて移行をなくす。Sentry の無料枠と OTel ネイティブのスパンで、一人分のエラー＋トレースは足りる。",
+      "last_checked": "2026-11-11",
+      "sources": [
+        {
+          "title": "OpenTelemetry JS + Sentry 最新版の確認（3.1.1 / 11.12.0）",
+          "url": "https://github.com/open-telemetry/opentelemetry-js/releases",
+          "date": "2026-11-10"
+        },
+        {
+          "title": "opentelemetry-js v3.0.0",
+          "url": "https://github.com/open-telemetry/opentelemetry-js/releases/tag/v3.0.0",
+          "date": "2026-10-20"
+        },
+        {
+          "title": "getsentry/sentry-javascript Releases",
+          "url": "https://github.com/getsentry/sentry-javascript/releases",
+          "date": "2026-11-05"
+        }
+      ]
+    },
+    {
+      "id": "in-container",
+      "layer": "Infra",
+      "topic": "コンテナ／オーケストレーション",
+      "pick": "Docker Engine + Compose",
+      "version": "29.9.3 / 5.7.0",
+      "alternatives": [
+        "Podman 6.1",
+        "Kubernetes 1.37（マネージド）",
+        "Cloudflare Containers"
+      ],
+      "reason": "一人開発では Compose v5 と Engine 29 の containerd store + lazy-pull で運用上の利点はほぼ得られ、k8s はホスティング先ではなく学習対象。",
+      "last_checked": "2026-11-11",
+      "sources": [
+        {
+          "title": "moby/moby Releases",
+          "url": "https://github.com/moby/moby/releases",
+          "date": "2026-11-03"
+        },
+        {
+          "title": "docker/compose Releases",
+          "url": "https://github.com/docker/compose/releases",
+          "date": "2026-11-02"
+        }
+      ]
+    },
+    {
+      "id": "3d-recon",
+      "layer": "3D",
+      "topic": "画像→3D 再構成（実用）",
+      "pick": "COLMAP（global_mapper）+ MapAnything",
+      "version": "4.2.1 / 1.1.0",
+      "alternatives": [
+        "VGGT-Ω（商用は申請制）",
+        "Depth Anything 3（Giant は NC）",
+        "AMB3R-SLAM（長尺向け）"
+      ],
+      "reason": "4.2 系で学習ベースマッチング LoMa と多成分 global SfM が入り精度と速度のバランスが最も安定。feed-forward 系は NC ライセンスが多い中、MapAnything は Apache 版重みがあり他モデルも同一 API で差し替え可能。",
+      "last_checked": "2026-11-11",
+      "sources": [
+        {
+          "title": "colmap/colmap Releases",
+          "url": "https://github.com/colmap/colmap/releases",
+          "date": "2026-09-29"
+        },
+        {
+          "title": "MapAnything CHANGELOG",
+          "url": "https://github.com/facebookresearch/map-anything/blob/main/CHANGELOG.md",
+          "date": "2026-01-18"
+        }
+      ]
+    },
+    {
+      "id": "3d-repr",
+      "layer": "3D",
+      "topic": "表現（Splat／Mesh／NeRF）",
+      "pick": "3D Gaussian Splatting（交換形式 SPZ v4）",
+      "version": "SPZ lib 3.0.0",
+      "alternatives": [
+        "メッシュ（生成系は TRELLIS.2）",
+        "NeRF（nerfstudio は停滞）"
+      ],
+      "reason": "Khronos 拡張の批准と three.js / Babylon / Open3D のネイティブ実装が 2026 年秋に揃い、配布と表示の互換性が事実上決着。NeRF 系ツールは更新停止。",
+      "last_checked": "2026-11-11",
+      "sources": [
+        {
+          "title": "3D Gaussian Splatting（交換形式 SPZ v4） 最新版の確認（SPZ lib 3.0.0）",
+          "url": "https://github.com/nianticlabs/spz/releases",
+          "date": "2026-05-05"
+        },
+        {
+          "title": "nianticlabs/spz",
+          "url": "https://github.com/nianticlabs/spz",
+          "date": "2026-05-05"
+        },
+        {
+          "title": "KHR_gaussian_splatting",
+          "url": "https://github.com/KhronosGroup/glTF/tree/main/extensions/2.0/Khronos/KHR_gaussian_splatting",
+          "date": "2026-11-09"
+        }
+      ]
+    },
+    {
+      "id": "3d-viewer",
+      "layer": "3D",
+      "topic": "ブラウザ表示",
+      "pick": "Spark",
+      "version": "2.4.0",
+      "alternatives": [
+        "three.js ネイティブ GaussianSplat（r187）",
+        "Spark Radix 0.0.1（WebGPU）",
+        "SuperSplat 3.7",
+        "Babylon.js 9.33"
+      ],
+      "reason": "WebGL2 で動き paged LoD・SPZ v4 に対応する MIT ライブラリで、互換性では現時点で最も安全。WebGPU 前提にできるなら three.js ネイティブか Radix へ移行余地。",
+      "last_checked": "2026-11-11",
+      "sources": [
+        {
+          "title": "Spark CHANGELOG",
+          "url": "https://github.com/sparkjsdev/spark/blob/main/CHANGELOG.md",
+          "date": "2026-10-19"
+        },
+        {
+          "title": "three.js r186 Release",
+          "url": "https://github.com/mrdoob/three.js/releases/tag/r186",
+          "date": "2026-09-24"
+        }
+      ]
+    },
+    {
+      "id": "ai-frontier",
+      "layer": "AI",
+      "topic": "フロンティアモデル（総合）",
+      "pick": "Claude Opus 5.5",
+      "version": "claude-opus-5-5（2026-09-22）",
+      "alternatives": [
+        "Claude Fable 5.2（$8/$40）",
+        "Claude Sonnet 5.5",
+        "GPT-6 Astra（$10/$50）",
+        "Gemini 4 Carbon（防御者限定）"
+      ],
+      "reason": "検証できた範囲でエージェント的コーディングと知的作業のスコアが最も高く、Opus 5 比 20% 安い。11 月 9 日の Fable 5.2（$8/$40）は多くのベンチで上回るが価格は 2 倍で、公式も「まず Opus 5.5、足りなければ Fable 5.2」。Gemini 4 Carbon は防御者限定提供で一般には未提供。",
+      "last_checked": "2026-11-11",
+      "sources": [
+        {
+          "title": "Introducing Claude Opus 5.5",
+          "url": "https://www.anthropic.com/news/claude-opus-5-5",
+          "date": "2026-09-22"
+        },
+        {
+          "title": "Claude Fable 5.2 / Mythos 5.2",
+          "url": "https://www.anthropic.com/claude-fable-and-mythos-5-2",
+          "date": "2026-11-09"
+        },
+        {
+          "title": "Claude Platform: Models overview",
+          "url": "https://platform.claude.com/docs/en/models/overview",
+          "date": "2026-11-11"
+        }
+      ]
+    },
+    {
+      "id": "ai-coding",
+      "layer": "AI",
+      "topic": "コーディングエージェント",
+      "pick": "Claude Code",
+      "version": "2.1.322",
+      "alternatives": [
+        "OpenAI Codex CLI 0.167.1",
+        "GitHub Copilot CLI 1.0.107（一次情報未確認）",
+        "Cursor（版未確認）",
+        "Gemini CLI"
+      ],
+      "reason": "2.1.321 で Fable 5.2 が既定モデルになり、権限・サンドボックスの強化（denyInsteadOfPrompting、hooks onFailure: block）と MCP タスクのバックグラウンド化が最速で進む。Ollama 経由でローカルモデルでも動く。",
+      "last_checked": "2026-11-11",
+      "sources": [
+        {
+          "title": "anthropics/claude-code Releases",
+          "url": "https://github.com/anthropics/claude-code/releases",
+          "date": "2026-11-10"
+        },
+        {
+          "title": "openai/codex Releases",
+          "url": "https://github.com/openai/codex/releases",
+          "date": "2026-11-10"
+        }
+      ]
+    },
+    {
+      "id": "ai-local",
+      "layer": "AI",
+      "topic": "ローカル LLM（モデル）",
+      "pick": "Qwen3.8-27B",
+      "version": "2026-08-14 公開",
+      "alternatives": [
+        "Ripple Preview 65B（Ollama 0.40.16）",
+        "Flint 40B MoE（A2.5B）",
+        "gpt-oss-20b",
+        "Muse Spark Open 816B-A42B（512 GB 級）"
+      ],
+      "reason": "32 GB マシンで 4 ビット量子化の密 27B なら 64K 以上のコンテキストの余地が残り、Qwen-Max 級で最新のオープン公開。ライセンスはモデルカードで要確認。コーディング特化なら Flint。",
+      "last_checked": "2026-11-11",
+      "sources": [
+        {
+          "title": "QwenLM/Qwen3.8 README",
+          "url": "https://raw.githubusercontent.com/QwenLM/Qwen3.8/main/README.md",
+          "date": "2026-08-14"
+        },
+        {
+          "title": "Ollama v0.40.8（Flint）",
+          "url": "https://github.com/ollama/ollama/releases/tag/v0.40.8",
+          "date": "2026-10-21"
+        }
+      ]
+    },
+    {
+      "id": "ai-local-rt",
+      "layer": "AI",
+      "topic": "ローカル LLM（ランタイム）",
+      "pick": "Ollama",
+      "version": "0.40.16",
+      "alternatives": [
+        "llama.cpp b12263",
+        "mlx-lm 0.32",
+        "vLLM 0.33",
+        "LM Studio"
+      ],
+      "reason": "ollama launch で Claude Code / Codex / OpenCode に直結し、新モデルを数日で取り込み、TTS と OpenAI / Anthropic 互換エンドポイントを備える。",
+      "last_checked": "2026-11-11",
+      "sources": [
+        {
+          "title": "Ollama 最新版の確認（0.40.16）",
+          "url": "https://github.com/ollama/ollama/releases/tag/v0.40.16",
+          "date": "2026-11-09"
+        },
+        {
+          "title": "ollama/ollama Releases",
+          "url": "https://github.com/ollama/ollama/releases",
+          "date": "2026-11-03"
+        },
+        {
+          "title": "ggml-org/llama.cpp Releases",
+          "url": "https://github.com/ggml-org/llama.cpp/releases",
+          "date": "2026-11-08"
+        }
+      ]
+    },
+    {
+      "id": "ai-agent-fw",
+      "layer": "AI",
+      "topic": "エージェント／MCP 基盤",
+      "pick": "MCP（2026-07-28 版）+ Agent Skills",
+      "version": "TS SDK 2.4.0 / Py SDK 2.3.0",
+      "alternatives": [
+        "Vercel AI SDK 7",
+        "OpenAI Agents SDK 0.24",
+        "Google ADK 2.14",
+        "LangGraph 1.2"
+      ],
+      "reason": "ステートレス化した MCP と、同じ財団に移った Agent Skills が、上記フレームワークすべてが対象にするベンダー中立の土台になった。",
+      "last_checked": "2026-11-11",
+      "sources": [
+        {
+          "title": "MCP（2026-07-28 版）+ Agent Skills 最新版の確認（TS SDK 2.4.0 / Py SDK 2.3.0）",
+          "url": "https://github.com/modelcontextprotocol/typescript-sdk/releases",
+          "date": "2026-10-23"
+        },
+        {
+          "title": "MCP 2026-07-28 changelog",
+          "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/docs/specification/2026-07-28/changelog.mdx",
+          "date": "2026-07-28"
+        },
+        {
+          "title": "Donating Agent Skills to the Agentic AI Foundation",
+          "url": "https://www.anthropic.com/news/donating-agent-skills-to-the-agentic-ai-foundation",
+          "date": "2026-10-22"
+        }
+      ]
+    },
+    {
+      "id": "dx-editor",
+      "layer": "DX",
+      "topic": "エディタ",
+      "pick": "VS Code",
+      "version": "1.145",
+      "alternatives": [
+        "Zed 1.27.0",
+        "Cursor（版未確認）",
+        "JetBrains 2026.3"
+      ],
+      "reason": "週次リリースで Copilot ハーネス既定化、Claude / Codex の同居（multi-harness）、Cloud sessions が入り、どのエージェントを使うにせよ母艦として選択肢が最も広い。",
+      "last_checked": "2026-11-11",
+      "sources": [
+        {
+          "title": "VS Code 最新版の確認（1.145（1.146 は Insiders））",
+          "url": "https://code.visualstudio.com/updates/v1_145",
+          "date": "2026-11-04"
+        },
+        {
+          "title": "VS Code 1.145 release notes",
+          "url": "https://github.com/microsoft/vscode-docs/blob/main/release-notes/v1_145.md",
+          "date": "2026-11-04"
+        },
+        {
+          "title": "Zed v1.27.0",
+          "url": "https://github.com/zed-industries/zed/releases/tag/v1.27.0",
+          "date": "2026-11-04"
+        }
+      ]
+    },
+    {
+      "id": "dx-test",
+      "layer": "DX",
+      "topic": "テスト（unit／e2e）",
+      "pick": "Vitest + Playwright",
+      "version": "5.1.0 / 1.65.0",
+      "alternatives": [
+        "Jest 30.5",
+        "bun test",
+        "Vitest Browser Mode"
+      ],
+      "reason": "Node 22 以上を前提にできる新規なら、mock 自動クリアと --last-failed、Browser Mode の trace view を持つ Vitest 5 と、月次で機能が増える Playwright が事実上の標準。",
+      "last_checked": "2026-11-11",
+      "sources": [
+        {
+          "title": "Vitest + Playwright 最新版の確認（5.1.0 / 1.65.0）",
+          "url": "https://github.com/microsoft/playwright/releases/tag/v1.65.0",
+          "date": "2026-11-05"
+        },
+        {
+          "title": "Vitest v5.1.0",
+          "url": "https://github.com/vitest-dev/vitest/releases/tag/v5.1.0",
+          "date": "2026-11-02"
+        },
+        {
+          "title": "microsoft/playwright Releases",
+          "url": "https://github.com/microsoft/playwright/releases",
+          "date": "2026-11-05"
+        }
+      ]
+    },
+    {
+      "id": "dx-mono",
+      "layer": "DX",
+      "topic": "monorepo",
+      "pick": "pnpm workspaces + Turborepo",
+      "version": "12.19.0 / 2.11.10",
+      "alternatives": [
+        "Nx 24.0",
+        "Bun workspaces",
+        "moon 2.6"
+      ],
+      "reason": "個人開発では Nx の機能量より、pnpm 12（devEngines による Node 固定）と turbo 2.11（turbo setup でツール provision、Cargo / uv 対応）の軽さが効く。",
+      "last_checked": "2026-11-11",
+      "sources": [
+        {
+          "title": "pnpm workspaces + Turborepo 最新版の確認（12.19.0 / 2.11.10）",
+          "url": "https://github.com/pnpm/pnpm/releases",
+          "date": "2026-11-10"
+        },
+        {
+          "title": "Release v12.0.0 · pnpm/pnpm",
+          "url": "https://github.com/pnpm/pnpm/releases/tag/v12.0.0",
+          "date": "2026-08-26"
+        },
+        {
+          "title": "Turborepo v2.11.0",
+          "url": "https://github.com/vercel/turborepo/releases/tag/v2.11.0",
+          "date": "2026-09-18"
+        }
+      ]
+    }
   ]
 }
