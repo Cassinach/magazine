@@ -96,13 +96,17 @@ node scripts/build.mjs <YYYY-MM>
 ```bash
 git checkout -b issue/<YYYY-MM>
 git add issues/<YYYY-MM> issues/<YYYY-MM>.html index.html state/watchlist.json
-git commit -m "issue: <YYYY-MM> 発刊"        # 改訂なら「issue: <YYYY-MM> 改訂」
+git -c user.name="magazine-routine" -c user.email="magazine-routine@users.noreply.github.com" \
+  commit -m "issue: <YYYY-MM> 発刊"        # 改訂なら「issue: <YYYY-MM> 改訂」
 git push -u origin issue/<YYYY-MM>
-gh pr create --base main --head issue/<YYYY-MM> --title "issue: <YYYY-MM> 発刊" --body "<§6 の報告文>"
+# PR 作成は REST で（クラウドの gh は GraphQL が使えないので `gh pr create` は失敗する）
+gh api -X POST repos/Cassinach/magazine/pulls -f base=main -f head=issue/<YYYY-MM> \
+  -f title="issue: <YYYY-MM> 発刊" -f body="<§6 の報告文>"
 ```
 
+- commit の author は上記の `magazine-routine <magazine-routine@users.noreply.github.com>` を使う（個人のメールアドレスを履歴に残さない）。
 - `git push` が「ブランチが既にある」で拒否されたら、ブランチ名を `issue/<YYYY-MM>-r2`（以降 r3, r4…）にして push し直す。force push はしない。
-- `gh pr create` が失敗しても、push さえできていれば GitHub Actions（`open-pr`）が PR を作るので、そのまま §6 へ。
+- PR 作成に失敗しても、push さえできていれば GitHub Actions（`open-pr`）が PR を作り、`publish-gate` が検証するので、そのまま §6 へ。`gh api` を使ってよいのはこの PR 作成だけ。
 - `main` には直接 push しない。PR の merge は `publish-gate` が行う（変更パス・validate・再現ビルド・HTML 検査に通れば数分で main に入る）。不合格なら PR にコメントが付き Issue が立つ。
 
 ## 6. 完了報告

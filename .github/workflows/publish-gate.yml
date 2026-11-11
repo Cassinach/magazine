@@ -7,14 +7,26 @@ on:
   pull_request_target:
     types: [opened, synchronize, reopened]
     branches: [main]
+  # open-pr（GITHUB_TOKEN）が作った PR は pull_request_target を発火させないので、
+  # open-pr の完了を合図にこちら（main 側のコード）で PR を探して検証する。
+  workflow_run:
+    workflows: [open-pr]
+    types: [completed]
 permissions: {}
 concurrency:
-  group: publish-gate-${{ github.event.pull_request.number }}
+  group: publish-gate-${{ github.event.pull_request.head.ref || github.event.workflow_run.head_branch }}
   cancel-in-progress: true
 jobs:
   publish-gate:
     name: publish-gate
-    if: github.event.pull_request.head.repo.full_name == github.repository && startsWith(github.event.pull_request.head.ref, 'issue/')
+    if: >-
+      (github.event_name == 'pull_request_target'
+        && github.event.pull_request.head.repo.full_name == github.repository
+        && startsWith(github.event.pull_request.head.ref, 'issue/'))
+      || (github.event_name == 'workflow_run'
+        && github.event.workflow_run.conclusion == 'success'
+        && github.event.workflow_run.head_repository.full_name == github.repository
+        && startsWith(github.event.workflow_run.head_branch, 'issue/'))
     runs-on: ubuntu-latest
     environment: publish
     permissions:
@@ -23,10 +35,36 @@ jobs:
       issues: write
     env:
       GH_TOKEN: ${{ github.token }}
-      PR_NUMBER: ${{ github.event.pull_request.number }}
-      HEAD_REF: ${{ github.event.pull_request.head.ref }}
-      HEAD_SHA: ${{ github.event.pull_request.head.sha }}
     steps:
+      - name: Resolve PR (number / head ref / head sha)
+        id: pr
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PR_NUMBER_EVT: ${{ github.event.pull_request.number }}
+          HEAD_REF_EVT: ${{ github.event.pull_request.head.ref || github.event.workflow_run.head_branch }}
+          HEAD_SHA_EVT: ${{ github.event.pull_request.head.sha || github.event.workflow_run.head_sha }}
+        run: |
+          set -euo pipefail
+          if [ "$EVENT_NAME" = "pull_request_target" ]; then
+            n="$PR_NUMBER_EVT"
+          else
+            n=$(gh pr list --repo "$GITHUB_REPOSITORY" --head "$HEAD_REF_EVT" --base main --state open --json number --jq '.[0].number // empty')
+            [ -n "$n" ] || { echo "open PR for $HEAD_REF_EVT not found"; exit 1; }
+          fi
+          sha=$(gh pr view "$n" --repo "$GITHUB_REPOSITORY" --json headRefOid --jq .headRefOid)
+          echo "number=$n" >> "$GITHUB_OUTPUT"
+          echo "head_ref=$HEAD_REF_EVT" >> "$GITHUB_OUTPUT"
+          echo "head_sha=$sha" >> "$GITHUB_OUTPUT"
+          echo "PR #$n  $HEAD_REF_EVT @ $sha"
+
+      - name: Export PR variables
+        run: |
+          {
+            echo "PR_NUMBER=${{ steps.pr.outputs.number }}"
+            echo "HEAD_REF=${{ steps.pr.outputs.head_ref }}"
+            echo "HEAD_SHA=${{ steps.pr.outputs.head_sha }}"
+          } >> "$GITHUB_ENV"
+
       - name: Checkout main (trusted)
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:

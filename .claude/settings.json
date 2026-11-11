@@ -41,6 +41,8 @@
       "Bash(git pull *)",
       "Bash(git push *)",
       "Bash(gh pr create *)",
+      "Bash(gh api -X POST repos/Cassinach/magazine/pulls *)",
+      "Bash(gh api repos/Cassinach/magazine/pulls *)",
       "Bash(gh pr view *)",
       "Bash(gh pr list *)",
       "Bash(gh pr comment *)"
