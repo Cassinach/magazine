@@ -359,6 +359,7 @@ export function buildHtml(content, { template, watchlist, prevWatchlist, issueDi
     .replace('{{TITLE}}', esc(`${title} ${dateJa}`))
     .replace('{{DESCRIPTION}}', esc(description))
     .replace('{{LOADER_N}}', String(loaderSecs.length))
+    .replace('{{LOADER_ISSUE}}', esc(dateJa))
     .replace('{{LOADER}}', loaderHtml)
     .replace('{{PAGES}}', pagesHtml)
     .replace('{{TOC}}', tocHtml);

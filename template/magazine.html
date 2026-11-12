@@ -58,13 +58,18 @@ p,li,figcaption,.lead,td{text-wrap:pretty}
 #loader .bars{display:flex;gap:14px;height:38vh;align-items:flex-end}
 #loader .bars i{display:block;width:7px;height:100%;border-radius:3px;background:var(--accent);opacity:0;transform-origin:50% 100%;
   animation:bar-in .5s cubic-bezier(.2,.7,.2,1) forwards;animation-delay:calc(var(--i) * 70ms)}
-#loader .word{font-family:var(--font-head);font-size:13px;letter-spacing:.42em;color:var(--muted);opacity:0;animation:bar-in .6s ease forwards;animation-delay:calc(var(--n) * 70ms + 200ms)}
+#loader .caption{display:flex;flex-direction:column;align-items:center;gap:10px}
+#loader .word,#loader .issue{font-family:var(--font-head);opacity:0;animation:bar-in .6s ease forwards}
+/* 色線が全部灯ってから誌名、続けて号数。字間ぶんの右余白は padding-left で打ち消して中央に置く */
+#loader .word{font-size:12px;letter-spacing:.42em;padding-left:.42em;color:var(--muted);animation-delay:calc(var(--n) * 70ms + 450ms)}
+#loader .issue{font-size:22px;letter-spacing:.16em;padding-left:.16em;color:var(--ink);animation-delay:calc(var(--n) * 70ms + 630ms)}
 @keyframes bar-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-#loader.done .bars i{animation:bar-out .42s cubic-bezier(.6,0,.8,.2) forwards;animation-delay:calc(var(--i) * 60ms)}
-#loader.done .word{animation:word-out .3s ease forwards;animation-delay:calc(var(--n) * 60ms)}
+/* 退場: animation を差し替えると delay の間は素の opacity:0 に戻って一瞬消えるので、both で from を先に当てておく */
+#loader.done .bars i{animation:bar-out .42s cubic-bezier(.6,0,.8,.2) both;animation-delay:calc(var(--i) * 60ms)}
+#loader.done .word,#loader.done .issue{animation:word-out .3s ease both;animation-delay:calc(var(--n) * 60ms)}
 @keyframes bar-out{from{opacity:1;transform:scaleY(1)}to{opacity:1;transform:scaleY(0)}}
-@keyframes word-out{to{opacity:0}}
-@media (prefers-reduced-motion: reduce){#loader .bars i,#loader .word{animation-duration:.01s;animation-delay:0s}#loader{transition:none}}
+@keyframes word-out{from{opacity:1}to{opacity:0}}
+@media (prefers-reduced-motion: reduce){#loader .bars i,#loader .word,#loader .issue{animation-duration:.01s;animation-delay:0s}#loader{transition:none}}
 #track{visibility:hidden}
 #track.ready{visibility:visible}
 
@@ -297,7 +302,7 @@ figure.fig img{cursor:zoom-in}
 </style>
 </head>
 <body>
-<div id="loader"><div class="bars">{{LOADER}}</div><div class="word" style="--n:{{LOADER_N}}">magazine</div></div>
+<div id="loader"><div class="bars">{{LOADER}}</div><div class="caption" style="--n:{{LOADER_N}}"><div class="word">magazine</div><div class="issue">{{LOADER_ISSUE}}</div></div></div>
 <div id="book"><div id="track">
 {{PAGES}}
 </div></div>
@@ -629,7 +634,7 @@ figure.fig img{cursor:zoom-in}
     track.classList.add('ready');
     const loader = $('loader');
     const bars = loader.querySelectorAll('.bars i').length;
-    const minShow = bars * 70 + 650; // 色線が全部灯るまでは待つ
+    const minShow = bars * 70 + 1230 + 600; // 色線 → 誌名 → 号数が出そろい（bars*70+1230ms）、少し見せてから退場
     const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
     setTimeout(() => {
       loader.classList.add('done');
